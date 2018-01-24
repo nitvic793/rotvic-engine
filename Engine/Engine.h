@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Engine.h"
+#include "CoreGame.h"
 #include "Vector3.h"
 #include "Entity.h"
 

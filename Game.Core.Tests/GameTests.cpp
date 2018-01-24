@@ -22,6 +22,12 @@ namespace GameCoreTests
 			Assert::AreEqual(expected.y, position.y);
 			Assert::AreEqual(expected.z, position.z);
 		}
+
+		TEST_METHOD(Game_Initialize)
+		{
+			Game *gameInstance = Game::CreateInstance();
+			Assert::IsNotNull(gameInstance);
+		}
 		
 		TEST_METHOD(GameEntity_Move)
 		{
