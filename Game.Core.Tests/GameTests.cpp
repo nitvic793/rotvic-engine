@@ -25,9 +25,9 @@ namespace GameCoreTests
 		
 		TEST_METHOD(GameEntity_Move)
 		{
-			GameEntity gameEntity;
+			GameEntity gameEntity;			
+			gameEntity.Move(Vector3f(1.f, 0.f, 0.f));
 			Vector3f position = gameEntity.GetPosition();
-			gameEntity.Move(1.f, 0.f, 0.f);
 			Vector3f expected(1.f, 0.f, 0.f);
 			Assert::AreEqual(expected.x, position.x);
 			Assert::AreEqual(expected.y, position.y);
