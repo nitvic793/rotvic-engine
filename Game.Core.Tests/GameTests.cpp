@@ -36,22 +36,50 @@ namespace GameCoreTests
 
 		TEST_METHOD(GameEntity_MoveUp)
 		{
-
+			GameEntity gameEntity;
+			float speed = 1.f;
+			gameEntity.MoveUp(speed);
+			Vector3f position = gameEntity.GetPosition();
+			Vector3f expected(0.f, speed, 0.f);
+			Assert::AreEqual(expected.x, position.x);
+			Assert::AreEqual(expected.y, position.y);
+			Assert::AreEqual(expected.z, position.z);
 		}
 
 		TEST_METHOD(GameEntity_MoveDown)
 		{
-
+			GameEntity gameEntity;
+			float speed = 1.f;
+			gameEntity.MoveDown(speed);
+			Vector3f position = gameEntity.GetPosition();
+			Vector3f expected(0.f, -speed, 0.f);
+			Assert::AreEqual(expected.x, position.x);
+			Assert::AreEqual(expected.y, position.y);
+			Assert::AreEqual(expected.z, position.z);
 		}
 
 		TEST_METHOD(GameEntity_MoveLeft)
 		{
-
+			GameEntity gameEntity;
+			float speed = 1.f;
+			gameEntity.MoveLeft(speed);
+			Vector3f position = gameEntity.GetPosition();
+			Vector3f expected(-speed, 0.f, 0.f);
+			Assert::AreEqual(expected.x, position.x);
+			Assert::AreEqual(expected.y, position.y);
+			Assert::AreEqual(expected.z, position.z);
 		}
 
 		TEST_METHOD(GameEntity_MoveRight)
 		{
-
+			GameEntity gameEntity;
+			float speed = 1.f;
+			gameEntity.MoveRight(speed);
+			Vector3f position = gameEntity.GetPosition();
+			Vector3f expected(speed, 0.f, 0.f);
+			Assert::AreEqual(expected.x, position.x);
+			Assert::AreEqual(expected.y, position.y);
+			Assert::AreEqual(expected.z, position.z);
 		}
 
 	};
