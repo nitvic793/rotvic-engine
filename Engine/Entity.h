@@ -3,6 +3,7 @@
 
 class Entity
 {
+protected:
 	Vector3f Position;
 public:
 	const Vector3f &GetPosition();
