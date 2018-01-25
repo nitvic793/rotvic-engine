@@ -124,6 +124,7 @@
     <ClCompile Include="CoreGame.cpp" />
     <ClCompile Include="Entity.cpp" />
     <ClCompile Include="IGame.cpp" />
+    <ClCompile Include="Keyboard.cpp" />
     <ClCompile Include="SystemCore.cpp" />
     <ClCompile Include="Vector3.cpp" />
   </ItemGroup>
