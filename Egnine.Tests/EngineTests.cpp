@@ -13,7 +13,8 @@ namespace EngineTests
 		TEST_METHOD(CoreGame_Initialization)
 		{
 			CoreGame *game = new CoreGame(1280, 720, "DXGame");
-			Assert::IsTrue(game->InitializeWindow());
+			HINSTANCE hInstance = 0;
+			Assert::IsTrue(game->Initialize(hInstance));
 		}
 
 	};
