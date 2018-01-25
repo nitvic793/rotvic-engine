@@ -17,6 +17,7 @@ protected:
 	std::string screenTitle;
 public:
 	bool Initialize(HINSTANCE hInstance);
+	SystemCore* GetSystemCore();
 	CoreGame(int height, int width, std::string title);
 	CoreGame();
 	~CoreGame();

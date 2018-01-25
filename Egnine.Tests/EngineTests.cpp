@@ -16,12 +16,12 @@ namespace EngineTests
 		TEST_METHOD(CoreGame_Initialization)
 		{
 			CoreGame *game = new CoreGame(1280, 720, "DXGame");
-			HINSTANCE hInstance = 0;
-			SystemCore &core = game->GetSystemCore();
-			Mock<SystemCore> coreMock;
+			HINSTANCE hInstance = 0; //Fake HINSTANCE		
+			SystemCore &core = *game->GetSystemCore();
+			Mock<SystemCore> coreMock(core);		
 			Fake(Method(coreMock, InitializeWindow));
-			Fake(Method(coreMock, InitializeAndBindDirectX));
-			Assert::IsTrue(game->Initialize(hInstance));
+			Fake(Method(coreMock, InitializeAndBindDirectX));		
+			Assert::IsTrue(game->Initialize(hInstance));		
 			Verify(Method(coreMock, InitializeWindow));
 			Verify(Method(coreMock, InitializeAndBindDirectX));
 			delete game;
