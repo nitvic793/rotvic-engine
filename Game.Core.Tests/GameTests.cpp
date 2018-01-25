@@ -27,6 +27,8 @@ namespace GameCoreTests
 		{
 			Game *gameInstance = Game::CreateInstance();
 			Assert::IsNotNull(gameInstance);
+			Assert::AreEqual(1, Game::GetInstanceCount());
+			delete gameInstance;
 		}
 		
 		TEST_METHOD(GameEntity_Move)
