@@ -58,6 +58,7 @@ namespace EngineTests
 			});
 			game->Bind(iGameInstance);
 			game->Run();
+			Verify(Method(coreMock, Run));
 		}
 
 		TEST_METHOD(CoreGame_ClearScreen)
@@ -70,6 +71,26 @@ namespace EngineTests
 			Fake(Method(coreMock, ClearScreen));
 			game->ClearScreen();
 			Verify(Method(coreMock, ClearScreen));
+		}
+
+		TEST_METHOD(CoreGame_BindNullInstance)
+		{
+			CoreGame *game = new CoreGame(1280, 720, "DXGame");
+			Assert::ExpectException<std::exception>([&]() {
+				game->Bind(nullptr);
+			});
+			delete game;
+		}
+
+		TEST_METHOD(Entity_SetPosition)
+		{
+			Entity entity;
+			auto expected = Vector3f(1.f, 1.f, 1.f);
+			entity.SetPosition(expected);
+			auto position = entity.GetPosition();
+			Assert::AreEqual(expected.x, position.x);
+			Assert::AreEqual(expected.y, position.y);
+			Assert::AreEqual(expected.z, position.z);
 		}
 
 		TEST_METHOD(Renderer_DrawMesh)
