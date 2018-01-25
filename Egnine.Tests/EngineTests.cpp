@@ -60,6 +60,18 @@ namespace EngineTests
 			game->Run();
 		}
 
+		TEST_METHOD(CoreGame_ClearScreen)
+		{
+			SystemCore &core = *game->GetSystemCore();
+			Mock<SystemCore> coreMock(core);
+			Fake(Method(coreMock, InitializeWindow));
+			Fake(Method(coreMock, InitializeAndBindDirectX));
+			Fake(Method(coreMock, Run));
+			Fake(Method(coreMock, ClearScreen));
+			game->ClearScreen();
+			Verify(Method(coreMock, ClearScreen));
+		}
+
 		TEST_METHOD_CLEANUP(Test_Cleanup)
 		{
 			delete game;
