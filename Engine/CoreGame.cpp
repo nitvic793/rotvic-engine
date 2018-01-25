@@ -47,6 +47,7 @@ void CoreGame::Run()
 {
 	Core->Run([&]() 
 	{
+		ClearScreen();
 		if (State != Quit) {
 			gameInstance->Update();
 		}
@@ -65,4 +66,9 @@ StateEnum CoreGame::GetState()
 void CoreGame::SetState(StateEnum state)
 {
 	State = state;
+}
+
+void CoreGame::ClearScreen()
+{
+	Core->ClearScreen();
 }

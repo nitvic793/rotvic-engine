@@ -21,6 +21,7 @@ protected:
 	Keyboard *keyboard;
 public:
 	StateEnum GetState();
+	void ClearScreen();
 	void SetState(StateEnum state);
 	virtual void Run();
 	virtual void Bind(IGame* gInstance);

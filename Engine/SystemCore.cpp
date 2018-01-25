@@ -97,13 +97,6 @@ HRESULT SystemCore::InitializeAndBindDirectX()
 
 	UINT deviceFlags = 0;
 	deviceFlags |= D3D11_CREATE_DEVICE_DEBUG;
-	D3D_FEATURE_LEVEL		dxFeatureLevel;
-	IDXGISwapChain*			swapChain;
-	ID3D11Device*			device;
-	ID3D11DeviceContext*	context;
-
-	ID3D11RenderTargetView* backBufferRTV;
-	ID3D11DepthStencilView* depthStencilView;
 
 	hr = D3D11CreateDeviceAndSwapChain(
 		0,							// Video adapter (physical GPU) to use, or null for default
@@ -160,6 +153,7 @@ HRESULT SystemCore::InitializeAndBindDirectX()
 	viewport.MinDepth = 0.0f;
 	viewport.MaxDepth = 1.0f;
 	context->RSSetViewports(1, &viewport);
+
 	return S_OK;
 };
 
@@ -176,6 +170,19 @@ void SystemCore::Run(std::function<void()> updateCallback)
 		else
 		{
 			updateCallback();
+			swapChain->Present(0, 0);
 		}
 	}
+}
+
+void SystemCore::ClearScreen()
+{
+	const float color[4] = { 0.4f, 0.6f, 0.75f, 0.0f };
+
+	context->ClearRenderTargetView(backBufferRTV, color);
+	context->ClearDepthStencilView(
+		depthStencilView,
+		D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL,
+		1.0f,
+		0);
 }
