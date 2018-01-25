@@ -3,7 +3,7 @@
 #include "Core.h"
 #include <map>
 
-class Game
+class Game 
 {
 protected:
 	static int InstanceCount;
@@ -12,7 +12,7 @@ protected:
 public:
 	static Game* CreateInstance();
 	static int GetInstanceCount();
-	void SendInput(Keys key, std::string entityName);
+	virtual void SendInput(Keys key, std::string entityName);
 	void AddEntity(GameEntity *entity, std::string entityName);
 	Game();
 	~Game();

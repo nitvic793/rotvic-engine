@@ -143,5 +143,18 @@ namespace GameCoreTests
 			Assert::AreEqual(expected.z, position.z);
 		}
 
+		TEST_METHOD(Game_Update)
+		{
+			Game *game = Game::CreateInstance();
+			Keyboard keyboard;
+			Mock<Game> gameMock(*game);
+			Fake(Method(gameMock, SendInput));
+			game->BindKeyboard(&keyboard);
+			Mock<Keyboard> kbMock(keyboard);
+			When(Method(kbMock, IsKeyPressed)).Return(true);
+			game->Update();
+			Verify(Method(gameMock, SendInput));
+		}
+
 	};
 }
