@@ -44,6 +44,45 @@ namespace GameCoreTests
 			Verify(Method(gameEntityMock, MoveUp));
 			delete gameInstance;
 		}
+
+		TEST_METHOD(Game_SendInput_Down)
+		{
+			Game *gameInstance = Game::CreateInstance();
+			GameEntity *entity = new GameEntity();
+			Mock<GameEntity> gameEntityMock(*entity);
+			std::string entityName = "MainEntity";
+			Fake(Method(gameEntityMock, MoveDown));
+			gameInstance->AddEntity(entity, entityName);
+			gameInstance->SendInput(Down, entityName);
+			Verify(Method(gameEntityMock, MoveDown));
+			delete gameInstance;
+		}
+
+		TEST_METHOD(Game_SendInput_Left)
+		{
+			Game *gameInstance = Game::CreateInstance();
+			GameEntity *entity = new GameEntity();
+			Mock<GameEntity> gameEntityMock(*entity);
+			std::string entityName = "MainEntity";
+			Fake(Method(gameEntityMock, MoveLeft));
+			gameInstance->AddEntity(entity, entityName);
+			gameInstance->SendInput(Left, entityName);
+			Verify(Method(gameEntityMock, MoveLeft));
+			delete gameInstance;
+		}
+
+		TEST_METHOD(Game_SendInput_Right)
+		{
+			Game *gameInstance = Game::CreateInstance();
+			GameEntity *entity = new GameEntity();
+			Mock<GameEntity> gameEntityMock(*entity);
+			std::string entityName = "MainEntity";
+			Fake(Method(gameEntityMock, MoveRight));
+			gameInstance->AddEntity(entity, entityName);
+			gameInstance->SendInput(Right, entityName);
+			Verify(Method(gameEntityMock, MoveRight));
+			delete gameInstance;
+		}
 		
 		TEST_METHOD(GameEntity_Move)
 		{
