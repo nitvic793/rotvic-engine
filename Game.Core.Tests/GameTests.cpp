@@ -6,6 +6,7 @@
 #include "../Engine/Engine.h"
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
+using namespace fakeit;
 
 namespace GameCoreTests
 {		
@@ -28,6 +29,17 @@ namespace GameCoreTests
 			Game *gameInstance = Game::CreateInstance();
 			Assert::IsNotNull(gameInstance);
 			Assert::AreEqual(1, Game::GetInstanceCount());
+			delete gameInstance;
+		}
+
+		TEST_METHOD(Game_SendInput)
+		{
+			Game *gameInstance = Game::CreateInstance();			
+			Mock<GameEntity> gameEntityMock;
+			Fake(Method(gameEntityMock, MoveUp));
+			gameInstance->SendInput(Up);
+
+			Verify(Method(gameEntityMock, MoveUp));
 			delete gameInstance;
 		}
 		
