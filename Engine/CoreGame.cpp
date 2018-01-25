@@ -2,7 +2,10 @@
 
 bool CoreGame::Initialize(HINSTANCE hInstance)
 {
-
+	Core = new SystemCore();
+	Core->InitializeWindow(hInstance, screenHeight, screenWidth, screenTitle);
+	Core->InitializeAndBindDirectX();
+	return true;
 }
 
 CoreGame::CoreGame()
