@@ -39,6 +39,10 @@ SystemCore* CoreGame::GetSystemCore()
 
 void CoreGame::Bind(IGame* gInstance) 
 {
+	if (gInstance == nullptr) 
+	{
+		throw std::exception("Null Game Instance");
+	}
 	gameInstance = gInstance;
 	gameInstance->BindKeyboard(keyboard);
 }
