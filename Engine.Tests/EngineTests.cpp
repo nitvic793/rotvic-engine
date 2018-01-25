@@ -104,6 +104,18 @@ namespace EngineTests
 			Verify(Method(coreMock, Draw));
 		}
 
+		TEST_METHOD(Renderer_DrawMesh_Null)
+		{
+			SystemCore &core = *game->GetSystemCore();
+			Mock<SystemCore> coreMock(core);
+			Fake(Method(coreMock, Draw));
+			Mesh *mesh = nullptr;
+			Renderer *renderer = new Renderer(game->GetSystemCore());			
+			Assert::ExpectException<std::exception>([&]() {
+				renderer->Draw(mesh);
+			});		
+		}
+
 		TEST_METHOD_CLEANUP(Test_Cleanup)
 		{
 			delete game;
