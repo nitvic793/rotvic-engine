@@ -11,6 +11,10 @@ Game::Game()
 Game::~Game()
 {
 	InstanceCount--;
+	for (auto entity : entities) 
+	{
+		delete entity.second;
+	}
 }
 
 Game* Game::CreateInstance()
@@ -24,9 +28,14 @@ int Game::GetInstanceCount()
 	return InstanceCount;
 }
 
-void Game::SendInput(Keys key)
+void Game::SendInput(Keys key, std::string entityName)
 {
 	if (key == Keys::Up) {
-		entity.MoveUp(speed);
+		entities[entityName]->MoveUp(speed);
 	}
+}
+
+void Game::AddEntity(GameEntity *entity, std::string entityName)
+{
+	entities.insert(std::pair<std::string, GameEntity*>(entityName, entity));
 }

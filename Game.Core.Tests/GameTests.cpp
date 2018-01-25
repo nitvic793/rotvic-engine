@@ -32,14 +32,15 @@ namespace GameCoreTests
 			delete gameInstance;
 		}
 
-		TEST_METHOD(Game_SendInput)
+		TEST_METHOD(Game_SendInput_Up)
 		{
-			Game *gameInstance = Game::CreateInstance();			
-			Mock<GameEntity> gameEntityMock;
+			Game *gameInstance = Game::CreateInstance();	
+			GameEntity *entity = new GameEntity();
+			Mock<GameEntity> gameEntityMock(*entity);
+			std::string entityName = "MainEntity";
 			Fake(Method(gameEntityMock, MoveUp));
-			gameInstance->AddEntity(gameEntityMock.get());
-			gameInstance->SendInput(Up);
-
+			gameInstance->AddEntity(entity, entityName);
+			gameInstance->SendInput(Up, entityName);
 			Verify(Method(gameEntityMock, MoveUp));
 			delete gameInstance;
 		}
