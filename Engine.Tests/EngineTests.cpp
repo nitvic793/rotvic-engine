@@ -116,6 +116,40 @@ namespace EngineTests
 			});		
 		}
 
+		TEST_METHOD(Renderer_DrawEntity)
+		{
+			SystemCore &core = *game->GetSystemCore();
+			Mock<SystemCore> coreMock(core);
+			Fake(Method(coreMock, Draw));
+			Entity *entity= new Entity();
+			Mesh *m = new Mesh(game->GetSystemCore());
+			entity->SetMesh(m)
+			Renderer *renderer = new Renderer(game->GetSystemCore());
+			renderer->Draw(entity);
+			Verify(Method(coreMock, Draw));
+		}
+
+		TEST_METHOD(Renderer_DrawEntity_Null)
+		{
+			SystemCore &core = *game->GetSystemCore();
+			Mock<SystemCore> coreMock(core);
+			Fake(Method(coreMock, Draw));
+			Entity *entity = nullptr;
+			Renderer *renderer = new Renderer(game->GetSystemCore());
+			Assert::ExpectException<std::exception>([&]() {
+				renderer->Draw(mesh);
+			});
+		}
+
+		TEST_METHOD(Entity_SetMesh)
+		{
+			Entity *entity = new Entity();
+			Mesh *m = new Mesh(game->GetSystemCore());
+			entity->SetMesh(m);
+			auto actual = entity->GetMesh();
+			Assert::AreEqual(m, actual);
+		}
+
 		TEST_METHOD_CLEANUP(Test_Cleanup)
 		{
 			delete game;
