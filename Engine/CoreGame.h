@@ -18,6 +18,7 @@ protected:
 	std::string screenTitle;
 	StateEnum State;
 	IGame *gameInstance;
+	Keyboard *keyboard;
 public:
 	StateEnum GetState();
 	void SetState(StateEnum state);

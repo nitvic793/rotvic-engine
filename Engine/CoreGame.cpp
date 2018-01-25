@@ -11,6 +11,7 @@ bool CoreGame::Initialize(HINSTANCE hInstance, int nCmdShow)
 CoreGame::CoreGame()
 {
 	Core = new SystemCore();
+	keyboard = new Keyboard();
 }
 
 CoreGame::CoreGame(int height, int width, std::string title)
@@ -19,6 +20,7 @@ CoreGame::CoreGame(int height, int width, std::string title)
 	screenWidth = width;
 	screenTitle = title;
 	Core = new SystemCore();
+	keyboard = new Keyboard();
 }
 
 
@@ -35,6 +37,7 @@ SystemCore* CoreGame::GetSystemCore()
 void CoreGame::Bind(IGame* gInstance) 
 {
 	gameInstance = gInstance;
+	gameInstance->BindKeyboard(keyboard);
 }
 
 void CoreGame::Run()
