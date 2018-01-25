@@ -10,6 +10,7 @@ bool CoreGame::Initialize(HINSTANCE hInstance, int nCmdShow)
 
 CoreGame::CoreGame()
 {
+	gameInstance = nullptr;
 	Core = new SystemCore();
 	keyboard = new Keyboard();
 }
@@ -21,12 +22,14 @@ CoreGame::CoreGame(int height, int width, std::string title)
 	screenTitle = title;
 	Core = new SystemCore();
 	keyboard = new Keyboard();
+	gameInstance = nullptr;
 }
 
 
 CoreGame::~CoreGame()
 {
 	delete Core;
+	if(gameInstance) delete gameInstance;
 }
 
 SystemCore* CoreGame::GetSystemCore()
@@ -42,10 +45,16 @@ void CoreGame::Bind(IGame* gInstance)
 
 void CoreGame::Run()
 {
-	while (State != Quit)
+	Core->Run([&]() 
 	{
-		gameInstance->Update();
-	}
+		if (State != Quit) {
+			gameInstance->Update();
+		}
+		else {
+			PostQuitMessage(WM_CLOSE);
+		}
+	});
+
 }
 
 StateEnum CoreGame::GetState()

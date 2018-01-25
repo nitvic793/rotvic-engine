@@ -13,6 +13,7 @@ namespace EngineTests
 	TEST_CLASS(CoreGameTests)
 	{
 		CoreGame *game;
+
 	public:
 
 		TEST_METHOD_INITIALIZE(Test_Initialization)
@@ -23,6 +24,7 @@ namespace EngineTests
 			Mock<SystemCore> coreMock(core);
 			Fake(Method(coreMock, InitializeWindow));
 			Fake(Method(coreMock, InitializeAndBindDirectX));
+			Fake(Method(coreMock, Run));
 			game->Initialize(hInstance, 0);
 		}
 
@@ -42,6 +44,11 @@ namespace EngineTests
 
 		TEST_METHOD(CoreGame_Run)
 		{
+			SystemCore &core = *game->GetSystemCore();
+			Mock<SystemCore> coreMock(core);
+			Fake(Method(coreMock, InitializeWindow));
+			Fake(Method(coreMock, InitializeAndBindDirectX));
+			Fake(Method(coreMock, Run));
 			class IGameMock : public IGame { public: virtual void Update() {} };
 			IGame *iGameInstance = new IGameMock();
 			Mock<IGame> gameInstanceMock(*iGameInstance);
@@ -51,8 +58,6 @@ namespace EngineTests
 			});
 			game->Bind(iGameInstance);
 			game->Run();
-			Assert::IsTrue(StateEnum::Quit == game->GetState());
-			delete iGameInstance;
 		}
 
 		TEST_METHOD_CLEANUP(Test_Cleanup)

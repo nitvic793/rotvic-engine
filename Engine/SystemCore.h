@@ -4,6 +4,7 @@
 #include <d3d11.h>
 #include <DirectXMath.h>
 #include <string>
+#include <functional>
 
 class SystemCore
 {
@@ -14,6 +15,7 @@ protected:
 public:
 	virtual void InitializeWindow(HINSTANCE hInstance, int nCmdShow, int screenHeight, int screenWidth, std::string screenTitle);
 	virtual HRESULT InitializeAndBindDirectX();
+	virtual void Run(std::function<void()> updateCallback);
 	SystemCore();
 	~SystemCore();
 };

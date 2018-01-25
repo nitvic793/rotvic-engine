@@ -162,3 +162,20 @@ HRESULT SystemCore::InitializeAndBindDirectX()
 	context->RSSetViewports(1, &viewport);
 	return S_OK;
 };
+
+void SystemCore::Run(std::function<void()> updateCallback)
+{
+	MSG msg = {};
+	while (msg.message != WM_QUIT)
+	{
+		if (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
+		{
+			TranslateMessage(&msg);
+			DispatchMessage(&msg);
+		}
+		else
+		{
+			updateCallback();
+		}
+	}
+}
