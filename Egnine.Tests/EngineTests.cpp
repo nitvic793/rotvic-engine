@@ -21,7 +21,7 @@ namespace EngineTests
 			Mock<SystemCore> coreMock(core);		
 			Fake(Method(coreMock, InitializeWindow));
 			Fake(Method(coreMock, InitializeAndBindDirectX));		
-			Assert::IsTrue(game->Initialize(hInstance));		
+			Assert::IsTrue(game->Initialize(hInstance, 0));		
 			Verify(Method(coreMock, InitializeWindow));
 			Verify(Method(coreMock, InitializeAndBindDirectX));
 			delete game;

@@ -1,8 +1,8 @@
 #include "CoreGame.h"
 
-bool CoreGame::Initialize(HINSTANCE hInstance)
+bool CoreGame::Initialize(HINSTANCE hInstance, int nCmdShow)
 {
-	Core->InitializeWindow(hInstance, screenHeight, screenWidth, screenTitle);
+	Core->InitializeWindow(hInstance, nCmdShow, screenHeight, screenWidth, screenTitle);
 	Core->InitializeAndBindDirectX();
 	return true;
 }
