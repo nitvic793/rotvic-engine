@@ -33,6 +33,18 @@ void Game::SendInput(Keys key, std::string entityName)
 	if (key == Keys::Up) {
 		entities[entityName]->MoveUp(speed);
 	}
+
+	if (key == Keys::Down) {
+		entities[entityName]->MoveDown(speed);
+	}
+
+	if (key == Keys::Left) {
+		entities[entityName]->MoveLeft(speed);
+	}
+
+	if (key == Keys::Right) {
+		entities[entityName]->MoveRight(speed);
+	}
 }
 
 void Game::AddEntity(GameEntity *entity, std::string entityName)
