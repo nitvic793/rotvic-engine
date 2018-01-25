@@ -21,6 +21,11 @@ SystemCore::SystemCore()
 
 SystemCore::~SystemCore()
 {
+	if (depthStencilView) { depthStencilView->Release(); }
+	if (backBufferRTV) { backBufferRTV->Release(); }
+	if (swapChain) { swapChain->Release(); }
+	if (context) { context->Release(); }
+	if (device) { device->Release(); }
 }
 
 void SystemCore::InitializeWindow(HINSTANCE hInstance, int nCmdShow, int screenHeight, int screenWidth, std::string screenTitle)

@@ -14,5 +14,8 @@ Renderer::~Renderer()
 
 void Renderer::Draw(Mesh *mesh)
 {
+	if (mesh == nullptr) {
+		throw std::exception("Null Mesh");
+	}
 	core->Draw();
 }

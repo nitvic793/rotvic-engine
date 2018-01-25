@@ -11,5 +11,6 @@ int WINAPI WinMain(
 	game->Initialize(hInstance, nCmdShow);
 	game->Bind(Game::CreateInstance());
 	game->Run();
+	delete game;
 	return 0;
 }
