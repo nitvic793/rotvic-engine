@@ -33,6 +33,36 @@ namespace GameCoreTests
 			delete gameInstance;
 		}
 
+		TEST_METHOD(Game_SetSpeed)
+		{
+			Game *gameInstance = Game::CreateInstance();
+			float speed = -2.f;
+			gameInstance->SetSpeed(speed);
+			float actual = gameInstance->GetSpeed();
+			Assert::AreEqual(speed, actual);
+		}
+
+		TEST_METHOD(Game_SendInput_CheckSpeed)
+		{
+			Game *gameInstance = Game::CreateInstance();
+			GameEntity *entity = new GameEntity();
+			Mock<GameEntity> gameEntityMock(*entity);
+			float speed = 2.f;
+			entity->SetPosition(Vector3f(0.f, 0.f, 0.f));
+			entity->SetSpeed(speed);
+			std::string entityName = "MainEntity";
+			
+			gameInstance->AddEntity(entity, entityName);
+			gameInstance->SendInput(Up, entityName);
+			
+			auto position = entity->GetPosition();
+			auto expected = Vector3f(speed, 0.f, 0.f);
+			Assert::AreEqual(expected.x, position.x);
+			Assert::AreEqual(expected.y, position.y);
+			Assert::AreEqual(expected.z, position.z);
+			delete gameInstance;
+		}
+
 		TEST_METHOD(Game_SendInput_Up)
 		{
 			Game *gameInstance = Game::CreateInstance();	
