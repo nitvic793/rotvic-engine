@@ -72,6 +72,17 @@ namespace EngineTests
 			Verify(Method(coreMock, ClearScreen));
 		}
 
+		TEST_METHOD(Renderer_DrawMesh)
+		{
+			SystemCore &core = *game->GetSystemCore();
+			Mock<SystemCore> coreMock(core);
+			Fake(Method(coreMock, Draw));
+			Mesh *mesh = new Mesh();
+			Renderer *renderer = new Renderer(core);
+			renderer->Draw(mesh);
+			Verify(Method(coreMock, Draw));
+		}
+
 		TEST_METHOD_CLEANUP(Test_Cleanup)
 		{
 			delete game;
