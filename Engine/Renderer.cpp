@@ -19,3 +19,11 @@ void Renderer::Draw(Mesh *mesh)
 	}
 	core->Draw();
 }
+
+void Renderer::Draw(Entity *entity)
+{
+	if (entity == nullptr) {
+		throw std::exception("Null Mesh");
+	}
+	core->Draw();
+}

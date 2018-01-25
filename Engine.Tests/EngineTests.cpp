@@ -123,7 +123,7 @@ namespace EngineTests
 			Fake(Method(coreMock, Draw));
 			Entity *entity= new Entity();
 			Mesh *m = new Mesh(game->GetSystemCore());
-			entity->SetMesh(m)
+			entity->SetMesh(m);
 			Renderer *renderer = new Renderer(game->GetSystemCore());
 			renderer->Draw(entity);
 			Verify(Method(coreMock, Draw));
@@ -137,17 +137,17 @@ namespace EngineTests
 			Entity *entity = nullptr;
 			Renderer *renderer = new Renderer(game->GetSystemCore());
 			Assert::ExpectException<std::exception>([&]() {
-				renderer->Draw(mesh);
+				renderer->Draw(entity);
 			});
 		}
 
 		TEST_METHOD(Entity_SetMesh)
 		{
 			Entity *entity = new Entity();
-			Mesh *m = new Mesh(game->GetSystemCore());
-			entity->SetMesh(m);
+			Mesh *expected = new Mesh(game->GetSystemCore());
+			entity->SetMesh(expected);
 			auto actual = entity->GetMesh();
-			Assert::AreEqual(m, actual);
+			Assert::IsTrue(expected == actual);
 		}
 
 		TEST_METHOD_CLEANUP(Test_Cleanup)

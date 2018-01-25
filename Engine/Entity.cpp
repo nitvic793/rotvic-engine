@@ -4,11 +4,13 @@
 
 Entity::Entity()
 {
+	mesh = nullptr;
 }
 
 
 Entity::~Entity()
 {
+	if(mesh) delete mesh;
 }
 
 const Vector3f &Entity::GetPosition()
@@ -24,6 +26,16 @@ void Entity::SetPosition(const Vector3f& position)
 void Entity::Move(const Vector3f& offset)
 {
 	Position = Position + offset;
+}
+
+void Entity::SetMesh(Mesh *mesh)
+{
+	this->mesh = mesh;
+}
+
+Mesh* Entity::GetMesh()
+{
+	return mesh;
 }
 
 /**
