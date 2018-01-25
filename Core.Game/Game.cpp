@@ -4,6 +4,7 @@ int Game::InstanceCount = 0;
 
 Game::Game()
 {
+	speed = 10.f;
 }
 
 
@@ -21,4 +22,11 @@ Game* Game::CreateInstance()
 int Game::GetInstanceCount()
 {
 	return InstanceCount;
+}
+
+void Game::SendInput(Keys key)
+{
+	if (key == Keys::Up) {
+		entity.MoveUp(speed);
+	}
 }

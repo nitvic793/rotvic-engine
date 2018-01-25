@@ -37,6 +37,7 @@ namespace GameCoreTests
 			Game *gameInstance = Game::CreateInstance();			
 			Mock<GameEntity> gameEntityMock;
 			Fake(Method(gameEntityMock, MoveUp));
+			gameInstance->AddEntity(gameEntityMock.get());
 			gameInstance->SendInput(Up);
 
 			Verify(Method(gameEntityMock, MoveUp));

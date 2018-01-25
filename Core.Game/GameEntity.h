@@ -5,10 +5,10 @@ class GameEntity : public Entity
 {
 
 public:
-	void MoveUp(float);
-	void MoveDown(float);
-	void MoveLeft(float);
-	void MoveRight(float);
+	virtual void MoveUp(float) ;
+	virtual void MoveDown(float);
+	virtual void MoveLeft(float);
+	virtual void MoveRight(float);
 	GameEntity();
 	~GameEntity();
 };
