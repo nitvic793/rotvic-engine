@@ -157,5 +157,14 @@ namespace GameCoreTests
 			Verify(Method(gameMock, SendInput));
 		}
 
+		TEST_METHOD(Game_ReturnAllEntities)
+		{
+			Game *game = Game::CreateInstance();
+			game->AddEntity(new GameEntity(), "A");
+			game->AddEntity(new GameEntity(), "B");
+			std::vector<Entity> entities = game->GetEntities();
+			Assert::AreEqual((size_t)2, entities.size());
+		}
+
 	};
 }

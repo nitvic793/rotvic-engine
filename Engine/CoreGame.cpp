@@ -45,6 +45,7 @@ void CoreGame::Bind(IGame* gInstance)
 
 void CoreGame::Run()
 {
+	State = Running;
 	Core->Run([&]() 
 	{
 		ClearScreen();
