@@ -9,12 +9,14 @@ protected:
 	static int InstanceCount;
 	std::map<std::string, GameEntity*> entities;
 	float speed;
+	std::vector<Entity*> vEntities;
 public:
 	static Game* CreateInstance();
 	static int GetInstanceCount();
 	virtual void SendInput(Keys key, std::string entityName);
 	void AddEntity(GameEntity *entity, std::string entityName);
 	virtual void Update();
+	virtual std::vector<Entity*> GetEntities();
 	Game();
 	~Game();
 };

@@ -49,7 +49,7 @@ namespace EngineTests
 			Fake(Method(coreMock, InitializeWindow));
 			Fake(Method(coreMock, InitializeAndBindDirectX));
 			Fake(Method(coreMock, Run));
-			class IGameMock : public IGame { public: virtual void Update() {} };
+			class IGameMock : public IGame { public: virtual void Update() {} std::vector<Entity*> GetEntities() { return std::vector<Entity*>(); } };
 			IGame *iGameInstance = new IGameMock();
 			Mock<IGame> gameInstanceMock(*iGameInstance);
 			When(Method(gameInstanceMock, Update))

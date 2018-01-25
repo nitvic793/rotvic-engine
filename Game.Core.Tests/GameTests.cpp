@@ -162,7 +162,7 @@ namespace GameCoreTests
 			Game *game = Game::CreateInstance();
 			game->AddEntity(new GameEntity(), "A");
 			game->AddEntity(new GameEntity(), "B");
-			std::vector<Entity> entities = game->GetEntities();
+			std::vector<Entity*> entities = game->GetEntities();
 			Assert::AreEqual((size_t)2, entities.size());
 		}
 

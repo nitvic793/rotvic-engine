@@ -50,6 +50,7 @@ void Game::SendInput(Keys key, std::string entityName)
 void Game::AddEntity(GameEntity *entity, std::string entityName)
 {
 	entities.insert(std::pair<std::string, GameEntity*>(entityName, entity));
+	vEntities.push_back(entity);
 }
 
 void Game::Update()
@@ -57,4 +58,9 @@ void Game::Update()
 	if (keyboard->IsKeyPressed(Up)) {
 		SendInput(Up, "MainEntity");
 	}
+}
+
+std::vector<Entity*> Game::GetEntities()
+{
+	return vEntities;
 }
