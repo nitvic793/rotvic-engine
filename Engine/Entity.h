@@ -11,6 +11,7 @@ public:
 	virtual void MoveLeft(float) ;
 	virtual void MoveRight(float);
 	const Vector3f &GetPosition();
+	void SetPosition(const Vector3f& position);
 	void Move(const Vector3f& offset);
 	Entity();
 	~Entity();

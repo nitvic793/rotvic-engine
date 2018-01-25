@@ -6,6 +6,7 @@ bool Keyboard::IsKeyPressed(Keys key)
 	{
 		return true;
 	}
+	return false;
 }
 
 Keyboard::Keyboard()

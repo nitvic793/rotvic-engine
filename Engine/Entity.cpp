@@ -16,6 +16,11 @@ const Vector3f &Entity::GetPosition()
 	return Position;
 }
 
+void Entity::SetPosition(const Vector3f& position)
+{
+	Position = position;
+}
+
 void Entity::Move(const Vector3f& offset)
 {
 	Position = Position + offset;

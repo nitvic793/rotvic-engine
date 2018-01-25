@@ -45,18 +45,17 @@ namespace GameCoreTests
 		TEST_METHOD(Game_SendInput_CheckSpeed)
 		{
 			Game *gameInstance = Game::CreateInstance();
-			GameEntity *entity = new GameEntity();
-			Mock<GameEntity> gameEntityMock(*entity);
+			GameEntity *entity = new GameEntity();		
 			float speed = 2.f;
 			entity->SetPosition(Vector3f(0.f, 0.f, 0.f));
-			entity->SetSpeed(speed);
+			gameInstance->SetSpeed(speed);
 			std::string entityName = "MainEntity";
 			
 			gameInstance->AddEntity(entity, entityName);
 			gameInstance->SendInput(Up, entityName);
 			
 			auto position = entity->GetPosition();
-			auto expected = Vector3f(speed, 0.f, 0.f);
+			auto expected = Vector3f(0.f, speed, 0.f);
 			Assert::AreEqual(expected.x, position.x);
 			Assert::AreEqual(expected.y, position.y);
 			Assert::AreEqual(expected.z, position.z);

@@ -3,6 +3,8 @@
 #include "Core.h"
 #include <map>
 
+const float DefaultSpeed = 10.0f;
+
 class Game : public IGame
 {
 protected:
@@ -13,11 +15,14 @@ protected:
 public:
 	static Game* CreateInstance();
 	static int GetInstanceCount();
-	virtual void SendInput(Keys key, std::string entityName);
+	void SetSpeed(float);
+	const float& GetSpeed();
 	void AddEntity(GameEntity *entity, std::string entityName);
+
+	virtual void SendInput(Keys key, std::string entityName);
 	virtual void Update();
 	virtual std::vector<Entity*> GetEntities();
-	Game();
+	Game(float speed = DefaultSpeed);
 	~Game();
 };
 

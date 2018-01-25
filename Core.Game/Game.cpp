@@ -2,11 +2,10 @@
 
 int Game::InstanceCount = 0;
 
-Game::Game()
+Game::Game(float speed)
 {
-	speed = 10.f;
+	this->speed = speed;
 }
-
 
 Game::~Game()
 {
@@ -15,6 +14,16 @@ Game::~Game()
 	{
 		delete entity.second;
 	}
+}
+
+void Game::SetSpeed(float speed)
+{
+	this->speed = speed;
+}
+
+const float& Game::GetSpeed()
+{
+	return speed;
 }
 
 Game* Game::CreateInstance()
