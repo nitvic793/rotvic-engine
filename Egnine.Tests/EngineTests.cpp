@@ -9,7 +9,7 @@ using namespace fakeit;
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
 namespace EngineTests
-{		
+{
 	TEST_CLASS(CoreGameTests)
 	{
 		CoreGame *game;
@@ -17,7 +17,7 @@ namespace EngineTests
 
 		TEST_METHOD_INITIALIZE(Test_Initialization)
 		{
-			CoreGame *game = new CoreGame(1280, 720, "DXGame");
+			game = new CoreGame(1280, 720, "DXGame");
 			HINSTANCE hInstance = 0; //Fake HINSTANCE		
 			SystemCore &core = *game->GetSystemCore();
 			Mock<SystemCore> coreMock(core);
@@ -25,31 +25,34 @@ namespace EngineTests
 			Fake(Method(coreMock, InitializeAndBindDirectX));
 			game->Initialize(hInstance, 0);
 		}
-		
+
 		TEST_METHOD(CoreGame_Initialization)
 		{
 			CoreGame *game = new CoreGame(1280, 720, "DXGame");
 			HINSTANCE hInstance = 0; //Fake HINSTANCE		
 			SystemCore &core = *game->GetSystemCore();
-			Mock<SystemCore> coreMock(core);		
+			Mock<SystemCore> coreMock(core);
 			Fake(Method(coreMock, InitializeWindow));
-			Fake(Method(coreMock, InitializeAndBindDirectX));		
-			Assert::IsTrue(game->Initialize(hInstance, 0));		
+			Fake(Method(coreMock, InitializeAndBindDirectX));
+			Assert::IsTrue(game->Initialize(hInstance, 0));
 			Verify(Method(coreMock, InitializeWindow));
 			Verify(Method(coreMock, InitializeAndBindDirectX));
 			delete game;
-		}		
+		}
 
 		TEST_METHOD(CoreGame_Run)
 		{
-			Mock<CoreGame> gameMock(*game);
-			Mock<IGame> gameInstanceMock;
-			When(Method(gameInstanceMock, Update)).Do([]() {
+			class IGameMock : public IGame { public: virtual void Update() {} };
+			IGame *iGameInstance = new IGameMock();
+			Mock<IGame> gameInstanceMock(*iGameInstance);
+			When(Method(gameInstanceMock, Update))
+				.Do([&]() {
 				game->SetState(Quit);
 			});
-			game->Bind(&gameInstanceMock.get());
+			game->Bind(iGameInstance);
 			game->Run();
-			Assert::AreEqual(Quit, game->GetState());
+			Assert::IsTrue(StateEnum::Quit == game->GetState());
+			delete iGameInstance;
 		}
 
 		TEST_METHOD_CLEANUP(Test_Cleanup)

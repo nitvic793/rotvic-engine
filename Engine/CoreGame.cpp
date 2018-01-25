@@ -2,6 +2,7 @@
 
 bool CoreGame::Initialize(HINSTANCE hInstance, int nCmdShow)
 {
+	State = Init;
 	Core->InitializeWindow(hInstance, nCmdShow, screenHeight, screenWidth, screenTitle);
 	Core->InitializeAndBindDirectX();
 	return true;
@@ -29,4 +30,27 @@ CoreGame::~CoreGame()
 SystemCore* CoreGame::GetSystemCore()
 {
 	return Core;
+}
+
+void CoreGame::Bind(IGame* gInstance) 
+{
+	gameInstance = gInstance;
+}
+
+void CoreGame::Run()
+{
+	while (State != Quit)
+	{
+		gameInstance->Update();
+	}
+}
+
+StateEnum CoreGame::GetState()
+{
+	return State;
+}
+
+void CoreGame::SetState(StateEnum state)
+{
+	State = state;
 }
