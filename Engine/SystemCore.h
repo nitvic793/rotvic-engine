@@ -24,10 +24,10 @@ public:
 	virtual void	Run(std::function<void()> updateCallback);
 	virtual void	ClearScreen();
 	virtual void	Draw();
+	virtual ID3D11DeviceContext*	GetDeviceContext();
 
 	IDXGISwapChain*			GetSwapChain();
-	ID3D11Device*			GetDevice();
-	ID3D11DeviceContext*	GetDeviceContext();
+	ID3D11Device*			GetDevice();	
 	D3D_FEATURE_LEVEL		GetDirectXFeatureLevel();
 	ID3D11RenderTargetView* GetBackBufferRenderTargetView();
 	ID3D11DepthStencilView* GetDepthStencilView();

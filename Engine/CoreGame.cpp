@@ -13,6 +13,7 @@ CoreGame::CoreGame()
 	gameInstance = nullptr;
 	Core = new SystemCore();
 	keyboard = new Keyboard();
+	renderer = new Renderer(Core);
 }
 
 CoreGame::CoreGame(int height, int width, std::string title)
@@ -23,8 +24,8 @@ CoreGame::CoreGame(int height, int width, std::string title)
 	Core = new SystemCore();
 	keyboard = new Keyboard();
 	gameInstance = nullptr;
+	renderer = new Renderer(Core);
 }
-
 
 CoreGame::~CoreGame()
 {
@@ -47,20 +48,26 @@ void CoreGame::Bind(IGame* gInstance)
 	gameInstance->BindKeyboard(keyboard);
 }
 
+Renderer *CoreGame::GetRenderer()
+{
+	return renderer;
+}
+
 void CoreGame::Run()
 {
 	State = Running;
+	renderer->Initialize();
 	Core->Run([&]() 
 	{
 		ClearScreen();
 		if (State != Quit) {
 			gameInstance->Update();
+			Draw();
 		}
 		else {
 			PostQuitMessage(WM_CLOSE);
 		}
 	});
-
 }
 
 StateEnum CoreGame::GetState()
@@ -76,4 +83,13 @@ void CoreGame::SetState(StateEnum state)
 void CoreGame::ClearScreen()
 {
 	Core->ClearScreen();
+}
+
+void CoreGame::Draw()
+{
+	auto entities = gameInstance->GetEntities();
+	for (auto entity : entities)
+	{
+		renderer->Draw(entity);
+	}
 }

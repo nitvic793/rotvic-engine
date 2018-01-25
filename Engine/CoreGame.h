@@ -7,6 +7,8 @@
 #include "SystemCore.h"
 #include "IGame.h"
 #include "States.h"
+#include "Renderer.h"
+
 #pragma comment(lib, "d3d11.lib")
 
 class CoreGame
@@ -19,10 +21,14 @@ protected:
 	StateEnum State;
 	IGame *gameInstance;
 	Keyboard *keyboard;
+	Renderer *renderer;
+
 public:
 	StateEnum GetState();
 	void ClearScreen();
 	void SetState(StateEnum state);
+	Renderer *GetRenderer();
+	virtual void Draw();
 	virtual void Run();
 	virtual void Bind(IGame* gInstance);
 	bool Initialize(HINSTANCE hInstance, int nCmdShow);

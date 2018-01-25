@@ -3,6 +3,7 @@
 #include "../Engine/Engine.h"
 #include "../Engine/SystemCore.h"
 #include "../Engine/IGame.h"
+#include "../Engine/Material.h"
 #include "../FakeIt/single_header/mstest/fakeit.hpp"
 
 using namespace fakeit;
@@ -46,9 +47,11 @@ namespace EngineTests
 		{
 			SystemCore &core = *game->GetSystemCore();
 			Mock<SystemCore> coreMock(core);
+			Mock<Renderer> renderMock(*game->GetRenderer());
 			Fake(Method(coreMock, InitializeWindow));
 			Fake(Method(coreMock, InitializeAndBindDirectX));
 			Fake(Method(coreMock, Run));
+			Fake(Method(renderMock, Initialize));
 			class IGameMock : public IGame { public: virtual void Update() {} std::vector<Entity*> GetEntities() { return std::vector<Entity*>(); } };
 			IGame *iGameInstance = new IGameMock();
 			Mock<IGame> gameInstanceMock(*iGameInstance);
@@ -59,6 +62,7 @@ namespace EngineTests
 			game->Bind(iGameInstance);
 			game->Run();
 			Verify(Method(coreMock, Run));
+			Verify(Method(renderMock, Initialize));
 		}
 
 		TEST_METHOD(CoreGame_ClearScreen)
@@ -100,8 +104,11 @@ namespace EngineTests
 			Fake(Method(coreMock, Draw));
 			Mesh *mesh = new Mesh(game->GetSystemCore());
 			Renderer *renderer = new Renderer(game->GetSystemCore());
+			Mock<SystemRenderer> sysRendMock(*renderer->GetInternalRenderer());
+			Fake(Method(sysRendMock, Draw));
 			renderer->Draw(mesh);
 			Verify(Method(coreMock, Draw));
+			Verify(Method(sysRendMock, Draw));
 		}
 
 		TEST_METHOD(Renderer_DrawMesh_Null)
@@ -120,13 +127,17 @@ namespace EngineTests
 		{
 			SystemCore &core = *game->GetSystemCore();
 			Mock<SystemCore> coreMock(core);
+			
 			Fake(Method(coreMock, Draw));
 			Entity *entity= new Entity();
 			Mesh *m = new Mesh(game->GetSystemCore());
 			entity->SetMesh(m);
 			Renderer *renderer = new Renderer(game->GetSystemCore());
+			Mock<SystemRenderer> sysRendMock(*renderer->GetInternalRenderer());
+			Fake(Method(sysRendMock, Draw));
 			renderer->Draw(entity);
 			Verify(Method(coreMock, Draw));
+			Verify(Method(sysRendMock, Draw));
 		}
 
 		TEST_METHOD(Renderer_DrawEntity_Null)
@@ -153,7 +164,7 @@ namespace EngineTests
 		TEST_METHOD(Mesh_SetMaterial)
 		{
 			Mesh *mesh = new Mesh(game->GetSystemCore());
-			Material *material = new Material();
+			Material *material = new Material(game->GetSystemCore());
 			mesh->SetMaterial(material);
 			auto actual = mesh->GetMaterial();
 			Assert::IsTrue(material == actual);
