@@ -16,14 +16,21 @@ protected:
 	IDXGISwapChain*			swapChain;
 	ID3D11Device*			device;
 	ID3D11DeviceContext*	context;
-
 	ID3D11RenderTargetView* backBufferRTV;
 	ID3D11DepthStencilView* depthStencilView;
 public:
-	virtual void InitializeWindow(HINSTANCE hInstance, int nCmdShow, int screenHeight, int screenWidth, std::string screenTitle);
+	virtual void	InitializeWindow(HINSTANCE hInstance, int nCmdShow, int screenHeight, int screenWidth, std::string screenTitle);
 	virtual HRESULT InitializeAndBindDirectX();
-	virtual void Run(std::function<void()> updateCallback);
-	virtual void ClearScreen();
+	virtual void	Run(std::function<void()> updateCallback);
+	virtual void	ClearScreen();
+	virtual void	Draw();
+
+	IDXGISwapChain*			GetSwapChain();
+	ID3D11Device*			GetDevice();
+	ID3D11DeviceContext*	GetDeviceContext();
+	D3D_FEATURE_LEVEL		GetDirectXFeatureLevel();
+	ID3D11RenderTargetView* GetBackBufferRenderTargetView();
+	ID3D11DepthStencilView* GetDepthStencilView();
 	SystemCore();
 	~SystemCore();
 };

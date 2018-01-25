@@ -186,3 +186,36 @@ void SystemCore::ClearScreen()
 		1.0f,
 		0);
 }
+
+IDXGISwapChain* SystemCore::GetSwapChain()
+{
+	return swapChain;
+}
+
+ID3D11Device* SystemCore::GetDevice()
+{
+	return device;
+}
+ID3D11DeviceContext* SystemCore::GetDeviceContext()
+{
+	return context;
+}
+
+D3D_FEATURE_LEVEL SystemCore::GetDirectXFeatureLevel()
+{
+	return dxFeatureLevel;
+}
+ID3D11RenderTargetView* SystemCore::GetBackBufferRenderTargetView()
+{
+	return backBufferRTV;
+}
+
+ID3D11DepthStencilView* SystemCore::GetDepthStencilView() 
+{
+	return depthStencilView;
+}
+
+void SystemCore::Draw()
+{
+
+}

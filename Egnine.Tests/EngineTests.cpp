@@ -1,6 +1,6 @@
 #include "stdafx.h"
 #include "CppUnitTest.h"
-#include "../Engine/CoreGame.h"
+#include "../Engine/Engine.h"
 #include "../Engine/SystemCore.h"
 #include "../Engine/IGame.h"
 #include "../FakeIt/single_header/mstest/fakeit.hpp"
@@ -77,8 +77,8 @@ namespace EngineTests
 			SystemCore &core = *game->GetSystemCore();
 			Mock<SystemCore> coreMock(core);
 			Fake(Method(coreMock, Draw));
-			Mesh *mesh = new Mesh();
-			Renderer *renderer = new Renderer(core);
+			Mesh *mesh = new Mesh(game->GetSystemCore());
+			Renderer *renderer = new Renderer(game->GetSystemCore());
 			renderer->Draw(mesh);
 			Verify(Method(coreMock, Draw));
 		}
