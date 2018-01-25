@@ -29,7 +29,29 @@ const float& Game::GetSpeed()
 Game* Game::CreateInstance()
 {
 	InstanceCount++;
-	return new Game();
+	auto game = new Game();
+	return game;
+}
+
+void Game::Initialize()
+{
+	XMFLOAT4 red = XMFLOAT4(1.0f, 0.0f, 0.0f, 1.0f);
+	XMFLOAT4 green = XMFLOAT4(0.0f, 1.0f, 0.0f, 1.0f);
+	XMFLOAT4 blue = XMFLOAT4(0.0f, 0.0f, 1.0f, 1.0f);
+	Mesh *mesh = new Mesh(core);
+	Material *mat = new Material(core);
+	Vertex vertices[] = {
+		{ XMFLOAT3(+0.0f, +1.0f, +0.0f), red },
+		{ XMFLOAT3(+1.5f, -1.0f, +0.0f), blue },
+		{ XMFLOAT3(-1.5f, -1.0f, +0.0f), green }
+	};
+	UINT indices[] = { 0, 1, 2 };
+	mat->LoadDefaultShaders();
+	mesh->Initialize(vertices, 3, indices, 3);
+	GameEntity *entity = new GameEntity();
+	mesh->SetMaterial(mat);
+	entity->SetMesh(mesh);
+	AddEntity(entity, "MainEntity");
 }
 
 int Game::GetInstanceCount()
@@ -64,9 +86,13 @@ void Game::AddEntity(GameEntity *entity, std::string entityName)
 
 void Game::Update()
 {
-	if (keyboard->IsKeyPressed(Up)) {
-		SendInput(Up, "MainEntity");
-	}
+	std::vector<Keys> inputs = { Up, Down, Left, Right };
+	for (auto input : inputs)
+	{
+		if (keyboard->IsKeyPressed(input)) {
+			SendInput(input, "MainEntity");
+		}
+	}	
 }
 
 std::vector<Entity*> Game::GetEntities()

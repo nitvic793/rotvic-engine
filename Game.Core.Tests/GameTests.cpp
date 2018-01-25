@@ -181,9 +181,12 @@ namespace GameCoreTests
 			Fake(Method(gameMock, SendInput));
 			game->BindKeyboard(&keyboard);
 			Mock<Keyboard> kbMock(keyboard);
-			When(Method(kbMock, IsKeyPressed)).Return(true);
+			When(Method(kbMock, IsKeyPressed).Using(Up)).Return(true);
+			When(Method(kbMock, IsKeyPressed).Using(Down)).Return(true);
+			When(Method(kbMock, IsKeyPressed).Using(Left)).Return(true);
+			When(Method(kbMock, IsKeyPressed).Using(Right)).Return(true);
 			game->Update();
-			Verify(Method(gameMock, SendInput));
+			Verify(Method(gameMock, SendInput)).AtLeastOnce();
 		}
 
 		TEST_METHOD(Game_ReturnAllEntities)

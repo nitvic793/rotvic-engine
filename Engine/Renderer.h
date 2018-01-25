@@ -6,6 +6,7 @@
 class SystemRenderer {
 public:
 	virtual void Draw(Mesh *mesh, ID3D11DeviceContext *context);
+	virtual void SetShaders(Entity *entity);
 };
 
 class Renderer

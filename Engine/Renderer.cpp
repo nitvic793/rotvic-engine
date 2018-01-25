@@ -2,6 +2,7 @@
 
 void SystemRenderer::Draw(Mesh *mesh, ID3D11DeviceContext *context)
 {
+
 	UINT stride = sizeof(Vertex);
 	UINT offset = 0;
 	auto vertexBuffer = mesh->GetVertexBuffer();
@@ -9,6 +10,18 @@ void SystemRenderer::Draw(Mesh *mesh, ID3D11DeviceContext *context)
 	context->IASetIndexBuffer(mesh->GetIndexBuffer(), DXGI_FORMAT_R32_UINT, 0);
 
 	context->DrawIndexed(mesh->GetIndexCount(), 0, 0);
+}
+
+void SystemRenderer::SetShaders(Entity *entity)
+{
+	auto pixelShader = entity->GetMesh()->GetMaterial()->GetPixelShader();
+	auto vertexShader = entity->GetMesh()->GetMaterial()->GetVertexShader();
+	vertexShader->SetMatrix4x4("world", entity->GetWorldMatrix());
+	vertexShader->SetMatrix4x4("view", entity->GetViewMatrix());
+	vertexShader->SetMatrix4x4("projection", entity->GetProjectionMatrix());
+	vertexShader->CopyAllBufferData();
+	vertexShader->SetShader();
+	pixelShader->SetShader();
 }
 
 Renderer::Renderer(SystemCore* core)
@@ -48,6 +61,7 @@ void Renderer::Draw(Entity *entity)
 	if (entity == nullptr) {
 		throw std::exception("Null Mesh");
 	}
+	internalRenderer->SetShaders(entity);
 	Draw(entity->GetMesh());
 	core->Draw();
 }

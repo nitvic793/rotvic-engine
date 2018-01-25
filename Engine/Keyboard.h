@@ -11,7 +11,7 @@ enum Keys
 class Keyboard
 {
 protected:
-	std::map<wchar_t, Keys> KeyMap;
+	std::map<Keys, wchar_t> KeyMap;
 public:
 	Keyboard();
 	~Keyboard();

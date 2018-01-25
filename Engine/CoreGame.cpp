@@ -45,6 +45,7 @@ void CoreGame::Bind(IGame* gInstance)
 		throw std::exception("Null Game Instance");
 	}
 	gameInstance = gInstance;
+	gameInstance->SetCore(Core);
 	gameInstance->BindKeyboard(keyboard);
 }
 
@@ -59,8 +60,8 @@ void CoreGame::Run()
 	renderer->Initialize();
 	Core->Run([&]() 
 	{
-		ClearScreen();
 		if (State != Quit) {
+			ClearScreen();
 			gameInstance->Update();
 			Draw();
 		}

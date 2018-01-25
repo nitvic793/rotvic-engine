@@ -11,7 +11,10 @@ bool Keyboard::IsKeyPressed(Keys key)
 
 Keyboard::Keyboard()
 {
-	KeyMap.insert(std::pair<wchar_t, Keys>(VK_UP, Up));
+	KeyMap.insert(std::pair<Keys, wchar_t>(Up, VK_UP));
+	KeyMap.insert(std::pair<Keys, wchar_t>(Down, VK_DOWN));
+	KeyMap.insert(std::pair<Keys, wchar_t>(Left, VK_LEFT));
+	KeyMap.insert(std::pair<Keys, wchar_t>(Right, VK_RIGHT));
 }
 
 Keyboard::~Keyboard()

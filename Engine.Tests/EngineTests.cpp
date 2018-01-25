@@ -106,6 +106,7 @@ namespace EngineTests
 			Renderer *renderer = new Renderer(game->GetSystemCore());
 			Mock<SystemRenderer> sysRendMock(*renderer->GetInternalRenderer());
 			Fake(Method(sysRendMock, Draw));
+			Fake(Method(sysRendMock, SetShaders));
 			renderer->Draw(mesh);
 			Verify(Method(coreMock, Draw));
 			Verify(Method(sysRendMock, Draw));
@@ -135,6 +136,7 @@ namespace EngineTests
 			Renderer *renderer = new Renderer(game->GetSystemCore());
 			Mock<SystemRenderer> sysRendMock(*renderer->GetInternalRenderer());
 			Fake(Method(sysRendMock, Draw));
+			Fake(Method(sysRendMock, SetShaders));
 			renderer->Draw(entity);
 			Verify(Method(coreMock, Draw));
 			Verify(Method(sysRendMock, Draw));

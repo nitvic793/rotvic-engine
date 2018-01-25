@@ -3,7 +3,7 @@
 #include "Core.h"
 #include <map>
 
-const float DefaultSpeed = 10.0f;
+const float DefaultSpeed = 0.01f;
 
 class Game : public IGame
 {
@@ -18,6 +18,7 @@ public:
 	void SetSpeed(float);
 	const float& GetSpeed();
 	void AddEntity(GameEntity *entity, std::string entityName);
+	void Initialize();
 
 	virtual void SendInput(Keys key, std::string entityName);
 	virtual void Update();
