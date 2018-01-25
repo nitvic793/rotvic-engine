@@ -2,7 +2,9 @@
 #include "CppUnitTest.h"
 #include "../Engine/CoreGame.h"
 #include "../Engine/SystemCore.h"
+#include "../FakeIt/single_header/mstest/fakeit.hpp"
 
+using namespace fakeit;
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
 namespace EngineTests
@@ -15,7 +17,13 @@ namespace EngineTests
 		{
 			CoreGame *game = new CoreGame(1280, 720, "DXGame");
 			HINSTANCE hInstance = 0;
+			SystemCore &core = game->GetSystemCore();
+			Mock<SystemCore> coreMock;
+			Fake(Method(coreMock, InitializeWindow));
+			Fake(Method(coreMock, InitializeAndBindDirectX));
 			Assert::IsTrue(game->Initialize(hInstance));
+			Verify(Method(coreMock, InitializeWindow));
+			Verify(Method(coreMock, InitializeAndBindDirectX));
 			delete game;
 		}
 
