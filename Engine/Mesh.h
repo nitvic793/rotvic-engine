@@ -4,6 +4,9 @@
 #include "Material.h"
 #include "Vertex.h"
 
+/// <summary>
+/// Mesh class represents the shape/dimensions of an object. Meshes should be bound to a Game Entity object for rendering.  
+/// </summary>
 class Mesh
 {
 protected:

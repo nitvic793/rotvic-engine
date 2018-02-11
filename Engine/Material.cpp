@@ -1,12 +1,9 @@
 #include "Material.h"
 
-
-
 Material::Material(SystemCore* core)
 {
 	this->core = core;
 }
-
 
 Material::~Material()
 {
@@ -14,6 +11,9 @@ Material::~Material()
 	delete vertexShader;
 }
 
+/// <summary>
+/// Loads default available shaders. 
+/// </summary>
 void Material::LoadDefaultShaders()
 {
 	auto device = core->GetDevice();
@@ -24,11 +24,19 @@ void Material::LoadDefaultShaders()
 	pixelShader->LoadShaderFile(L"PixelShader.cso");
 }
 
+/// <summary>
+/// Get pixel shader.
+/// </summary>
+/// <returns></returns>
 SimplePixelShader *Material::GetPixelShader() 
 {
 	return pixelShader;
 }
 
+/// <summary>
+/// Get vertex shader.
+/// </summary>
+/// <returns></returns>
 SimpleVertexShader *Material::GetVertexShader()
 {
 	return vertexShader;

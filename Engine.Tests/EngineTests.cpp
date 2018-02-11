@@ -11,6 +11,16 @@ using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
 namespace EngineTests
 {
+	class IGameMock : public IGame
+	{
+	public:
+		virtual void Update(float) {}
+		std::vector<Entity*> GetEntities() {
+			return std::vector<Entity*>();
+		}
+		void Initialize() {}
+	};
+
 	TEST_CLASS(CoreGameTests)
 	{
 		CoreGame *game;
@@ -19,27 +29,52 @@ namespace EngineTests
 
 		TEST_METHOD_INITIALIZE(Test_Initialization)
 		{
-			game = new CoreGame(1280, 720, "DXGame");
+			game = new CoreGame(720, 1280, "DXGame");
 			HINSTANCE hInstance = 0; //Fake HINSTANCE		
 			SystemCore &core = *game->GetSystemCore();
 			Mock<SystemCore> coreMock(core);
+			ResourceManager &rm = *game->GetResourceManager();			
+			Mock<ResourceManager> rmMock(rm);
+			Fake(Method(rmMock, LoadResources));
 			Fake(Method(coreMock, InitializeWindow));
 			Fake(Method(coreMock, InitializeAndBindDirectX));
+			Fake(Method(coreMock, CreateConsoleWindow));
 			Fake(Method(coreMock, Run));
 			game->Initialize(hInstance, 0);
 		}
 
 		TEST_METHOD(CoreGame_Initialization)
 		{
-			CoreGame *game = new CoreGame(1280, 720, "DXGame");
+			CoreGame *game = new CoreGame(720, 1280, "DXGame");
 			HINSTANCE hInstance = 0; //Fake HINSTANCE		
 			SystemCore &core = *game->GetSystemCore();
 			Mock<SystemCore> coreMock(core);
+			ResourceManager &rm = *game->GetResourceManager();
+			Mock<ResourceManager> rmMock(rm);
+			Fake(Method(rmMock, LoadResources));
 			Fake(Method(coreMock, InitializeWindow));
 			Fake(Method(coreMock, InitializeAndBindDirectX));
+			Fake(Method(coreMock, CreateConsoleWindow));
 			Assert::IsTrue(game->Initialize(hInstance, 0));
 			Verify(Method(coreMock, InitializeWindow));
 			Verify(Method(coreMock, InitializeAndBindDirectX));
+			delete game;
+		}
+
+		TEST_METHOD(CoreGame_Initialization_InvalidAspectRatio)
+		{
+			CoreGame *game = new CoreGame(725, 1280, "DXGame");
+			HINSTANCE hInstance = 0; //Fake HINSTANCE		
+			SystemCore &core = *game->GetSystemCore();
+			Mock<SystemCore> coreMock(core);
+			ResourceManager &rm = *game->GetResourceManager();
+			Mock<ResourceManager> rmMock(rm);
+			Fake(Method(rmMock, LoadResources));
+			Fake(Method(coreMock, InitializeWindow));
+			Fake(Method(coreMock, InitializeAndBindDirectX));
+			Assert::ExpectException<std::exception>([&]() {
+				game->Initialize(hInstance, 0);
+			});
 			delete game;
 		}
 
@@ -52,17 +87,35 @@ namespace EngineTests
 			Fake(Method(coreMock, InitializeAndBindDirectX));
 			Fake(Method(coreMock, Run));
 			Fake(Method(renderMock, Initialize));
-			class IGameMock : public IGame { public: virtual void Update() {} std::vector<Entity*> GetEntities() { return std::vector<Entity*>(); } };
+
 			IGame *iGameInstance = new IGameMock();
 			Mock<IGame> gameInstanceMock(*iGameInstance);
 			When(Method(gameInstanceMock, Update))
-				.Do([&]() {
+				.Do([&](float deltaTime) {
 				game->SetState(Quit);
 			});
 			game->Bind(iGameInstance);
 			game->Run();
 			Verify(Method(coreMock, Run));
 			Verify(Method(renderMock, Initialize));
+		}
+
+		TEST_METHOD(CoreGame_Run_Exception)
+		{
+			SystemCore &core = *game->GetSystemCore();
+			Mock<SystemCore> coreMock(core);
+			Mock<Renderer> renderMock(*game->GetRenderer());
+			Fake(Method(coreMock, InitializeWindow));
+			Fake(Method(coreMock, InitializeAndBindDirectX));
+			Fake(Method(coreMock, HandleError));
+			When(Method(coreMock, Run)).Throw(std::exception("Test error"));
+			Fake(Method(renderMock, Initialize));
+			IGame *iGameInstance = new IGameMock();
+			Mock<IGame> gameInstanceMock(*iGameInstance);
+			game->Bind(iGameInstance);
+			game->Run();
+			Verify(Method(renderMock, Initialize));
+			Verify(Method(coreMock, HandleError));
 		}
 
 		TEST_METHOD(CoreGame_ClearScreen)
@@ -79,7 +132,7 @@ namespace EngineTests
 
 		TEST_METHOD(CoreGame_BindNullInstance)
 		{
-			CoreGame *game = new CoreGame(1280, 720, "DXGame");
+			CoreGame *game = new CoreGame(720, 1280, "DXGame");
 			Assert::ExpectException<std::exception>([&]() {
 				game->Bind(nullptr);
 			});
@@ -118,19 +171,18 @@ namespace EngineTests
 			Mock<SystemCore> coreMock(core);
 			Fake(Method(coreMock, Draw));
 			Mesh *mesh = nullptr;
-			Renderer *renderer = new Renderer(game->GetSystemCore());			
+			Renderer *renderer = new Renderer(game->GetSystemCore());
 			Assert::ExpectException<std::exception>([&]() {
 				renderer->Draw(mesh);
-			});		
+			});
 		}
 
 		TEST_METHOD(Renderer_DrawEntity)
 		{
 			SystemCore &core = *game->GetSystemCore();
 			Mock<SystemCore> coreMock(core);
-			
 			Fake(Method(coreMock, Draw));
-			Entity *entity= new Entity();
+			Entity *entity = new Entity();
 			Mesh *m = new Mesh(game->GetSystemCore());
 			entity->SetMesh(m);
 			Renderer *renderer = new Renderer(game->GetSystemCore());
@@ -170,6 +222,48 @@ namespace EngineTests
 			mesh->SetMaterial(material);
 			auto actual = mesh->GetMaterial();
 			Assert::IsTrue(material == actual);
+		}
+
+		TEST_METHOD(Mesh_SetCore_Null)
+		{
+			Assert::ExpectException<std::exception>([&]() {
+				Mesh *mesh = new Mesh(nullptr);
+			});
+		}
+
+		TEST_METHOD(SaveSystem_Save)
+		{
+			FileBuffer *buffer = new FileBuffer();
+			Mock<FileBuffer> mockBuffer(*buffer);
+			Mock<ISerializable> mockSerialize;
+			SaveSystem sys(buffer);
+			Fake(Method(mockBuffer, Save));
+			Fake(Method(mockSerialize, Serialize));
+			sys.Save(&mockSerialize.get(), "Test");
+			Verify(Method(mockBuffer, Save));
+			Verify(Method(mockSerialize, Serialize));
+		}
+
+		TEST_METHOD(SaveSystem_NullBuffer)
+		{
+			Assert::ExpectException<std::invalid_argument>([&]() 
+			{
+				SaveSystem sys(nullptr); 
+			});
+		}
+
+		TEST_METHOD(SaveSystem_Load)
+		{
+			FileBuffer *buffer = new FileBuffer();
+			Mock<FileBuffer> mockBuffer(*buffer);
+			Mock<ISerializable> mockSerialize;
+			SaveSystem sys(buffer);
+			Fake(Method(mockBuffer, Load));
+			//Fake(Method(mockBuffer, GetBuffer));
+			Fake(Method(mockSerialize, Deserialize));
+			sys.Load(&mockSerialize.get(), "Test");
+			Verify(Method(mockBuffer, Load));
+			Verify(Method(mockSerialize, Deserialize));
 		}
 
 		TEST_METHOD_CLEANUP(Test_Cleanup)

@@ -1,4 +1,5 @@
 #pragma once
 
 #include "../Engine/Engine.h"
-#include "GameEntity.h"
+#include "SaveState.h"
+#include "PlayerEntity.h"

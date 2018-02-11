@@ -3,26 +3,34 @@
 #include "Core.h"
 #include <map>
 
-const float DefaultSpeed = 0.01f;
+const float DefaultSpeed = 20.0f;
 
+/// <summary>
+/// Implementation of IGame interface. All custom game logic goes here. 
+/// </summary>
 class Game : public IGame
 {
 protected:
 	static int InstanceCount;
-	std::map<std::string, GameEntity*> entities;
 	float speed;
-	std::vector<Entity*> vEntities;
+
+	float deltaTime;
+	float delayTime;
+	Mesh *mesh;
+	Material *mat;
+
 public:
 	static Game* CreateInstance();
 	static int GetInstanceCount();
 	void SetSpeed(float);
 	const float& GetSpeed();
-	void AddEntity(GameEntity *entity, std::string entityName);
+
 	void Initialize();
 
-	virtual void SendInput(Keys key, std::string entityName);
-	virtual void Update();
-	virtual std::vector<Entity*> GetEntities();
+	virtual void LoadLevel();
+	virtual bool Save();
+	virtual bool Load();
+	virtual void Update(float);
 	Game(float speed = DefaultSpeed);
 	~Game();
 };

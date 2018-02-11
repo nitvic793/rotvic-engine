@@ -19,13 +19,26 @@ int WINAPI WinMain(
 			SetCurrentDirectory(currentDir);
 		}
 	}
+	CoreGame *game = nullptr;
+	try
+	{
+		game = new CoreGame("config.json");
+		game->Initialize(hInstance, nCmdShow);
+		auto gInstance = Game::CreateInstance();
+		game->Bind(gInstance);
+		gInstance->Initialize();
+		game->Run();
+	}
+	catch (std::exception e)
+	{
+		if (game) game->HandleError(&e);
+		else MessageBox(NULL, e.what(), "Error", MB_ICONERROR);
+	}
+	catch (...)
+	{
+		MessageBox(NULL, "Unexpected error. Aborting.", "Error", MB_ICONERROR);
+	}
 
-	CoreGame *game = new CoreGame(1280, 720, "DXGame");
-	game->Initialize(hInstance, nCmdShow);
-	auto gInstance = Game::CreateInstance();
-	game->Bind(gInstance);
-	gInstance->Initialize();
-	game->Run();
-	delete game;
+	if(game)delete game;
 	return 0;
 }

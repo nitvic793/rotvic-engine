@@ -5,9 +5,12 @@
 
 enum Keys
 {
-	Up, Down, Left, Right
+	Up, Down, Left, Right, F5, F6
 };
 
+/// <summary>
+/// Keyboard class for all keyboard related input data. 
+/// </summary>
 class Keyboard
 {
 protected:

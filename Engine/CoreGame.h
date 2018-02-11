@@ -4,15 +4,27 @@
 #include <DirectXMath.h>
 #include "SystemCore.h"
 #include <string>
-#include "SystemCore.h"
 #include "IGame.h"
 #include "States.h"
 #include "Renderer.h"
+#include "SaveSystem.h"
+#include "Mouse.h"
+#include "ResourceManager.h"
 
 #pragma comment(lib, "d3d11.lib")
 
+/// <summary>
+/// Core Game class.
+/// Should be created and initialized first before binding game instance. 
+/// </summary>
 class CoreGame
 {
+	double perfCounterSeconds;
+	float totalTime;
+	float deltaTime;
+	__int64 startTime;
+	__int64 currentTime;
+	__int64 previousTime;
 protected:
 	SystemCore *Core;
 	int screenHeight;
@@ -21,20 +33,28 @@ protected:
 	StateEnum State;
 	IGame *gameInstance;
 	Keyboard *keyboard;
+	Mouse *mouse;
 	Renderer *renderer;
-
+	ConfigMap config;
+	SaveSystem *saveSystem;
+	ResourceManager* resourceManager;
 public:
 	StateEnum GetState();
 	void ClearScreen();
 	void SetState(StateEnum state);
 	Renderer *GetRenderer();
+	SystemCore* GetSystemCore();
+	ResourceManager* GetResourceManager();
+
+	virtual void OnResizeCallback(int width, int height);
+	virtual void HandleError(std::exception *e);
 	virtual void Draw();
 	virtual void Run();
 	virtual void Bind(IGame* gInstance);
 	bool Initialize(HINSTANCE hInstance, int nCmdShow);
-	SystemCore* GetSystemCore();
+	void UpdateTimer();
 	CoreGame(int height, int width, std::string title);
-	CoreGame();
+	CoreGame(std::string configFileName);
 	~CoreGame();
 };
 

@@ -1,0 +1,7 @@
+{
+    "width" : "1280",
+    "height" : "720",
+    "title" : "DX Game",
+    "speed" : "20.0",
+    "mesh":"mesh.msh"
+}

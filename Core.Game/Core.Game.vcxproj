@@ -46,7 +46,7 @@
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
+    <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <PlatformToolset>v141</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
@@ -119,11 +119,13 @@
   <ItemGroup>
     <ClInclude Include="Core.h" />
     <ClInclude Include="Game.h" />
-    <ClInclude Include="GameEntity.h" />
+    <ClInclude Include="PlayerEntity.h" />
+    <ClInclude Include="SaveState.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Game.cpp" />
-    <ClCompile Include="GameEntity.cpp" />
+    <ClCompile Include="PlayerEntity.cpp" />
+    <ClCompile Include="SaveState.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

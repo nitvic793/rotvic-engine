@@ -19,4 +19,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="config.json" />
+    <None Include="mesh.msh" />
+    <None Include="mesh2.msh" />
+  </ItemGroup>
 </Project>

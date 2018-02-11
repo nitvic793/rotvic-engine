@@ -1,24 +1,31 @@
 #include "SystemCore.h"
 
+SystemCore*	SystemCore::SystemCoreInstance = nullptr;
+
+/// <summary>
+/// Windows process callback.
+/// </summary>
+/// <param name="hWnd"></param>
+/// <param name="message"></param>
+/// <param name="wParam"></param>
+/// <param name="lParam"></param>
+/// <returns></returns>
 LRESULT CALLBACK WindowProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
-	switch (message)
-	{
-	case WM_DESTROY:
-	{
-		PostQuitMessage(0);
-		return 0;
-	} break;
-	}
-
-	return DefWindowProc(hWnd, message, wParam, lParam);
+	return SystemCore::SystemCoreInstance->ProcessMessage(hWnd, message, wParam, lParam);
 }
 
+/// <summary>
+/// System core constructor.
+/// </summary>
 SystemCore::SystemCore()
 {
+	SystemCoreInstance = this;
 }
 
-
+/// <summary>
+/// System core destructor.
+/// </summary>
 SystemCore::~SystemCore()
 {
 	if (depthStencilView) { depthStencilView->Release(); }
@@ -28,14 +35,145 @@ SystemCore::~SystemCore()
 	if (device) { device->Release(); }
 }
 
-void SystemCore::InitializeWindow(HINSTANCE hInstance, int nCmdShow, int screenHeight, int screenWidth, std::string screenTitle)
+/// <summary>
+/// Creates console window. 
+/// </summary>
+/// <param name="bufferLines"></param>
+/// <param name="bufferColumns"></param>
+/// <param name="windowLines"></param>
+/// <param name="windowColumns"></param>
+void SystemCore::CreateConsoleWindow(int bufferLines, int bufferColumns, int windowLines, int windowColumns)
+{
+	CONSOLE_SCREEN_BUFFER_INFO coninfo;
+	AllocConsole();
+	GetConsoleScreenBufferInfo(GetStdHandle(STD_OUTPUT_HANDLE), &coninfo);
+	coninfo.dwSize.Y = bufferLines;
+	coninfo.dwSize.X = bufferColumns;
+	SetConsoleScreenBufferSize(GetStdHandle(STD_OUTPUT_HANDLE), coninfo.dwSize);
+
+	SMALL_RECT rect;
+	rect.Left = 0;
+	rect.Top = 0;
+	rect.Right = windowColumns;
+	rect.Bottom = windowLines;
+	SetConsoleWindowInfo(GetStdHandle(STD_OUTPUT_HANDLE), TRUE, &rect);
+
+	FILE *stream;
+	freopen_s(&stream, "CONIN$", "r", stdin);
+	freopen_s(&stream, "CONOUT$", "w", stdout);
+	freopen_s(&stream, "CONOUT$", "w", stderr);
+
+	HWND consoleHandle = GetConsoleWindow();
+	HMENU hmenu = GetSystemMenu(consoleHandle, FALSE);
+	EnableMenuItem(hmenu, SC_CLOSE, MF_GRAYED);
+}
+
+/// <summary>
+/// Handle error callback.
+/// </summary>
+/// <param name="ex"></param>
+void SystemCore::HandleError(std::exception *ex)
+{
+	if (ex)
+		MessageBoxA(hWnd, ex->what(), "Error", MB_ICONERROR);
+	else
+		MessageBoxA(hWnd, "Unexpected error. Aborting.", "Error", MB_ICONERROR);
+}
+
+void SystemCore::OnResize()
+{
+	// Release existing DirectX views and buffers
+	if (depthStencilView) { depthStencilView->Release(); }
+	if (backBufferRTV) { backBufferRTV->Release(); }
+
+	// Resize the underlying swap chain buffers
+	swapChain->ResizeBuffers(
+		1,
+		width,
+		height,
+		DXGI_FORMAT_R8G8B8A8_UNORM,
+		0);
+
+	// Recreate the render target view for the back buffer
+	// texture, then release our local texture reference
+	ID3D11Texture2D* backBufferTexture;
+	swapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), reinterpret_cast<void**>(&backBufferTexture));
+	device->CreateRenderTargetView(backBufferTexture, 0, &backBufferRTV);
+	backBufferTexture->Release();
+
+	// Set up the description of the texture to use for the depth buffer
+	D3D11_TEXTURE2D_DESC depthStencilDesc;
+	depthStencilDesc.Width = width;
+	depthStencilDesc.Height = height;
+	depthStencilDesc.MipLevels = 1;
+	depthStencilDesc.ArraySize = 1;
+	depthStencilDesc.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
+	depthStencilDesc.Usage = D3D11_USAGE_DEFAULT;
+	depthStencilDesc.BindFlags = D3D11_BIND_DEPTH_STENCIL;
+	depthStencilDesc.CPUAccessFlags = 0;
+	depthStencilDesc.MiscFlags = 0;
+	depthStencilDesc.SampleDesc.Count = 1;
+	depthStencilDesc.SampleDesc.Quality = 0;
+
+	ID3D11Texture2D* depthBufferTexture;
+	device->CreateTexture2D(&depthStencilDesc, 0, &depthBufferTexture);
+	device->CreateDepthStencilView(depthBufferTexture, 0, &depthStencilView);
+	depthBufferTexture->Release();
+
+	context->OMSetRenderTargets(1, &backBufferRTV, depthStencilView);
+
+	D3D11_VIEWPORT viewport = {};
+	viewport.TopLeftX = 0;
+	viewport.TopLeftY = 0;
+	viewport.Width = (float)width;
+	viewport.Height = (float)height;
+	viewport.MinDepth = 0.0f;
+	viewport.MaxDepth = 1.0f;
+	context->RSSetViewports(1, &viewport);
+}
+
+LRESULT SystemCore::ProcessMessage(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
+{
+	switch (uMsg)
+	{
+	case WM_SIZE:
+		if (wParam == SIZE_MINIMIZED)
+			return 0;
+		width = LOWORD(lParam);
+		height = HIWORD(lParam);
+		if (device)
+			OnResize();
+
+		if (onResizeCallback)
+			onResizeCallback(width, height);
+
+		return 0;
+	case WM_DESTROY:
+	{
+		PostQuitMessage(0);
+		return 0;
+	} break;
+	}
+
+	return DefWindowProc(hWnd, uMsg, wParam, lParam);
+}
+
+/// <summary>
+/// Initializes the main window. 
+/// </summary>
+/// <param name="hInstance"></param>
+/// <param name="nCmdShow"></param>
+/// <param name="screenHeight"></param>
+/// <param name="screenWidth"></param>
+/// <param name="screenTitle"></param>
+void SystemCore::InitializeWindow(HINSTANCE hInstance, int nCmdShow, int screenHeight, int screenWidth, std::string screenTitle = "DXGame")
 {
 	height = screenHeight;
 	width = screenWidth;
 	WNDCLASSEX wndClass;
 	ZeroMemory(&wndClass, sizeof(WNDCLASSEX));
-	int width = 1280;
-	int height = 720;
+	int width = screenWidth;
+	int height = screenHeight;
 	wndClass.cbSize = sizeof(WNDCLASSEX);
 	wndClass.style = CS_HREDRAW | CS_VREDRAW;
 	wndClass.lpfnWndProc = WindowProc;
@@ -52,18 +190,14 @@ void SystemCore::InitializeWindow(HINSTANCE hInstance, int nCmdShow, int screenH
 		WS_OVERLAPPEDWINDOW,	// Has a title bar, border, min and max buttons, etc.
 		false);
 
-	// create the window and use the result as the handle
 	RECT desktopRect;
 	GetClientRect(GetDesktopWindow(), &desktopRect);
 	int centeredX = (desktopRect.right / 2) - (clientRect.right / 2);
 	int centeredY = (desktopRect.bottom / 2) - (clientRect.bottom / 2);
 
-	// Actually ask Windows to create the window itself
-	// using our settings so far.  This will return the
-	// handle of the window, which we'll keep around for later
 	hWnd = CreateWindow(
 		wndClass.lpszClassName,
-		"DXGame",
+		screenTitle.c_str(),
 		WS_OVERLAPPEDWINDOW,
 		centeredX,
 		centeredY,
@@ -73,11 +207,13 @@ void SystemCore::InitializeWindow(HINSTANCE hInstance, int nCmdShow, int screenH
 		0,			// No menu
 		hInstance,	// The app's handle
 		0);	  // used with multiple windows, NULL
-
-			  // display the window on the screen
 	ShowWindow(hWnd, nCmdShow);
 }
 
+/// <summary>
+/// Initialize DirectX and bind to window. 
+/// </summary>
+/// <returns></returns>
 HRESULT SystemCore::InitializeAndBindDirectX()
 {
 	DXGI_SWAP_CHAIN_DESC swapDesc = {};
@@ -162,6 +298,10 @@ HRESULT SystemCore::InitializeAndBindDirectX()
 	return S_OK;
 };
 
+/// <summary>
+/// Starts the core game loop. Requires a callback function which should encapsulate all update related logic. 
+/// </summary>
+/// <param name="updateCallback">Update Callback</param>
 void SystemCore::Run(std::function<void()> updateCallback)
 {
 	MSG msg = {};
@@ -180,6 +320,9 @@ void SystemCore::Run(std::function<void()> updateCallback)
 	}
 }
 
+/// <summary>
+/// Clear screen to cornflower blue.
+/// </summary>
 void SystemCore::ClearScreen()
 {
 	const float color[4] = { 0.4f, 0.6f, 0.75f, 0.0f };
@@ -192,32 +335,61 @@ void SystemCore::ClearScreen()
 		0);
 }
 
+void SystemCore::SetOnResizeCallback(std::function<void(int, int)> callback)
+{
+	onResizeCallback = callback;
+}
+
+/// <summary>
+/// Returns the swap chain
+/// </summary>
+/// <returns></returns>
 IDXGISwapChain* SystemCore::GetSwapChain()
 {
 	return swapChain;
 }
 
+/// <summary>
+/// Returns the device.
+/// </summary>
+/// <returns></returns>
 ID3D11Device* SystemCore::GetDevice()
 {
 	return device;
 }
+
+/// <summary>
+/// Returns the device context. 
+/// </summary>
+/// <returns></returns>
 ID3D11DeviceContext* SystemCore::GetDeviceContext()
 {
 	return context;
 }
 
+/// <summary>
+/// Returns the DirectX feature level. 
+/// </summary>
+/// <returns></returns>
 D3D_FEATURE_LEVEL SystemCore::GetDirectXFeatureLevel()
 {
 	return dxFeatureLevel;
 }
+
+
 ID3D11RenderTargetView* SystemCore::GetBackBufferRenderTargetView()
 {
 	return backBufferRTV;
 }
 
-ID3D11DepthStencilView* SystemCore::GetDepthStencilView() 
+ID3D11DepthStencilView* SystemCore::GetDepthStencilView()
 {
 	return depthStencilView;
+}
+
+HWND SystemCore::GetWindowHandle()
+{
+	return hWnd;
 }
 
 void SystemCore::Draw()
