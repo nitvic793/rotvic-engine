@@ -4,11 +4,17 @@
 
 IGame::IGame()
 {
+	camera = nullptr;
 }
 
 IGame::~IGame()
 {
 	ClearEntities();
+}
+
+void IGame::OnResize(int width, int height)
+{
+	camera->SetProjectionMatrix((float)width / height);
 }
 
 bool IGame::Save()
@@ -82,6 +88,7 @@ void IGame::BindMouse(Mouse * mouse)
 void IGame::SetRenderer(Renderer * renderer)
 {
 	this->renderer = renderer;
+	camera = new Camera((float)renderer->screenWidth / renderer->screenHeight);
 }
 
 /// <summary>
@@ -115,6 +122,11 @@ void IGame::AddEntity(GameEntity *entity, std::string entityName)
 	vEntities.push_back(entity);
 }
 
+Camera * IGame::GetCamera()
+{
+	return camera;
+}
+
 /// <summary>
 /// Deletes all entities in game instance.
 /// </summary>
@@ -126,6 +138,8 @@ void IGame::ClearEntities()
 	}
 	entities.clear();
 	vEntities.clear();
+	if (camera)
+		delete camera;
 }
 
 /// <summary>
@@ -135,8 +149,8 @@ void IGame::ClearEntities()
 const Vector2f& IGame::GetMousePosition2D()
 {
 	return mouse->GetMousePositionWorld(
-		renderer->GetViewMatrix(),
-		renderer->GetProjectionMatrix(),
+		camera->GetViewMatrix(),
+		camera->GetProjectionMatrix(),
 		renderer->screenWidth, renderer->screenHeight,
 		Vector3f(0, 0, -25.f));
 }

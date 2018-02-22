@@ -112,6 +112,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Camera.h" />
     <ClInclude Include="Collision2D.h" />
     <ClInclude Include="ConfigLoader.h" />
     <ClInclude Include="Constants.h" />
@@ -146,6 +147,7 @@
     <ClInclude Include="Vertex.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Camera.cpp" />
     <ClCompile Include="Collision2D.cpp" />
     <ClCompile Include="ConfigLoader.cpp" />
     <ClCompile Include="CoreGame.cpp" />

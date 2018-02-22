@@ -3,6 +3,7 @@
 #include "Mesh.h"
 #include "Entity.h"
 #include "Constants.h"
+#include "Camera.h"
 
 /// <summary>
 /// Internal render class to abstract the draw calls. 
@@ -22,6 +23,7 @@ class Renderer
 	SystemCore		*core;
 	XMFLOAT4X4		viewMatrix;
 	XMFLOAT4X4		projectionMatrix;
+	Camera*			camera;
 public:
 	virtual SystemRenderer* GetInternalRenderer();
 	virtual void			Draw(Mesh *mesh);
@@ -31,6 +33,7 @@ public:
 	XMFLOAT4X4				GetViewMatrix();
 	XMFLOAT4X4				GetProjectionMatrix();
 	void					SetProjectionMatrix(int width, int height);
+	void					UseCamera(Camera* camera);
 
 	int	screenHeight;
 	int	screenWidth;

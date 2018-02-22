@@ -242,6 +242,7 @@ void CoreGame::ClearScreen()
 /// </summary>
 void CoreGame::Draw()
 {
+	renderer->UseCamera(gameInstance->GetCamera());
 	auto entities = gameInstance->GetEntities();
 	for (auto entity : entities)
 	{

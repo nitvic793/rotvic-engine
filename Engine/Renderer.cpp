@@ -42,6 +42,7 @@ void SystemRenderer::SetShaders(Entity *entity, XMFLOAT4X4 viewMatrix, XMFLOAT4X
 /// <param name="height"></param>
 Renderer::Renderer(SystemCore* core, int width, int height)
 {
+	camera = nullptr;
 	screenHeight = height;
 	screenWidth = width;
 	this->core = core;
@@ -90,7 +91,8 @@ void Renderer::Initialize()
 /// <returns></returns>
 XMFLOAT4X4 Renderer::GetViewMatrix()
 {
-	return viewMatrix;
+	return camera->GetViewMatrix();
+	//return viewMatrix;
 }
 
 /// <summary>
@@ -99,7 +101,8 @@ XMFLOAT4X4 Renderer::GetViewMatrix()
 /// <returns></returns>
 XMFLOAT4X4 Renderer::GetProjectionMatrix()
 {
-	return projectionMatrix;
+	return camera->GetProjectionMatrix();
+	//return projectionMatrix;
 }
 
 void Renderer::SetProjectionMatrix(int width, int height)
@@ -110,6 +113,11 @@ void Renderer::SetProjectionMatrix(int width, int height)
 		0.1f,
 		100.0f);
 	XMStoreFloat4x4(&projectionMatrix, XMMatrixTranspose(P));
+}
+
+void Renderer::UseCamera(Camera * camera)
+{
+	this->camera = camera;
 }
 
 /// <summary>
@@ -136,7 +144,7 @@ void Renderer::Draw(Entity *entity)
 	if (entity == nullptr) {
 		throw std::exception("Null Mesh");
 	}
-	internalRenderer->SetShaders(entity, viewMatrix, projectionMatrix);
+	internalRenderer->SetShaders(entity, camera->GetViewMatrix(), camera->GetProjectionMatrix());
 	Draw(entity->GetMesh());
 	core->Draw();
 }

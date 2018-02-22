@@ -82,7 +82,7 @@ void Game::LoadLevel()
 	entity->SetPosition(Vector3f(-8, -8, 0));
 	AddEntity(entity, "Object3");
 
-	auto bounds = Utility::GetScreenBounds2D(renderer->GetViewMatrix(), renderer->GetProjectionMatrix(), renderer->screenWidth, renderer->screenHeight, Vector3f(0, 0, -25));
+	auto bounds = Utility::GetScreenBounds2D(camera->GetViewMatrix(), camera->GetProjectionMatrix(), renderer->screenWidth, renderer->screenHeight, Vector3f(0, 0, -25));
 	Collision2D::InstantiateQuadTree2D(bounds);
 	std::vector<GameEntity*> qtObjects;
 	for (auto entity : entities) {
@@ -156,6 +156,7 @@ int Game::GetInstanceCount()
 /// <param name="deltaTime"></param>
 void Game::Update(float deltaTime)
 {
+	camera->Update(deltaTime);
 	delayTime += deltaTime;
 	if (keyboard->IsKeyPressed(F5) && delayTime > 0.5f) {
 		Save();
