@@ -17,7 +17,6 @@ Mesh::~Mesh()
 {
 	if (vertexBuffer) vertexBuffer->Release();
 	if (indexBuffer) indexBuffer->Release();
-	delete material;
 }
 
 /// <summary>

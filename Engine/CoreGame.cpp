@@ -111,6 +111,7 @@ CoreGame::~CoreGame()
 	if (keyboard) delete keyboard;
 	if (saveSystem) delete saveSystem;
 	if (mouse) delete mouse;
+	if (resourceManager) delete resourceManager;
 }
 
 /// <summary>
