@@ -4,6 +4,7 @@
 #include "Entity.h"
 #include "Constants.h"
 #include "Camera.h"
+#include "Lights.h"
 
 /// <summary>
 /// Internal render class to abstract the draw calls. 
@@ -11,7 +12,7 @@
 class SystemRenderer {
 public:
 	virtual void Draw(Mesh *mesh, ID3D11DeviceContext *context);
-	virtual void SetShaders(Entity *entity, XMFLOAT4X4 viewMatrix, XMFLOAT4X4 projectionMatrix);
+	virtual void SetShaders(Entity *entity, Camera* camera, LightsMap lights);
 };
 
 /// <summary>
@@ -24,6 +25,7 @@ class Renderer
 	XMFLOAT4X4		viewMatrix;
 	XMFLOAT4X4		projectionMatrix;
 	Camera*			camera;
+	LightsMap		lights;
 public:
 	virtual SystemRenderer* GetInternalRenderer();
 	virtual void			Draw(Mesh *mesh);
@@ -34,6 +36,8 @@ public:
 	XMFLOAT4X4				GetProjectionMatrix();
 	void					SetProjectionMatrix(int width, int height);
 	void					UseCamera(Camera* camera);
+	void					SetLights(LightsMap lightsMap);
+	void					ClearScreen();
 
 	int	screenHeight;
 	int	screenWidth;

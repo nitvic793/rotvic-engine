@@ -10,6 +10,11 @@ GameEntity::GameEntity()
 	rect.height = 2;
 }
 
+GameEntity::GameEntity(Mesh * m, Material * mat):
+	Entity(m, mat)
+{
+}
+
 
 GameEntity::~GameEntity()
 {

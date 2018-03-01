@@ -5,10 +5,18 @@ Material::Material(SystemCore* core)
 	this->core = core;
 }
 
+Material::Material(SystemCore* core, SimpleVertexShader *vertexShader, SimplePixelShader *pixelShader, ID3D11ShaderResourceView *srv, ID3D11ShaderResourceView *normal, ID3D11SamplerState *samplerState)
+{
+	this->core = core;
+	this->vertexShader = vertexShader;
+	this->pixelShader = pixelShader;
+	textureSRV = srv;
+	sampler = samplerState;
+	normalSRV = normal;
+}
+
 Material::~Material()
 {
-	delete pixelShader;
-	delete vertexShader;
 }
 
 /// <summary>
@@ -40,4 +48,20 @@ SimplePixelShader *Material::GetPixelShader()
 SimpleVertexShader *Material::GetVertexShader()
 {
 	return vertexShader;
+}
+
+
+ID3D11ShaderResourceView * Material::GetSRV()
+{
+	return textureSRV;
+}
+
+ID3D11ShaderResourceView * Material::GetNormalSRV()
+{
+	return normalSRV;
+}
+
+ID3D11SamplerState * Material::GetSampler()
+{
+	return sampler;
 }

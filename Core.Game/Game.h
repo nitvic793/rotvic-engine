@@ -13,7 +13,9 @@ class Game : public IGame
 protected:
 	static int InstanceCount;
 	float speed;
-
+	DirectionalLight light;
+	DirectionalLight secondaryLight;
+	PointLight pointLight;
 	float deltaTime;
 	float delayTime;
 	Mesh *mesh;

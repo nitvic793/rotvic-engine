@@ -23,5 +23,6 @@
     <None Include="config.json" />
     <None Include="mesh.msh" />
     <None Include="mesh2.msh" />
+    <None Include="packages.config" />
   </ItemGroup>
 </Project>

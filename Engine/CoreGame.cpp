@@ -65,6 +65,7 @@ void CoreGame::OnResizeCallback(int width, int height)
 	screenWidth = width;
 	renderer->screenHeight = height;
 	renderer->screenWidth = width;
+	gameInstance->GetCamera()->SetProjectionMatrix((float)width / height);
 	renderer->SetProjectionMatrix(width, height);
 }
 
@@ -235,7 +236,7 @@ void CoreGame::SetState(StateEnum state)
 /// <remarks>Need to allow arguments to pass color.</remarks>
 void CoreGame::ClearScreen()
 {
-	Core->ClearScreen();
+	renderer->ClearScreen();
 }
 
 /// <summary>
@@ -244,6 +245,7 @@ void CoreGame::ClearScreen()
 void CoreGame::Draw()
 {
 	renderer->UseCamera(gameInstance->GetCamera());
+	renderer->SetLights(gameInstance->GetLights());
 	auto entities = gameInstance->GetEntities();
 	for (auto entity : entities)
 	{

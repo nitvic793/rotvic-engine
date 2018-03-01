@@ -17,6 +17,7 @@ public:
 	Rect GetRect();
 	void SetRect(const Rect& rect);
 	GameEntity();
+	GameEntity(Mesh* m, Material *mat);
 	~GameEntity();
 };
 

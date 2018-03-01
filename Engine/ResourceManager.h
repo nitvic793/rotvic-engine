@@ -2,6 +2,7 @@
 #include "Mesh.h"
 #include "Material.h"
 #include "ConfigLoader.h"
+#include "WICTextureLoader.h"
 #include <map>
 
 /// <summary>
@@ -9,8 +10,13 @@
 /// </summary>
 class ResourceManager
 {
+	ID3D11SamplerState *sampler;
+	SimpleVertexShader *vertexShader;
+	SimplePixelShader *pixelShader;
 	std::map<std::string, Mesh*> meshes;
 	std::map<std::string, Material*> materials;
+	std::map<std::string, ID3D11ShaderResourceView*> textures;
+
 public:
 	/// <summary>
 	/// Loads resources based on given config data.

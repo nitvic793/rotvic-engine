@@ -12,7 +12,6 @@ void SystemRenderer::Draw(Mesh *mesh, ID3D11DeviceContext *context)
 	auto vertexBuffer = mesh->GetVertexBuffer();
 	context->IASetVertexBuffers(0, 1, &vertexBuffer, &stride, &offset);
 	context->IASetIndexBuffer(mesh->GetIndexBuffer(), DXGI_FORMAT_R32_UINT, 0);
-
 	context->DrawIndexed(mesh->GetIndexCount(), 0, 0);
 }
 
@@ -22,14 +21,35 @@ void SystemRenderer::Draw(Mesh *mesh, ID3D11DeviceContext *context)
 /// <param name="entity"></param>
 /// <param name="viewMatrix"></param>
 /// <param name="projectionMatrix"></param>
-void SystemRenderer::SetShaders(Entity *entity, XMFLOAT4X4 viewMatrix, XMFLOAT4X4 projectionMatrix)
+void SystemRenderer::SetShaders(Entity *entity, Camera *camera, LightsMap lights)
 {
-	auto pixelShader = entity->GetMesh()->GetMaterial()->GetPixelShader();
-	auto vertexShader = entity->GetMesh()->GetMaterial()->GetVertexShader();
+	auto material = entity->GetMaterial();
+	auto pixelShader = material->GetPixelShader();
+	auto vertexShader = material->GetVertexShader();
 	vertexShader->SetMatrix4x4(WORLD_STR, entity->GetWorldMatrix());
-	vertexShader->SetMatrix4x4(VIEW_STR, viewMatrix);
-	vertexShader->SetMatrix4x4(PROJECTION_STR, projectionMatrix);
+	vertexShader->SetMatrix4x4(VIEW_STR, camera->GetViewMatrix());
+	vertexShader->SetMatrix4x4(PROJECTION_STR, camera->GetProjectionMatrix());
+	pixelShader->SetSamplerState("basicSampler", material->GetSampler());
+	pixelShader->SetShaderResourceView("diffuseTexture", material->GetSRV());
+	if (material->GetNormalSRV())
+		pixelShader->SetShaderResourceView("normalTexture", material->GetNormalSRV());
+	else pixelShader->SetShaderResourceView("normalTexture", nullptr);
+	pixelShader->SetFloat3("cameraPosition", camera->GetPosition());
+	for (auto lightPair : lights)
+	{
+		auto light = lightPair.second;
+		switch (light->Type)
+		{
+		case Directional:
+			pixelShader->SetData(lightPair.first, light->GetLight<DirectionalLight>(), sizeof(DirectionalLight));
+			break;
+		case Point:
+			pixelShader->SetData(lightPair.first, light->GetLight<PointLight>(), sizeof(PointLight));
+			break;
+		}
+	}
 	vertexShader->CopyAllBufferData();
+	pixelShader->CopyAllBufferData();
 	vertexShader->SetShader();
 	pixelShader->SetShader();
 }
@@ -120,6 +140,23 @@ void Renderer::UseCamera(Camera * camera)
 	this->camera = camera;
 }
 
+void Renderer::SetLights(LightsMap lightsMap)
+{
+	lights = lightsMap;
+}
+
+void Renderer::ClearScreen()
+{
+	const float color[4] = { 0.11f, 0.11f, 0.11f, 0.0f };
+
+	core->GetDeviceContext()->ClearRenderTargetView(core->GetBackBufferRenderTargetView(), color);
+	core->GetDeviceContext()->ClearDepthStencilView(
+		core->GetDepthStencilView(),
+		D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL,
+		1.0f,
+		0);
+}
+
 /// <summary>
 /// Draws the given mesh. 
 /// </summary>
@@ -144,7 +181,7 @@ void Renderer::Draw(Entity *entity)
 	if (entity == nullptr) {
 		throw std::exception("Null Mesh");
 	}
-	internalRenderer->SetShaders(entity, camera->GetViewMatrix(), camera->GetProjectionMatrix());
+	internalRenderer->SetShaders(entity, camera, lights);
 	Draw(entity->GetMesh());
 	core->Draw();
 }

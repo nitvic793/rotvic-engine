@@ -19,7 +19,11 @@ class Entity
 protected:
 	EntityContextWrapper context;
 	Vector3f Position;
+	DirectX::XMFLOAT3 position;
+	DirectX::XMFLOAT3 scale;
+	DirectX::XMFLOAT3 rotation;
 	Mesh *mesh;
+	Material *material;
 public:
 	XMFLOAT4X4 GetWorldMatrix();
 	virtual void MoveUp(float);
@@ -27,13 +31,23 @@ public:
 	virtual void MoveLeft(float) ;
 	virtual void MoveRight(float);
 	virtual void Update(float);
+
 	const Vector3f &GetPosition();
+
 	void SetContext(EntityContextWrapper context);
 	void SetPosition(const Vector3f& position);
+	void SetRotationZ(float angle);
+	void SetPosition(float x, float y, float z);
+	void SetScale(float x, float y, float z);
 	void Move(const Vector3f& offset);
 	void SetMesh(Mesh *mesh);
+	void SetMaterial(Material *mat);
+
+	XMFLOAT3 GetScale();
 	Mesh* GetMesh();
+	Material *GetMaterial();
 	Entity();
+	Entity(Mesh *m, Material* mat);
 	~Entity();
 };
 

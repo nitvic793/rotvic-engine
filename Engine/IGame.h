@@ -9,6 +9,7 @@
 #include "Renderer.h"
 #include "ResourceManager.h"
 #include "Camera.h"
+#include "Lights.h"
 
 /// <summary>
 /// The game instance interface. The actual game should inherit and implement this abstract class and bind it to the core game instance. 
@@ -27,6 +28,7 @@ protected:
 	EntityContextWrapper context;
 	ResourceManager *resource;
 	Camera* camera;
+	LightsMap lightsMap;
 	void ClearEntities();
 	const Vector2f& GetMousePosition2D();
 public:
@@ -46,6 +48,7 @@ public:
 	virtual std::vector<Entity*> GetEntities();
 	void AddEntity(GameEntity *entity, std::string entityName);
 	Camera* GetCamera();
+	LightsMap GetLights();
 
 	IGame();
 	~IGame();

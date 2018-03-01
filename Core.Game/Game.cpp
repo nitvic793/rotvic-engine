@@ -12,7 +12,6 @@ Game::Game(float speed)
 Game::~Game()
 {
 	InstanceCount--;
-	Collision2D::DestroyQuadTree();
 }
 
 void Game::SetSpeed(float speed)
@@ -41,18 +40,20 @@ Game* Game::CreateInstance()
 /// </summary>
 void Game::Initialize()
 {
-	context = EntityContextWrapper(keyboard, mouse);
-	context.GetMousePosition2D = [&]() { return GetMousePosition2D(); };
-	mesh = resource->GetMesh("Green");
-	float speed = (float)std::atof(config["speed"].c_str());
-	if (speed == 0.0f) {
-		speed = DefaultSpeed;
-	}
-	SetSpeed(speed);
-	GameEntity *entity = new PlayerEntity(speed);
-	entity->SetMesh(mesh);
-	entity->SetContext(context);
-	AddEntity(entity, "MainEntity");
+	light.AmbientColor = XMFLOAT4(0.1f, 0.1f, 0.1f, 0);
+	light.DiffuseColor = XMFLOAT4(0.4f, 0.4f, 0.9f, 1.f);
+	light.Direction = XMFLOAT3(1.f, 0, 0.f);
+
+	secondaryLight.AmbientColor = XMFLOAT4(0.1f, 0.1f, 0.1f, 0);
+	secondaryLight.DiffuseColor = XMFLOAT4(0.9f, 0.4f, 0.4f, 1);
+	secondaryLight.Direction = XMFLOAT3(0, -1, 0);
+
+	pointLight.Color = XMFLOAT4(0.4f, 0.9f, 0.4f, 1);
+	pointLight.Position = XMFLOAT3(0, 0, 0);
+
+	lightsMap.insert(std::pair<std::string, Light*>("light", new Light{ &light, Directional }));
+	lightsMap.insert(std::pair<std::string, Light*>("secondaryLight", new Light{ &secondaryLight, Directional }));
+	lightsMap.insert(std::pair<std::string, Light*>("pointLight", new Light{ &pointLight, Point }));
 	LoadLevel();
 }
 
@@ -61,35 +62,9 @@ void Game::Initialize()
 /// </summary>
 void Game::LoadLevel()
 {
-	mesh = resource->GetMesh("Default");
-	GameEntity *entity = new GameEntity();
-	entity->SetMesh(mesh);
-	entity->SetContext(context);
-	entity->SetPosition(Vector3f(7, 5, 0));
-	AddEntity(entity, "Object1");
-
-	mesh = resource->GetMesh("Default");
-	entity = new GameEntity();
-	entity->SetMesh(mesh);
-	entity->SetContext(context);
-	entity->SetPosition(Vector3f(-10, 5, 0));
-	AddEntity(entity, "Object2");
-
-	mesh = resource->GetMesh("Default");
-	entity = new GameEntity();
-	entity->SetMesh(mesh);
-	entity->SetContext(context);
-	entity->SetPosition(Vector3f(-8, -8, 0));
-	AddEntity(entity, "Object3");
-
-	auto bounds = Utility::GetScreenBounds2D(camera->GetViewMatrix(), camera->GetProjectionMatrix(), renderer->screenWidth, renderer->screenHeight, Vector3f(0, 0, -25));
-	Collision2D::InstantiateQuadTree2D(bounds);
-	std::vector<GameEntity*> qtObjects;
-	for (auto entity : entities) {
-		if (entity.first == "MainEntity")continue;;
-		qtObjects.push_back(entity.second);
-	}
-	Collision2D::InsertStaticObjectsInQuadTree(qtObjects);
+	auto entity = new GameEntity(resource->GetMesh("sphere"), resource->GetMaterial("metal"));
+	AddEntity(entity, "Test");
+	entity->SetPosition(0, 2, 0);
 }
 
 /// <summary>
@@ -158,23 +133,6 @@ void Game::Update(float deltaTime)
 {
 	camera->Update(deltaTime);
 	delayTime += deltaTime;
-	if (keyboard->IsKeyPressed(F5) && delayTime > 0.5f) {
-		Save();
-		delayTime = 0.f;
-	}
-
-	if (keyboard->IsKeyPressed(F6) && delayTime > 0.5f) {
-		Load();
-		delayTime = 0.f;
-	}
-
-	auto player = entities["MainEntity"];
-	auto collidingEntity = Collision2D::IsCollidingQuadTree(player);
-	if (collidingEntity != nullptr)
-	{
-		auto collider = dynamic_cast<ICollider2D*>(player);
-		collider->OnCollision(collidingEntity);
-	}
 }
 
 

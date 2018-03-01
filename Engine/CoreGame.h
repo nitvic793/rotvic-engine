@@ -10,6 +10,7 @@
 #include "SaveSystem.h"
 #include "Mouse.h"
 #include "ResourceManager.h"
+#include "Lights.h"
 
 #pragma comment(lib, "d3d11.lib")
 

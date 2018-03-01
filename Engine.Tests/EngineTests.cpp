@@ -215,15 +215,6 @@ namespace EngineTests
 			Assert::IsTrue(expected == actual);
 		}
 
-		TEST_METHOD(Mesh_SetMaterial)
-		{
-			Mesh *mesh = new Mesh(game->GetSystemCore());
-			Material *material = new Material(game->GetSystemCore());
-			mesh->SetMaterial(material);
-			auto actual = mesh->GetMaterial();
-			Assert::IsTrue(material == actual);
-		}
-
 		TEST_METHOD(Mesh_SetCore_Null)
 		{
 			Assert::ExpectException<std::exception>([&]() {

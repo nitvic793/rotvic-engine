@@ -11,14 +11,30 @@ Entity::Entity()
 
 }
 
+Entity::Entity(Mesh *m, Material* mat)
+{
+	XMStoreFloat4x4(&worldMatrix, XMMatrixTranspose(XMMatrixIdentity()));
+	XMVECTOR v = XMVectorSet(0.0f, 0.0f, 0.0f, 0.0f);
+	XMVECTOR sc = XMVectorSet(1.0f, 1.0f, 1.0f, 0.0f);
+	Position = Vector3f(0,0,0);
+	XMStoreFloat3(&position, v);
+	XMStoreFloat3(&scale, sc);
+	XMStoreFloat3(&rotation, v);
+	mesh = m;
+	material = mat;
+}
+
 /// <summary>
 /// Gets the world matrix of entity
 /// </summary>
 /// <returns>Returns 4x4 world matrix for this entity.</returns>
 XMFLOAT4X4 Entity::GetWorldMatrix() 
 {
-	auto newPos = XMMatrixMultiply(XMMatrixIdentity(), XMMatrixTranslation(Position.x, Position.y, Position.z));
-	XMStoreFloat4x4(&worldMatrix, XMMatrixTranspose(newPos));
+	XMMATRIX trans = XMMatrixTranslation(Position.x, Position.y, Position.z);
+	XMMATRIX rotY = XMMatrixRotationZ(rotation.z);
+	XMMATRIX scle = XMMatrixScaling(scale.x, scale.y, scale.z);
+	XMMATRIX world = scle * rotY * trans;
+	XMStoreFloat4x4(&worldMatrix, XMMatrixTranspose(world));
 	return worldMatrix;
 }
 
@@ -33,6 +49,30 @@ Entity::~Entity()
 const Vector3f &Entity::GetPosition()
 {
 	return Position;
+}
+
+void Entity::SetRotationZ(float angle)
+{
+	rotation.z = angle;
+}
+
+void Entity::SetPosition(float x, float y, float z)
+{
+	this->Position.x = x;
+	this->Position.y = y;
+	this->Position.z = z;
+}
+
+void Entity::SetScale(float x, float y, float z)
+{
+	this->scale.x = x;
+	this->scale.y = y;
+	this->scale.z = z;
+}
+
+XMFLOAT3 Entity::GetScale()
+{
+	return scale;
 }
 
 /// <summary>
@@ -73,6 +113,11 @@ void Entity::SetMesh(Mesh *mesh)
 	this->mesh = mesh;
 }
 
+void Entity::SetMaterial(Material * mat)
+{
+	material = mat;
+}
+
 /// <summary>
 /// Gets the mesh for this entity
 /// </summary>
@@ -80,6 +125,11 @@ void Entity::SetMesh(Mesh *mesh)
 Mesh* Entity::GetMesh()
 {
 	return mesh;
+}
+
+Material * Entity::GetMaterial()
+{
+	return material;
 }
 
 /**

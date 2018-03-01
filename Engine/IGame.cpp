@@ -127,6 +127,11 @@ Camera * IGame::GetCamera()
 	return camera;
 }
 
+LightsMap IGame::GetLights()
+{
+	return lightsMap;
+}
+
 /// <summary>
 /// Deletes all entities in game instance.
 /// </summary>

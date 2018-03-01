@@ -99,11 +99,11 @@ void Camera::Update(float deltaTime)
 
 Camera::Camera(float aspectRatio)
 {
-	position = XMFLOAT3(0.f, 0.f, -25.f);
+	position = XMFLOAT3(0.f, 0.f, -8.f);
 	direction = XMFLOAT3(0.f, 0.f, 1.f);
 	rotationX = rotationY = 0.f;
 
-	XMVECTOR pos = XMVectorSet(0, 0, -25, 0);
+	XMVECTOR pos = XMVectorSet(0, 0, -8, 0);
 	XMVECTOR dir = XMVectorSet(0, 0, 1, 0);
 	XMVECTOR up = XMVectorSet(0, 1, 0, 0);
 	XMMATRIX V = XMMatrixLookToLH(
