@@ -25,6 +25,7 @@ Keyboard::Keyboard()
 	KeyMap.insert(std::pair<Keys, wchar_t>(Right, VK_RIGHT));
 	KeyMap.insert(std::pair<Keys, wchar_t>(F5, VK_F5));
 	KeyMap.insert(std::pair<Keys, wchar_t>(F6, VK_F6));
+	KeyMap.insert(std::pair<Keys, wchar_t>(Tab, VK_TAB));
 }
 
 Keyboard::~Keyboard()

@@ -62,6 +62,7 @@ void Game::Initialize()
 /// </summary>
 void Game::LoadLevel()
 {
+	console->WriteLine(L"Level loaded");
 	auto entity = new GameEntity(resource->GetMesh("sphere"), resource->GetMaterial("metal"));
 	AddEntity(entity, "Test");
 	entity->SetPosition(0, 2, 0);
@@ -76,14 +77,8 @@ bool Game::Save()
 #ifdef _DEBUG
 	printf("\nSave state");
 #endif
-	if (vEntities.size() == 0)return false;
 	SaveState state;
-	for (auto entity : entities)
-	{
-		state.EntityName = entity.first;
-		state.Position = entity.second->GetPosition();
-		break;
-	}
+	//Save here
 	saveSystem->Save(&state, "save.dat");
 	return true;
 }
@@ -99,16 +94,7 @@ bool Game::Load()
 #ifdef _DEBUG
 		printf("\nLoad state");
 #endif
-		SaveState state;
-		saveSystem->Load(&state, "save.dat");
-		GameEntity *entity = new PlayerEntity();
-		mesh = resource->GetMesh("Green");
-		entity->SetMesh(mesh);
-		entity->SetPosition(state.Position);
-		entity->SetContext(context);
-		ClearEntities();
-		AddEntity(entity, state.EntityName);
-		LoadLevel();
+		//Load Here
 	}
 	catch (std::exception)
 	{
@@ -131,7 +117,18 @@ int Game::GetInstanceCount()
 /// <param name="deltaTime"></param>
 void Game::Update(float deltaTime)
 {
-	camera->Update(deltaTime);
+	delayTime += deltaTime;
+	if (keyboard->IsKeyPressed(Tab) && delayTime>0.2f)
+	{
+		delayTime = 0.f;
+		console->enabled = !console->enabled;
+	}
+	
+	if (keyboard->IsKeyPressed(Up) && delayTime > 0.2f)
+	{
+		delayTime = 0.f;
+		console->WriteLine(L"Up key pressed");
+	}
 	delayTime += deltaTime;
 }
 

@@ -115,6 +115,7 @@
     <ClInclude Include="Camera.h" />
     <ClInclude Include="Collision2D.h" />
     <ClInclude Include="ConfigLoader.h" />
+    <ClInclude Include="Console.h" />
     <ClInclude Include="Constants.h" />
     <ClInclude Include="CoreGame.h" />
     <ClInclude Include="Engine.h" />
@@ -151,6 +152,7 @@
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="Collision2D.cpp" />
     <ClCompile Include="ConfigLoader.cpp" />
+    <ClCompile Include="Console.cpp" />
     <ClCompile Include="CoreGame.cpp" />
     <ClCompile Include="Entity.cpp" />
     <ClCompile Include="FileBuffer.cpp" />

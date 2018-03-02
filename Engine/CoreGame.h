@@ -11,6 +11,7 @@
 #include "Mouse.h"
 #include "ResourceManager.h"
 #include "Lights.h"
+#include "Console.h"
 
 #pragma comment(lib, "d3d11.lib")
 
@@ -39,6 +40,7 @@ protected:
 	ConfigMap config;
 	SaveSystem *saveSystem;
 	ResourceManager* resourceManager;
+	std::unique_ptr<Console> console;
 public:
 	StateEnum GetState();
 	void ClearScreen();

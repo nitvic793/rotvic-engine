@@ -10,6 +10,7 @@
 #include "ResourceManager.h"
 #include "Camera.h"
 #include "Lights.h"
+#include "Console.h"
 
 /// <summary>
 /// The game instance interface. The actual game should inherit and implement this abstract class and bind it to the core game instance. 
@@ -29,9 +30,11 @@ protected:
 	ResourceManager *resource;
 	Camera* camera;
 	LightsMap lightsMap;
+	Console* console;
 	void ClearEntities();
 	const Vector2f& GetMousePosition2D();
 public:
+	void BindConsole(Console* console);
 	void BindKeyboard(Keyboard* keyboard);
 	void SetCore(SystemCore* core);
 	void SetConfig(const ConfigMap& map);

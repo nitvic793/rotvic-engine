@@ -36,6 +36,11 @@ std::vector<Entity*> IGame::GetEntities()
 	return vEntities;
 }
 
+void IGame::BindConsole(Console * console)
+{
+	this->console = console;
+}
+
 /// <summary>
 /// Bind keyboard to game instance.
 /// </summary>

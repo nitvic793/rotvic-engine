@@ -21,10 +21,12 @@ bool CoreGame::Initialize(HINSTANCE hInstance, int nCmdShow)
 #endif
 	Core->InitializeWindow(hInstance, nCmdShow, screenHeight, screenWidth, screenTitle);
 	Core->InitializeAndBindDirectX();
-	Core->SetOnResizeCallback([&](int width, int height) 
+	Core->SetOnResizeCallback([&](int width, int height)
 	{
 		this->OnResizeCallback(width, height);
 	});
+
+	console = std::unique_ptr<Console>(new Console(Core));
 	mouse = new Mouse(Core->GetWindowHandle());
 	resourceManager->LoadResources(config, Core);
 	return true;
@@ -152,6 +154,7 @@ void CoreGame::Bind(IGame* gInstance)
 	gameInstance->BindMouse(mouse);
 	gameInstance->SetRenderer(renderer);
 	gameInstance->SetResourceManager(resourceManager);
+	gameInstance->BindConsole(console.get());
 }
 
 /// <summary>
@@ -179,26 +182,27 @@ void CoreGame::Run()
 	startTime = now;
 	currentTime = now;
 	previousTime = now;
-	try 
+	try
 	{
 		Core->Run([&]()
 		{
 			UpdateTimer();
 			switch (State)
 			{
-				case Running:
-				{
-					ClearScreen();
-					gameInstance->Update(deltaTime);
-					gameInstance->UpdateEntities(deltaTime);
-					Draw();
-					break;
-				}
-				case Quit:
-				{
-					PostQuitMessage(WM_CLOSE);
-					break;
-				}
+			case Running:
+			{
+				ClearScreen();
+				gameInstance->GetCamera()->Update(deltaTime);
+				gameInstance->Update(deltaTime);
+				gameInstance->UpdateEntities(deltaTime);
+				Draw();
+				break;
+			}
+			case Quit:
+			{
+				PostQuitMessage(WM_CLOSE);
+				break;
+			}
 			}
 		});
 	}
@@ -244,6 +248,7 @@ void CoreGame::ClearScreen()
 /// </summary>
 void CoreGame::Draw()
 {
+	if (console->enabled)console->Render();
 	renderer->UseCamera(gameInstance->GetCamera());
 	renderer->SetLights(gameInstance->GetLights());
 	auto entities = gameInstance->GetEntities();

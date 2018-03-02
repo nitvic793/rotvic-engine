@@ -5,7 +5,7 @@
 
 enum Keys
 {
-	Up, Down, Left, Right, F5, F6
+	Up, Down, Left, Right, F5, F6, Tab
 };
 
 /// <summary>
