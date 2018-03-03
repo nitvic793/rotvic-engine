@@ -1,15 +1,6 @@
+﻿# DirectX 11 Game Engine
 
-## To run the tests
-
-1. Open the solution using Visual Studio 2017. 
-2. Go to Test->Default Processor Architecture and set it to x64 instead of x86. 
-3. After building the solution once, open Test->Windows->Test Explorer and run the tests by clicking on "Run All" in the Test Explorer panel. 
-
-Also ensure the other projects are "x64" to avoid any issues.
-
-
-## Run the game
-- Run the project "Game". Use arrow keys to move the triangle. 
+[![Build status](https://ci.appveyor.com/api/projects/status/l56arbrrf5mpbp5p?svg=true)](https://ci.appveyor.com/project/nitvic793/rotvic-engine)
 
 ## Solution Structure
 

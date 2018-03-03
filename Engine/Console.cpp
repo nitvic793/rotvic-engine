@@ -21,7 +21,7 @@ void Console::Render()
 	for (auto line : buffer)
 	{
 		if (counter > currentLine)break;
-		spriteFont->DrawString(spriteBatch.get(), line.c_str(), XMVectorSet(10, height * counter, 0, 0));
+		spriteFont->DrawString(spriteBatch.get(), line.c_str(), XMVectorSet(10, (float)height * counter, 0, 0));
 		counter++;
 	}
 
