@@ -8,7 +8,7 @@
 /// <remarks>Need to expand key map.</remarks>
 bool Keyboard::IsKeyPressed(Keys key)
 {
-	if (GetAsyncKeyState(KeyMap[key])) 
+	if ((GetAsyncKeyState(KeyMap[key]) & 0x8000) != 0)
 	{
 		return true;
 	}
@@ -26,6 +26,7 @@ Keyboard::Keyboard()
 	KeyMap.insert(std::pair<Keys, wchar_t>(F5, VK_F5));
 	KeyMap.insert(std::pair<Keys, wchar_t>(F6, VK_F6));
 	KeyMap.insert(std::pair<Keys, wchar_t>(Tab, VK_TAB));
+	KeyMap.insert(std::pair<Keys, wchar_t>(Tilde, VK_OEM_3));
 }
 
 Keyboard::~Keyboard()

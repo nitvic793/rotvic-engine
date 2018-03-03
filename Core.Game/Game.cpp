@@ -118,7 +118,7 @@ int Game::GetInstanceCount()
 void Game::Update(float deltaTime)
 {
 	delayTime += deltaTime;
-	if (keyboard->IsKeyPressed(Tab) && delayTime>0.2f)
+	if (keyboard->IsKeyPressed(Tilde) && delayTime>0.2f)
 	{
 		delayTime = 0.f;
 		console->enabled = !console->enabled;

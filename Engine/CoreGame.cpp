@@ -248,7 +248,6 @@ void CoreGame::ClearScreen()
 /// </summary>
 void CoreGame::Draw()
 {
-	if (console->enabled)console->Render();
 	renderer->UseCamera(gameInstance->GetCamera());
 	renderer->SetLights(gameInstance->GetLights());
 	auto entities = gameInstance->GetEntities();
@@ -256,6 +255,7 @@ void CoreGame::Draw()
 	{
 		renderer->Draw(entity);
 	}
+	if (console->enabled)console->Render(); //Render console if required.
 }
 
 /// <summary>

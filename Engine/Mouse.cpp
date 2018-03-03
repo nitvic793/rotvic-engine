@@ -7,7 +7,7 @@
 /// <returns></returns>
 bool Mouse::IsKeyPressed(MouseButton button)
 {
-	if (GetAsyncKeyState(KeyMap[button]))
+	if ((GetAsyncKeyState(KeyMap[button]) & 0x8000)!=0)
 	{
 		return true;
 	}
