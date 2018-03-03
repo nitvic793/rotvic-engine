@@ -136,6 +136,21 @@ LRESULT SystemCore::ProcessMessage(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM l
 {
 	switch (uMsg)
 	{
+	case WM_CHAR:
+	{
+		if (onKeyPressCallBack)
+			onKeyPressCallBack((char)wParam);
+		return 0;
+	}
+	case WM_KEYDOWN:
+		break;
+
+	// Check if a key has been released on the keyboard.
+	case WM_KEYUP:
+	{
+		//printf("KeyUp: %c\n", (char)wParam);
+		return 0;
+	}
 	case WM_SIZE:
 		if (wParam == SIZE_MINIMIZED)
 			return 0;
@@ -338,6 +353,11 @@ void SystemCore::ClearScreen()
 void SystemCore::SetOnResizeCallback(std::function<void(int, int)> callback)
 {
 	onResizeCallback = callback;
+}
+
+void SystemCore::SetOnKeyPressCallback(std::function<void(char)> callback)
+{
+	onKeyPressCallBack = callback;
 }
 
 /// <summary>

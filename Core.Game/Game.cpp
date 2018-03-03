@@ -66,6 +66,17 @@ void Game::LoadLevel()
 	auto entity = new GameEntity(resource->GetMesh("sphere"), resource->GetMaterial("metal"));
 	AddEntity(entity, "Test");
 	entity->SetPosition(0, 2, 0);
+
+	console->RegisterCommand("AddSphere", [&](std::vector<std::string> params)->void 
+	{
+		if (params.size() < 3)return;
+		float x = (float)atof(params[0].c_str());
+		float y = (float)atof(params[1].c_str());
+		float z = (float)atof(params[2].c_str());
+		auto entity = new GameEntity(resource->GetMesh("sphere"), resource->GetMaterial("metal"));
+		AddEntity(entity, "Test");
+		entity->SetPosition(x, y, z);
+	});
 }
 
 /// <summary>
@@ -129,6 +140,7 @@ void Game::Update(float deltaTime)
 		delayTime = 0.f;
 		console->WriteLine(L"Up key pressed");
 	}
+
 	delayTime += deltaTime;
 }
 

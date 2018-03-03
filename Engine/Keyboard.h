@@ -19,4 +19,5 @@ public:
 	Keyboard();
 	~Keyboard();
 	virtual bool IsKeyPressed(Keys key);
+	virtual bool IsKeyPressed(wchar_t key);
 };

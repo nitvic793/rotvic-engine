@@ -15,6 +15,11 @@ bool Keyboard::IsKeyPressed(Keys key)
 	return false;
 }
 
+bool Keyboard::IsKeyPressed(wchar_t key)
+{
+	return (GetAsyncKeyState(key) & 0x8000) != 0;
+}
+
 
 Keyboard::Keyboard()
 {

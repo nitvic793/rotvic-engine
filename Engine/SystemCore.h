@@ -15,6 +15,7 @@ protected:
 	int height;
 	int width;
 	std::function<void(int, int)> onResizeCallback;
+	std::function<void(char)> onKeyPressCallBack;
 	HWND hWnd;
 	D3D_FEATURE_LEVEL		dxFeatureLevel;
 	IDXGISwapChain*			swapChain;
@@ -35,6 +36,7 @@ public:
 	virtual ID3D11DeviceContext*	GetDeviceContext();
 
 	void					SetOnResizeCallback(std::function<void(int, int)> callback);
+	void					SetOnKeyPressCallback(std::function<void(char)> callback);
 	IDXGISwapChain*			GetSwapChain();
 	ID3D11Device*			GetDevice();	
 	D3D_FEATURE_LEVEL		GetDirectXFeatureLevel();

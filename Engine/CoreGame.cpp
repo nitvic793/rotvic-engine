@@ -27,6 +27,10 @@ bool CoreGame::Initialize(HINSTANCE hInstance, int nCmdShow)
 	});
 
 	console = std::unique_ptr<Console>(new Console(Core));
+	Core->SetOnKeyPressCallback([&](char key)->void 
+	{
+		console->OnKeyPress(key);
+	});
 	mouse = new Mouse(Core->GetWindowHandle());
 	resourceManager->LoadResources(config, Core);
 	return true;
@@ -192,6 +196,7 @@ void CoreGame::Run()
 			case Running:
 			{
 				ClearScreen();
+				if (console->enabled)console->Update(deltaTime);
 				gameInstance->GetCamera()->Update(deltaTime);
 				gameInstance->Update(deltaTime);
 				gameInstance->UpdateEntities(deltaTime);
