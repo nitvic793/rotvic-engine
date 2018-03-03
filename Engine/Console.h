@@ -17,6 +17,9 @@ using namespace DirectX;
 typedef std::function<void(std::vector<std::string>)> CommandCallback;
 typedef std::unordered_map<std::string, CommandCallback> CommandMap;
 
+/// <summary>
+/// In-game console
+/// </summary>
 class Console
 {
 	SystemCore *core;
@@ -30,15 +33,56 @@ class Console
 	std::vector<std::wstring> buffer;
 	std::wstringstream currentCommand;
 	CommandMap commandMap;
+
+	/// <summary>
+	/// Invokes the command with given command name if it was registered with the console.
+	/// </summary>
+	/// <param name="commandName">Name of the command</param>
+	/// <param name="params">Params to pass to command</param>
 	void ProcessCommand(std::string commandName, std::vector<std::string> params);
 public:
+
+	/// <summary>
+	/// Flag which enables or disables the console rendering and command processing.
+	/// </summary>
 	bool enabled;
+
+	/// <summary>
+	/// Called every frame when console is enabled.
+	/// </summary>
+	/// <param name="deltaTime"></param>
 	void Update(float deltaTime);
+
+	/// <summary>
+	/// Invoked by core game whenever a key is pressed and console is enabled.
+	/// </summary>
+	/// <param name="key"></param>
 	void OnKeyPress(char key);
+
+	/// <summary>
+	/// Write to the console.
+	/// </summary>
+	/// <param name="line"></param>
 	void WriteLine(std::wstring line);
+
+	/// <summary>
+	/// Renders the console on-screen
+	/// </summary>
 	void Render();
+
+	/// <summary>
+	/// Register a command to the console. This command will be invoke-able from the console.
+	/// </summary>
+	/// <param name="commandName">Name of the command. This will be used to invoke the command</param>
+	/// <param name="command">The function to call when the command is invoked</param>
 	void RegisterCommand(std::string commandName, CommandCallback command);
+
+	/// <summary>
+	/// Console constructor
+	/// </summary>
+	/// <param name="sysCore">System core is required to instantiate the console.</param>
 	Console(SystemCore *sysCore);
+
 	~Console();
 };
 

@@ -82,7 +82,7 @@ void Console::Render()
 	}
 	
 	spriteFont->DrawString(spriteBatch.get(), L":", XMVectorSet(10, (float)height * counter, 0, 0));
-	spriteFont->DrawString(spriteBatch.get(), currentCommand.str().c_str(), XMVectorSet(10 + DirectX::XMVectorGetX(spriteFont->MeasureString(L":")), (float)height * counter, 0, 0));
+	spriteFont->DrawString(spriteBatch.get(), currentCommand.str().c_str(), XMVectorSet(15 + DirectX::XMVectorGetX(spriteFont->MeasureString(L":")), (float)height * counter, 0, 0));
 	spriteBatch->End();
 
 	// Reset render states, since sprite batch changes these!
@@ -103,7 +103,7 @@ Console::Console(SystemCore* sysCore)
 	currentLine = 0;
 	core = sysCore;
 	spriteBatch = std::unique_ptr<SpriteBatch>(new SpriteBatch(core->GetDeviceContext()));
-	spriteFont = std::unique_ptr<SpriteFont>(new SpriteFont(core->GetDevice(), L"../../Assets/Fonts/arial.spritefont"));
+	spriteFont = std::unique_ptr<SpriteFont>(new SpriteFont(core->GetDevice(), L"../../Assets/Fonts/lucida_small.spritefont"));
 	//buffer = std::vector<std::wstring>(maxLines);
 }
 
