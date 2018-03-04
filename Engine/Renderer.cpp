@@ -157,6 +157,11 @@ void Renderer::ClearScreen()
 		0);
 }
 
+void Renderer::SetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY primitive)
+{
+	core->GetDeviceContext()->IASetPrimitiveTopology(primitive);
+}
+
 /// <summary>
 /// Draws the given mesh. 
 /// </summary>

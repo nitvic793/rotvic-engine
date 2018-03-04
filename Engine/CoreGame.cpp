@@ -27,12 +27,13 @@ bool CoreGame::Initialize(HINSTANCE hInstance, int nCmdShow)
 	});
 
 	console = std::unique_ptr<Console>(new Console(Core));
-	Core->SetOnKeyPressCallback([&](char key)->void 
+	Core->SetOnKeyPressCallback([&](char key)->void
 	{
 		console->OnKeyPress(key);
 	});
 	mouse = new Mouse(Core->GetWindowHandle());
 	resourceManager->LoadResources(config, Core);
+	RegisterConsoleCommands();
 	return true;
 }
 
@@ -219,6 +220,19 @@ void CoreGame::Run()
 	{
 		Core->HandleError(nullptr);
 	}
+}
+
+void CoreGame::RegisterConsoleCommands()
+{
+	console->RegisterCommand("SetWireFrame", [&](std::vector<std::string> params)
+	{
+		if (params.size() < 1) return;
+		bool setWireFrame = std::stoi(params[0]);
+		if (setWireFrame)
+			renderer->SetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_LINELIST);
+		else
+			renderer->SetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+	});
 }
 
 /// <summary>

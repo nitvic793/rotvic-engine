@@ -41,6 +41,8 @@ protected:
 	SaveSystem *saveSystem;
 	ResourceManager* resourceManager;
 	std::unique_ptr<Console> console;
+
+	void RegisterConsoleCommands();
 public:
 	StateEnum GetState();
 	void ClearScreen();

@@ -10,6 +10,7 @@
 /// Internal render class to abstract the draw calls. 
 /// </summary>
 class SystemRenderer {
+	D3D11_PRIMITIVE_TOPOLOGY primitiveTopology;
 public:
 	virtual void Draw(Mesh *mesh, ID3D11DeviceContext *context);
 	virtual void SetShaders(Entity *entity, Camera* camera, LightsMap lights);
@@ -38,6 +39,7 @@ public:
 	void					UseCamera(Camera* camera);
 	void					SetLights(LightsMap lightsMap);
 	void					ClearScreen();
+	void					SetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY primitive);
 
 	int	screenHeight;
 	int	screenWidth;
