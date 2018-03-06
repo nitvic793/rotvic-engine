@@ -21,7 +21,7 @@ bool CoreGame::Initialize(HINSTANCE hInstance, int nCmdShow)
 #endif
 	Core->InitializeWindow(hInstance, nCmdShow, screenHeight, screenWidth, screenTitle);
 	Core->InitializeAndBindDirectX();
-	Core->SetOnResizeCallback([&](int width, int height)
+	Core->SetOnResizeCallback([&](int width, int height)->void
 	{
 		this->OnResizeCallback(width, height);
 	});

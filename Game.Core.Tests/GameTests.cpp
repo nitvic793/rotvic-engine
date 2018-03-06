@@ -2,8 +2,7 @@
 #include "CppUnitTest.h"
 #include "../FakeIt/single_header/mstest/fakeit.hpp"
 
-#include "../Core.Game/Game.h"
-#include "../Engine/Engine.h"
+
 #include <exception>
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;

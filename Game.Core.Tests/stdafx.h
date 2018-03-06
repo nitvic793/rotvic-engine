@@ -9,6 +9,7 @@
 
 // Headers for CppUnitTest
 #include "CppUnitTest.h"
-
+#include "../Core.Game/Game.h"
+#include "../Engine/Engine.h"
 
 // TODO: reference additional headers your program requires here
