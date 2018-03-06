@@ -34,6 +34,7 @@ bool CoreGame::Initialize(HINSTANCE hInstance, int nCmdShow)
 	mouse = new Mouse(Core->GetWindowHandle());
 	resourceManager->LoadResources(config, Core);
 	RegisterConsoleCommands();
+	debugDraw = std::unique_ptr<DebugDraw>(new DebugDraw(Core));
 	return true;
 }
 
@@ -229,9 +230,9 @@ void CoreGame::RegisterConsoleCommands()
 		if (params.size() < 1) return;
 		bool setWireFrame = std::stoi(params[0]);
 		if (setWireFrame)
-			renderer->SetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_LINELIST);
+			Core->GetDeviceContext()->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_LINELIST);
 		else
-			renderer->SetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+			Core->GetDeviceContext()->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 	});
 }
 
@@ -275,6 +276,9 @@ void CoreGame::Draw()
 		renderer->Draw(entity);
 	}
 	if (console->enabled)console->Render(); //Render console if required.
+	debugDraw->Render(gameInstance->GetCamera()); //Debug Draw
+	Core->GetDeviceContext()->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+	renderer->Present();
 }
 
 /// <summary>

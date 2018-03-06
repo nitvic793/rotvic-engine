@@ -162,6 +162,11 @@ void Renderer::SetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY primitive)
 	core->GetDeviceContext()->IASetPrimitiveTopology(primitive);
 }
 
+void Renderer::Present()
+{
+	core->GetSwapChain()->Present(0, 0);
+}
+
 /// <summary>
 /// Draws the given mesh. 
 /// </summary>

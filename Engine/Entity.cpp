@@ -5,9 +5,15 @@
 /// </summary>
 Entity::Entity()
 {
-	XMMATRIX W = XMMatrixIdentity();
-	XMStoreFloat4x4(&worldMatrix, XMMatrixTranspose(W));
+	XMStoreFloat4x4(&worldMatrix, XMMatrixTranspose(XMMatrixIdentity()));
+	XMVECTOR v = XMVectorSet(0.0f, 0.0f, 0.0f, 0.0f);
+	XMVECTOR sc = XMVectorSet(1.0f, 1.0f, 1.0f, 0.0f);
+	Position = Vector3f(0, 0, 0);
+	XMStoreFloat3(&position, v);
+	XMStoreFloat3(&scale, sc);
+	XMStoreFloat3(&rotation, v);
 	mesh = nullptr;	
+	material = nullptr;
 
 }
 

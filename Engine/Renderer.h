@@ -40,6 +40,7 @@ public:
 	void					SetLights(LightsMap lightsMap);
 	void					ClearScreen();
 	void					SetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY primitive);
+	void					Present();
 
 	int	screenHeight;
 	int	screenWidth;

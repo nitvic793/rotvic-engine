@@ -330,7 +330,7 @@ void SystemCore::Run(std::function<void()> updateCallback)
 		else
 		{
 			updateCallback();
-			swapChain->Present(0, 0);
+			//swapChain->Present(0, 0);
 		}
 	}
 }

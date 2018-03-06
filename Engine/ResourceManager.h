@@ -11,13 +11,16 @@
 class ResourceManager
 {
 	ID3D11SamplerState *sampler;
-	SimpleVertexShader *vertexShader;
-	SimplePixelShader *pixelShader;
+
 	std::map<std::string, Mesh*> meshes;
 	std::map<std::string, Material*> materials;
 	std::map<std::string, ID3D11ShaderResourceView*> textures;
-
+	static ResourceManager* instance;
 public:
+	SimpleVertexShader *vertexShader;
+	SimplePixelShader *pixelShader;
+	SimplePixelShader *debugShader;
+
 	/// <summary>
 	/// Loads resources based on given config data.
 	/// </summary>
@@ -39,7 +42,9 @@ public:
 	/// <returns>Material</returns>
 	Material* GetMaterial(std::string materialName);
 
+	static ResourceManager* GetInstance();
 	ResourceManager();
 	~ResourceManager();
 };
+
 

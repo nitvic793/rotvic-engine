@@ -12,6 +12,7 @@
 #include "ResourceManager.h"
 #include "Lights.h"
 #include "Console.h"
+#include "DebugDraw.h"
 
 #pragma comment(lib, "d3d11.lib")
 
@@ -41,6 +42,7 @@ protected:
 	SaveSystem *saveSystem;
 	ResourceManager* resourceManager;
 	std::unique_ptr<Console> console;
+	std::unique_ptr<DebugDraw> debugDraw;
 
 	void RegisterConsoleCommands();
 public:

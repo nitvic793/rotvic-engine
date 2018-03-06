@@ -11,6 +11,7 @@
 #include <unordered_map>
 #include <locale>
 #include <codecvt>
+#include <stack>
 
 using namespace DirectX;
 

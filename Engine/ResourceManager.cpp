@@ -1,6 +1,7 @@
 #include "ResourceManager.h"
 #include "MeshLoader.h"
 
+ResourceManager* ResourceManager::instance = nullptr;
 
 void ResourceManager::LoadResources(ConfigMap config, SystemCore* core)
 {
@@ -18,9 +19,12 @@ void ResourceManager::LoadResources(ConfigMap config, SystemCore* core)
 	device->CreateSamplerState(&samplerDesc, &sampler);
 
 	vertexShader = new SimpleVertexShader(device, context);
-	auto isVertexShaderValid = vertexShader->LoadShaderFile(L"VertexShader.cso");
+	vertexShader->LoadShaderFile(L"VertexShader.cso");
 	pixelShader = new SimplePixelShader(device, context);
 	pixelShader->LoadShaderFile(L"PixelShader.cso");
+	debugShader = new SimplePixelShader(device, context);
+	debugShader->LoadShaderFile(L"DebugShader.cso");
+
 	Material *material = nullptr;
 	ID3D11ShaderResourceView *srv = nullptr;
 	ID3D11ShaderResourceView *normalSrv = nullptr; 
@@ -64,8 +68,14 @@ Material * ResourceManager::GetMaterial(std::string materialName)
 	return materials[materialName];
 }
 
+ResourceManager* ResourceManager::GetInstance()
+{
+	return instance;
+}
+
 ResourceManager::ResourceManager()
 {
+	instance = this;
 }
 
 
@@ -88,6 +98,7 @@ ResourceManager::~ResourceManager()
 	materials.clear();
 	delete vertexShader;
 	delete pixelShader;
+	delete debugShader;
 	if (sampler)
 		sampler->Release();
 }
