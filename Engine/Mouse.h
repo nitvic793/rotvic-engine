@@ -56,7 +56,7 @@ public:
 	/// <returns>Returns Mouse Instance</returns>
 	static Mouse* GetInstance();
 
-	void RegisterOnButtonUpCallback(void(*callback)(WPARAM, int, int));
+	void RegisterOnButtonUpCallback(std::function<void(WPARAM, int, int)> callback);
 
 	void RegisterOnMouseMoveCallback(std::function<void(WPARAM, int, int)> callback);
 

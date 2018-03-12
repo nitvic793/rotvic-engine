@@ -15,12 +15,30 @@ void Console::ProcessCommand(std::string commandName, std::vector<std::string> p
 
 void Console::Update(float deltaTime)
 {
+	delayTime += deltaTime;
+	if (keyboard->IsKeyPressed(Down) && delayTime > 0.1f && !commandHistory.empty()) 
+	{
+		currentCommand.str(std::wstring());
+		currentCommand.str(commandHistory.top());
+		commandHistoryUp.push(commandHistory.top());
+		commandHistory.pop();
+		delayTime = 0;
+	}
 
+	if (keyboard->IsKeyPressed(Up) && delayTime > 0.1f && !commandHistoryUp.empty())
+	{
+		currentCommand.str(std::wstring());
+		currentCommand.str(commandHistoryUp.top());
+		commandHistory.push(commandHistoryUp.top());
+		commandHistoryUp.pop();
+		delayTime = 0;
+	}
 }
 
 void Console::OnKeyPress(char key)
 {
-	if (!enabled) 
+	printf("%d\n", key);
+	if (!enabled)
 	{
 		return;
 	}
@@ -50,6 +68,13 @@ void Console::OnKeyPress(char key)
 
 		WriteLine(L"Command " + currentCommand.str());
 		ProcessCommand(command, args);
+		
+		while (!commandHistoryUp.empty())
+		{
+			commandHistory.push(commandHistoryUp.top());
+			commandHistoryUp.pop();
+		}
+		commandHistory.push(currentCommand.str());
 		currentCommand.str(std::wstring());
 	}
 	else if (key == '`')return;
@@ -58,7 +83,7 @@ void Console::OnKeyPress(char key)
 
 void Console::WriteLine(std::wstring line)
 {
-	if (currentLine < maxLines) 
+	if (currentLine < maxLines)
 	{
 		buffer.push_back(line);
 		currentLine++;
@@ -80,7 +105,7 @@ void Console::Render()
 		spriteFont->DrawString(spriteBatch.get(), line.c_str(), XMVectorSet(10, (float)height * counter, 0, 0));
 		counter++;
 	}
-	
+
 	spriteFont->DrawString(spriteBatch.get(), L":", XMVectorSet(10, (float)height * counter, 0, 0));
 	spriteFont->DrawString(spriteBatch.get(), currentCommand.str().c_str(), XMVectorSet(15 + DirectX::XMVectorGetX(spriteFont->MeasureString(L":")), (float)height * counter, 0, 0));
 	spriteBatch->End();
@@ -92,7 +117,7 @@ void Console::Render()
 
 void Console::RegisterCommand(std::string commandName, CommandCallback command)
 {
-	commandMap.insert(std::pair<std::string, CommandCallback>(commandName,command));
+	commandMap.insert(std::pair<std::string, CommandCallback>(commandName, command));
 }
 
 Console::Console(SystemCore* sysCore)
@@ -104,6 +129,8 @@ Console::Console(SystemCore* sysCore)
 	core = sysCore;
 	spriteBatch = std::unique_ptr<SpriteBatch>(new SpriteBatch(core->GetDeviceContext()));
 	spriteFont = std::unique_ptr<SpriteFont>(new SpriteFont(core->GetDevice(), L"../../Assets/Fonts/lucida_small.spritefont"));
+	keyboard = Keyboard::GetInstance();
+	delayTime = 0;
 	//buffer = std::vector<std::wstring>(maxLines);
 }
 

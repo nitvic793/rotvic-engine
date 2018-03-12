@@ -1,5 +1,7 @@
 #include "Keyboard.h"
 
+Keyboard* Keyboard::instance = nullptr;
+
 /// <summary>
 /// Checks if given key is pressed or not.
 /// </summary>
@@ -32,9 +34,15 @@ Keyboard::Keyboard()
 	KeyMap.insert(std::pair<Keys, wchar_t>(F6, VK_F6));
 	KeyMap.insert(std::pair<Keys, wchar_t>(Tab, VK_TAB));
 	KeyMap.insert(std::pair<Keys, wchar_t>(Tilde, VK_OEM_3));
+	instance = this;
 }
 
 Keyboard::~Keyboard()
 {
 
+}
+
+Keyboard * Keyboard::GetInstance()
+{
+	return instance;
 }

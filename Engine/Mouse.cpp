@@ -65,7 +65,7 @@ Mouse * Mouse::GetInstance()
 	return instance;
 }
 
-void Mouse::RegisterOnButtonUpCallback(void(*callback)(WPARAM, int, int))
+void Mouse::RegisterOnButtonUpCallback(std::function<void(WPARAM, int, int)> callback)
 {
 	buttonUpCallbacks.push_back(callback);
 }
@@ -77,10 +77,14 @@ void Mouse::RegisterOnMouseMoveCallback(std::function<void(WPARAM, int, int)> ca
 
 void Mouse::OnMouseUp(WPARAM wParam, int x, int y)
 {
+	for (auto cb : buttonUpCallbacks)
+		cb(wParam, x, y);
 }
 
 void Mouse::OnMouseDown(WPARAM wParam, int x, int y)
 {
+	for (auto cb : buttonDownCallbacks)
+		cb(wParam, x, y);
 }
 
 void Mouse::OnMouseMove(WPARAM wParam, int x, int y)
@@ -91,6 +95,8 @@ void Mouse::OnMouseMove(WPARAM wParam, int x, int y)
 
 void Mouse::OnMouseWheel(float wheelData, int x, int y)
 {
+	for (auto cb : mouseWheelCallbacks)
+		cb(wheelData, x, y);
 }
 
 Mouse::Mouse(HWND hWnd)

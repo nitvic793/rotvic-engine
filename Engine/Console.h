@@ -4,6 +4,7 @@
 #include "SystemCore.h"
 #include "SpriteBatch.h"
 #include "SpriteFont.h"
+#include "Keyboard.h"
 #include <mutex>
 #include <string>
 #include <sstream>
@@ -31,10 +32,14 @@ class Console
 	int maxLines;
 	int currentLine;
 	int height;
+	float delayTime;
 	std::vector<std::wstring> buffer;
 	std::wstringstream currentCommand;
-	CommandMap commandMap;
+	std::stack<std::wstring> commandHistory;
+	std::stack<std::wstring> commandHistoryUp;
 
+	CommandMap commandMap;
+	Keyboard* keyboard;
 	/// <summary>
 	/// Invokes the command with given command name if it was registered with the console.
 	/// </summary>

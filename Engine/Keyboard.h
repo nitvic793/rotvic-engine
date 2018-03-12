@@ -15,9 +15,11 @@ class Keyboard
 {
 protected:
 	std::map<Keys, wchar_t> KeyMap;
+	static Keyboard* instance;
 public:
 	Keyboard();
 	~Keyboard();
+	static Keyboard* GetInstance();
 	virtual bool IsKeyPressed(Keys key);
 	virtual bool IsKeyPressed(wchar_t key);
 };
