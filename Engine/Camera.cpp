@@ -1,4 +1,6 @@
 #include "Camera.h"
+
+#include "Mouse.h"
 #include <Windows.h>
 #include <algorithm>
 
@@ -97,6 +99,10 @@ void Camera::Update(float deltaTime)
 	XMStoreFloat3(&position, pos);
 }
 
+void Camera::OnMouseMove(WPARAM wParam, int x, int y)
+{
+}
+
 Camera::Camera(float aspectRatio)
 {
 	position = XMFLOAT3(0.f, 0.f, -8.f);
@@ -118,6 +124,11 @@ Camera::Camera(float aspectRatio)
 		0.1f,						// Near clip plane distance
 		100.0f);					// Far clip plane distance
 	XMStoreFloat4x4(&projectionMatrix, XMMatrixTranspose(P));
+	auto mouse = Mouse::GetInstance();
+	mouse->RegisterOnMouseMoveCallback([&](WPARAM wParam, int x, int y) 
+	{
+		OnMouseMove(wParam, x, y); 
+	});
 }
 
 

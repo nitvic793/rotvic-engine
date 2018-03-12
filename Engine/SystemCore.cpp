@@ -1,4 +1,5 @@
 #include "SystemCore.h"
+#include <WindowsX.h>
 
 SystemCore*	SystemCore::SystemCoreInstance = nullptr;
 
@@ -168,9 +169,54 @@ LRESULT SystemCore::ProcessMessage(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM l
 		PostQuitMessage(0);
 		return 0;
 	} break;
+	// Mouse button being pressed (while the cursor is currently over our window)
+	case WM_LBUTTONDOWN:
+	case WM_MBUTTONDOWN:
+	case WM_RBUTTONDOWN:
+		OnMouseDown(wParam, GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam));
+		return 0;
+
+		// Mouse button being released (while the cursor is currently over our window)
+	case WM_LBUTTONUP:
+	case WM_MBUTTONUP:
+	case WM_RBUTTONUP:
+		OnMouseUp(wParam, GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam));
+		return 0;
+
+		// Cursor moves over the window (or outside, while we're currently capturing it)
+	case WM_MOUSEMOVE:
+		OnMouseMove(wParam, GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam));
+		return 0;
+
+		// Mouse wheel is scrolled
+	case WM_MOUSEWHEEL:
+		OnMouseWheel(GET_WHEEL_DELTA_WPARAM(wParam) / (float)WHEEL_DELTA, GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam));
+		return 0;
 	}
 
 	return DefWindowProc(hWnd, uMsg, wParam, lParam);
+}
+
+void SystemCore::OnMouseUp(WPARAM wParam, int x, int y)
+{
+	mouse->OnMouseUp(wParam, x, y);
+	ReleaseCapture();
+}
+
+void SystemCore::OnMouseDown(WPARAM wParam, int x, int y)
+{
+	SetCapture(hWnd);
+	mouse->OnMouseDown(wParam, x, y);
+}
+
+void SystemCore::OnMouseMove(WPARAM wParam, int x, int y)
+{
+	mouse->OnMouseMove(wParam, x, y);
+}
+
+void SystemCore::OnMouseWheel(float wheelData, int x, int y)
+{
+	mouse->OnMouseWheel(wheelData, x, y);
 }
 
 /// <summary>
@@ -348,6 +394,11 @@ void SystemCore::ClearScreen()
 		D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL,
 		1.0f,
 		0);
+}
+
+void SystemCore::BindMouse(Mouse * m)
+{
+	mouse = m;
 }
 
 void SystemCore::SetOnResizeCallback(std::function<void(int, int)> callback)

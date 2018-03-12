@@ -1,6 +1,6 @@
 #pragma once
 #include <DirectXMath.h>
-
+#include <Windows.h>
 using namespace DirectX;
 
 class Camera
@@ -19,6 +19,7 @@ public:
 	XMFLOAT4X4 GetProjectionMatrix();
 	void SetProjectionMatrix(float aspectRatio);
 	virtual void Update(float deltaTime);
+	virtual void OnMouseMove(WPARAM wParam, int x, int y);
 	Camera(float aspectRatio);
 	~Camera();
 };

@@ -1,5 +1,7 @@
 #include "Mouse.h"
 
+Mouse* Mouse::instance = nullptr;
+
 /// <summary>
 /// Checks if given mouse button is pressed/clicked. 
 /// </summary>
@@ -58,11 +60,45 @@ Vector2f Mouse::GetMousePositionWorld(XMFLOAT4X4 viewMatrix, XMFLOAT4X4 projecti
 	return Vector2f(mouseInWorld.x, mouseInWorld.y);
 }
 
+Mouse * Mouse::GetInstance()
+{
+	return instance;
+}
+
+void Mouse::RegisterOnButtonUpCallback(void(*callback)(WPARAM, int, int))
+{
+	buttonUpCallbacks.push_back(callback);
+}
+
+void Mouse::RegisterOnMouseMoveCallback(std::function<void(WPARAM, int, int)> callback)
+{
+	mouseMoveCallbacks.push_back(callback);
+}
+
+void Mouse::OnMouseUp(WPARAM wParam, int x, int y)
+{
+}
+
+void Mouse::OnMouseDown(WPARAM wParam, int x, int y)
+{
+}
+
+void Mouse::OnMouseMove(WPARAM wParam, int x, int y)
+{
+	for (auto cb : mouseMoveCallbacks)
+		cb(wParam, x, y);
+}
+
+void Mouse::OnMouseWheel(float wheelData, int x, int y)
+{
+}
+
 Mouse::Mouse(HWND hWnd)
 {
 	this->hWnd = hWnd;
 	KeyMap.insert(std::pair<MouseButton, wchar_t>(MBLeft, VK_LBUTTON));
 	KeyMap.insert(std::pair<MouseButton, wchar_t>(MBRight, VK_RBUTTON));
+	instance = this;
 }
 
 

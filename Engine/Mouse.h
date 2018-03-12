@@ -5,6 +5,8 @@
 #include <Windows.h>
 #include <map>
 #include <DirectXMath.h>
+#include <vector>
+#include <functional>
 
 using namespace DirectX;
 
@@ -17,6 +19,12 @@ class Mouse
 {
 	HWND hWnd;
 	std::map<MouseButton, wchar_t> KeyMap;
+	static Mouse *instance;
+
+	std::vector<std::function< void(WPARAM, int, int) >>	buttonUpCallbacks;
+	std::vector<std::function< void(WPARAM, int, int) >>	buttonDownCallbacks;
+	std::vector<std::function< void(WPARAM, int, int) >>	mouseMoveCallbacks;
+	std::vector<std::function< void(float, int, int) >>		mouseWheelCallbacks;
 public:
 	/// <summary>
 	/// Checks if given mouse button is pressed/clicked. 
@@ -41,6 +49,25 @@ public:
 	/// <param name="cameraPosition">Position of camera. Only z position is considered</param>
 	/// <returns>Position of mouse in world space</returns>
 	virtual Vector2f GetMousePositionWorld(XMFLOAT4X4 viewMatrix, XMFLOAT4X4 projectionMatrix, int screenWidth, int screenHeight, Vector3f cameraPosition);
+
+	/// <summary>
+	/// Get instance of Mouse Input class
+	/// </summary>
+	/// <returns>Returns Mouse Instance</returns>
+	static Mouse* GetInstance();
+
+	void RegisterOnButtonUpCallback(void(*callback)(WPARAM, int, int));
+
+	void RegisterOnMouseMoveCallback(std::function<void(WPARAM, int, int)> callback);
+
+	void OnMouseUp(WPARAM wParam, int x, int y);
+
+	void OnMouseDown(WPARAM wParam, int x, int y);
+
+	void OnMouseMove(WPARAM wParam, int x, int y);
+
+	void OnMouseWheel(float wheelData, int x, int y);
+
 	Mouse(HWND hInstance);
 	~Mouse();
 };

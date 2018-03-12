@@ -17,13 +17,14 @@ using namespace DirectX;
 enum PrimitiveShapes 
 {
 	CUBE,
-	SPHERE
+	SPHERE,
+	CONE
 };
 
 class DebugDraw
 {
 	SystemCore *core;
-	std::unique_ptr<PrimitiveBatch<DirectX::VertexPositionColor>> batch;
+	std::unique_ptr<PrimitiveBatch<VertexPositionColor>> batch;
 	std::unique_ptr<BasicEffect> effect;
 	std::unique_ptr<CommonStates> states;
 	Microsoft::WRL::ComPtr<ID3D11InputLayout> inputLayout;
