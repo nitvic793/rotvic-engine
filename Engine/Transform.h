@@ -15,7 +15,10 @@ public:
 	void SetRotation(float roll, float pitch, float yaw);
 	void SetPosition(float x, float y, float z);
 	void SetScale(float x, float y, float z);
-	XMFLOAT4X4 GetWorldMatrix();
+	const XMFLOAT3 &GetPosition();
+	const XMFLOAT3 &GetScale();
+	const XMFLOAT3 &GetRotation();
+	const XMFLOAT4X4 &GetWorldMatrix();
 	
 	Transform();
 	~Transform();

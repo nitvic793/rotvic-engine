@@ -135,6 +135,7 @@
     <ClInclude Include="Mesh.h" />
     <ClInclude Include="MeshLoader.h" />
     <ClInclude Include="Mouse.h" />
+    <ClInclude Include="PrimitiveShape.h" />
     <ClInclude Include="QuadTree.h" />
     <ClInclude Include="Rect.h" />
     <ClInclude Include="Renderer.h" />
@@ -167,6 +168,7 @@
     <ClCompile Include="Mesh.cpp" />
     <ClCompile Include="MeshLoader.cpp" />
     <ClCompile Include="Mouse.cpp" />
+    <ClCompile Include="PrimitiveShape.cpp" />
     <ClCompile Include="QuadTree.cpp" />
     <ClCompile Include="Rect.cpp" />
     <ClCompile Include="Renderer.cpp" />

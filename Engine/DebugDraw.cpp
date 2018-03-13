@@ -41,50 +41,6 @@ void XM_CALLCONV DrawRing(PrimitiveBatch<VertexPositionColor>* batch,
 	//batch->Draw(D3D11_PRIMITIVE_TOPOLOGY_LINELIST, verts, c_ringSegments + 1);
 }
 
-
-void XM_CALLCONV DebugDraw::Draw(const BoundingSphere & sphere, FXMVECTOR color)
-{
-	XMVECTOR origin = XMLoadFloat3(&sphere.Center);
-
-	const float radius = sphere.Radius;
-
-	XMVECTOR xaxis = g_XMIdentityR0 * radius;
-	XMVECTOR yaxis = g_XMIdentityR1 * radius;
-	XMVECTOR zaxis = g_XMIdentityR2 * radius;
-
-	DrawRing(batch.get(), origin, xaxis, zaxis, color);
-	DrawRing(batch.get(), origin, xaxis, yaxis, color);
-	DrawRing(batch.get(), origin, yaxis, zaxis, color);
-	return;
-}
-
-void Initialize(Vertex *vertices, UINT vertexCount, UINT *indices, UINT indexCount, ID3D11Buffer** vertexBuffer, ID3D11Buffer** indexBuffer, ID3D11Device* device)
-{
-	D3D11_BUFFER_DESC vbd;
-	vbd.Usage = D3D11_USAGE_IMMUTABLE;
-	vbd.ByteWidth = sizeof(Vertex) * vertexCount;
-	vbd.BindFlags = D3D11_BIND_VERTEX_BUFFER;
-	vbd.CPUAccessFlags = 0;
-	vbd.MiscFlags = 0;
-	vbd.StructureByteStride = 0;
-	D3D11_SUBRESOURCE_DATA initialVertexData;
-	initialVertexData.pSysMem = vertices;
-
-	device->CreateBuffer(&vbd, &initialVertexData, &*vertexBuffer);
-
-	D3D11_BUFFER_DESC ibd;
-	ibd.Usage = D3D11_USAGE_IMMUTABLE;
-	ibd.ByteWidth = sizeof(unsigned int) * indexCount;
-	ibd.BindFlags = D3D11_BIND_INDEX_BUFFER;
-	ibd.CPUAccessFlags = 0;
-	ibd.MiscFlags = 0;
-	ibd.StructureByteStride = 0;
-	D3D11_SUBRESOURCE_DATA initialIndexData;
-	initialIndexData.pSysMem = indices;
-
-	device->CreateBuffer(&ibd, &initialIndexData, &*indexBuffer);
-}
-
 void DebugDraw::Draw(ID3D11DeviceContext *context, ID3D11Buffer* vertexBuffer, ID3D11Buffer* indexBuffer, UINT indexCount)
 {
 	UINT stride = sizeof(Vertex);
@@ -95,85 +51,30 @@ void DebugDraw::Draw(ID3D11DeviceContext *context, ID3D11Buffer* vertexBuffer, I
 }
 
 
-
-inline void XM_CALLCONV DebugDraw::DrawCube(SystemCore* core,
-	CXMMATRIX matWorld)
-{
-	static const XMVECTORF32 s_verts[8] =
-	{
-		{ -1.f, -1.f, -1.f, 0.f },
-		{ 1.f, -1.f, -1.f, 0.f },
-		{ 1.f, -1.f,  1.f, 0.f },
-		{ -1.f, -1.f,  1.f, 0.f },
-		{ -1.f,  1.f, -1.f, 0.f },
-		{ 1.f,  1.f, -1.f, 0.f },
-		{ 1.f,  1.f,  1.f, 0.f },
-		{ -1.f,  1.f,  1.f, 0.f }
-	};
-
-	static UINT s_indices[] =
-	{
-		0, 1,
-		1, 2,
-		2, 3,
-		3, 0,
-		4, 5,
-		5, 6,
-		6, 7,
-		7, 4,
-		0, 4,
-		1, 5,
-		2, 6,
-		3, 7
-	}; //12
-
-	Vertex verts[8];
-	for (size_t i = 0; i < 8; ++i)
-	{
-		verts[i] = {};
-		XMVECTOR v = XMVector3Transform(s_verts[i], matWorld);
-		XMStoreFloat3(&verts[i].Position, v);
-	}
-
-	if (cubeIndexBuffer == nullptr)
-		Initialize(verts, 8, s_indices, 24, &cubeVertexBuffer, &cubeIndexBuffer, core->GetDevice());
-	Draw(core->GetDeviceContext(), cubeVertexBuffer, cubeIndexBuffer, 24);
-}
-
-
 void DebugDraw::Render(Camera* camera)
 {
 	auto context = core->GetDeviceContext();
+	//Set output merger and rasterizer options.
 	context->OMSetBlendState(states->Opaque(), nullptr, 0xFFFFFFFF);
-	context->OMSetDepthStencilState(states->DepthNone(), 0);
+	//context->OMSetDepthStencilState(states->DepthNone(), 0);
 	context->RSSetState(states->CullNone());
-	//effect->SetView(XMLoadFloat4x4(&camera->GetViewMatrix()));
-	//effect->SetProjection(XMLoadFloat4x4(&camera->GetProjectionMatrix()));
-	//effect->Apply(context);
 
-	//context->IASetInputLayout(inputLayout.Get());
 	auto rm = ResourceManager::GetInstance();
 	auto ps = rm->debugShader;
 	auto vs = rm->vertexShader;
-	Entity* entity = new Entity();
-	entity->SetPosition(0, 0, 0);
-	auto identity = XMMatrixIdentity();
-	XMFLOAT4X4 mat;
-	auto m = entity->GetWorldMatrix();
-	XMStoreFloat4x4(&mat, XMMatrixTranspose(identity));
-	vs->SetMatrix4x4(WORLD_STR, m);
-
-	//batch->Begin();
+	cube->transform.SetPosition(2, 1, 5);
+	cube->transform.SetRotation(10, 30, 0);
+	vs->SetMatrix4x4(WORLD_STR, cube->transform.GetWorldMatrix());
 	vs->SetMatrix4x4(VIEW_STR, camera->GetViewMatrix());
 	vs->SetMatrix4x4(PROJECTION_STR, camera->GetProjectionMatrix());
 	vs->CopyAllBufferData();
 	ps->CopyAllBufferData();
 	ps->SetShader();
 	vs->SetShader();
-	context->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_LINELIST);
-	DrawCube(core, identity);
+	context->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_LINELIST); //Ensure only lines are drawn
+	Draw(core->GetDeviceContext(), cube->vertexBuffer, cube->indexBuffer, cube->indexCount);
 
-	delete entity;
+	//Reset Pipeline 
 	context->OMSetBlendState(0, 0, 0xFFFFFFFF);
 	context->OMSetDepthStencilState(0, 0);
 	context->RSSetState(nullptr);
@@ -181,29 +82,13 @@ void DebugDraw::Render(Camera* camera)
 
 DebugDraw::DebugDraw(SystemCore* core)
 {
-
 	this->core = core;
+	cube = PrimitiveShape::InstantiateCube(core);
 	states = std::make_unique<CommonStates>(core->GetDevice());
-	effect = std::make_unique<BasicEffect>(core->GetDevice());
-	effect->SetVertexColorEnabled(true);
-
-	{
-		void const* shaderByteCode;
-		size_t byteCodeLength;
-
-		effect->GetVertexShaderBytecode(&shaderByteCode, &byteCodeLength);
-		core->GetDevice()->CreateInputLayout(
-			VertexPositionColor::InputElements, VertexPositionColor::InputElementCount,
-			shaderByteCode, byteCodeLength,
-			inputLayout.ReleaseAndGetAddressOf());
-	}
-
-	batch = std::make_unique<PrimitiveBatch<VertexPositionColor>>(core->GetDeviceContext());
 }
 
 
 DebugDraw::~DebugDraw()
 {
-	if (cubeVertexBuffer)cubeVertexBuffer->Release();
-	if (cubeIndexBuffer)cubeIndexBuffer->Release();
+	delete cube;
 }

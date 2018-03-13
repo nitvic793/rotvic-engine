@@ -1,0 +1,84 @@
+#include "PrimitiveShape.h"
+
+void PrimitiveShape::Initialize(Vertex *vertices, UINT vertexCount, UINT *indices, UINT indexCount, ID3D11Device* device)
+{
+	this->indexCount = indexCount;
+	D3D11_BUFFER_DESC vbd;
+	vbd.Usage = D3D11_USAGE_IMMUTABLE;
+	vbd.ByteWidth = sizeof(Vertex) * vertexCount;
+	vbd.BindFlags = D3D11_BIND_VERTEX_BUFFER;
+	vbd.CPUAccessFlags = 0;
+	vbd.MiscFlags = 0;
+	vbd.StructureByteStride = 0;
+	D3D11_SUBRESOURCE_DATA initialVertexData;
+	initialVertexData.pSysMem = vertices;
+
+	device->CreateBuffer(&vbd, &initialVertexData, &vertexBuffer);
+
+	D3D11_BUFFER_DESC ibd;
+	ibd.Usage = D3D11_USAGE_IMMUTABLE;
+	ibd.ByteWidth = sizeof(unsigned int) * indexCount;
+	ibd.BindFlags = D3D11_BIND_INDEX_BUFFER;
+	ibd.CPUAccessFlags = 0;
+	ibd.MiscFlags = 0;
+	ibd.StructureByteStride = 0;
+	D3D11_SUBRESOURCE_DATA initialIndexData;
+	initialIndexData.pSysMem = indices;
+
+	device->CreateBuffer(&ibd, &initialIndexData, &indexBuffer);
+}
+
+PrimitiveShape::PrimitiveShape()
+{
+	indexBuffer = vertexBuffer = nullptr;
+}
+
+
+PrimitiveShape *PrimitiveShape::InstantiateCube(SystemCore * core)
+{
+	auto shape = new PrimitiveShape();
+	static const XMVECTORF32 s_verts[8] =
+	{
+		{ -1.f, -1.f, -1.f, 0.f },
+		{ 1.f, -1.f, -1.f, 0.f },
+		{ 1.f, -1.f,  1.f, 0.f },
+		{ -1.f, -1.f,  1.f, 0.f },
+		{ -1.f,  1.f, -1.f, 0.f },
+		{ 1.f,  1.f, -1.f, 0.f },
+		{ 1.f,  1.f,  1.f, 0.f },
+		{ -1.f,  1.f,  1.f, 0.f }
+	};
+
+	static UINT s_indices[] =
+	{
+		0, 1,
+		1, 2,
+		2, 3,
+		3, 0,
+		4, 5,
+		5, 6,
+		6, 7,
+		7, 4,
+		0, 4,
+		1, 5,
+		2, 6,
+		3, 7
+	}; //12
+	auto identity = XMMatrixIdentity();
+	Vertex verts[8];
+	for (size_t i = 0; i < 8; ++i)
+	{
+		verts[i] = {};
+		XMVECTOR v = XMVector3Transform(s_verts[i], identity);
+		XMStoreFloat3(&verts[i].Position, v);
+	}
+
+	shape->Initialize(verts, 8, s_indices, 24, core->GetDevice());
+	return shape;
+}
+
+PrimitiveShape::~PrimitiveShape()
+{
+	if (indexBuffer)indexBuffer->Release();
+	if (vertexBuffer)vertexBuffer->Release();
+}

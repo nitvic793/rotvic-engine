@@ -175,7 +175,10 @@
       <Filter>Header Files\CoreTypes</Filter>
     </ClInclude>
     <ClInclude Include="Transform.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\CoreTypes</Filter>
+    </ClInclude>
+    <ClInclude Include="PrimitiveShape.h">
+      <Filter>Header Files\Debug</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -258,6 +261,9 @@
       <Filter>Source Files\Management</Filter>
     </ClCompile>
     <ClCompile Include="Transform.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="PrimitiveShape.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

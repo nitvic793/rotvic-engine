@@ -37,7 +37,6 @@ void Console::Update(float deltaTime)
 
 void Console::OnKeyPress(char key)
 {
-	printf("%d\n", key);
 	if (!enabled)
 	{
 		return;
