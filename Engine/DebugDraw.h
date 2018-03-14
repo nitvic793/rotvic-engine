@@ -12,6 +12,8 @@
 #include "PrimitiveShape.h"
 #include <queue>
 #include <wrl.h>
+#include <map>
+#include <queue>
 
 using namespace DirectX;
 
@@ -22,11 +24,19 @@ enum PrimitiveShapesType
 	CONE
 };
 
+struct DrawCallPayLoad
+{
+	PrimitiveShapesType shape;
+	Transform transform;
+};
+
 class DebugDraw
 {
 	SystemCore *core;
 	std::unique_ptr<CommonStates> states;
 	PrimitiveShape* cube;
+	std::queue<DrawCallPayLoad> drawCalls;
+	std::map<PrimitiveShapesType, PrimitiveShape*> shapeBuffers;
 	void Draw(ID3D11DeviceContext *context, ID3D11Buffer* vertexBuffer, ID3D11Buffer* indexBuffer, UINT indexCount);
 public:
 	void Draw(PrimitiveShapesType shape, Transform transform);

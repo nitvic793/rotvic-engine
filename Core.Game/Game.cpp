@@ -62,6 +62,7 @@ void Game::Initialize()
 /// </summary>
 void Game::LoadLevel()
 {
+	keyboard->AddAction("up", { Up,W });
 	console->WriteLine(L"Level loaded");
 	auto entity = new GameEntity(resource->GetMesh("sphere"), resource->GetMaterial("metal"));
 	AddEntity(entity, "Test");
@@ -135,10 +136,10 @@ void Game::Update(float deltaTime)
 		console->enabled = !console->enabled;
 	}
 	
-	if (keyboard->IsKeyPressed(Up) && delayTime > 0.2f)
+	if (keyboard->IsActionPressed("up") && delayTime > 0.2f)
 	{
 		delayTime = 0.f;
-		console->WriteLine(L"Up key pressed");
+		console->WriteLine(L"Up action pressed");
 	}
 
 	delayTime += deltaTime;

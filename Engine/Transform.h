@@ -5,6 +5,9 @@
 
 using namespace DirectX;
 
+/// <summary>
+/// A Transform represents the position,scale and rotation of an entity
+/// </summary>
 class Transform
 {
 	XMFLOAT4X4 worldMatrix;

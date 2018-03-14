@@ -51,6 +51,11 @@ void DebugDraw::Draw(ID3D11DeviceContext *context, ID3D11Buffer* vertexBuffer, I
 }
 
 
+void DebugDraw::Draw(PrimitiveShapesType shape, Transform transform)
+{
+	drawCalls.push({ shape, transform });
+}
+
 void DebugDraw::Render(Camera* camera)
 {
 	auto context = core->GetDeviceContext();
@@ -62,8 +67,10 @@ void DebugDraw::Render(Camera* camera)
 	auto rm = ResourceManager::GetInstance();
 	auto ps = rm->debugShader;
 	auto vs = rm->vertexShader;
+	cube->transform.SetScale(3, 1, 1);
 	cube->transform.SetPosition(2, 1, 5);
 	cube->transform.SetRotation(10, 30, 0);
+
 	vs->SetMatrix4x4(WORLD_STR, cube->transform.GetWorldMatrix());
 	vs->SetMatrix4x4(VIEW_STR, camera->GetViewMatrix());
 	vs->SetMatrix4x4(PROJECTION_STR, camera->GetProjectionMatrix());
@@ -84,6 +91,11 @@ DebugDraw::DebugDraw(SystemCore* core)
 {
 	this->core = core;
 	cube = PrimitiveShape::InstantiateCube(core);
+	shapeBuffers.insert(std::pair<PrimitiveShapesType, PrimitiveShape*>(CUBE,cube));
+	if (shapeBuffers.find(CONE) != shapeBuffers.end()) 
+	{
+		printf("Test");
+	}
 	states = std::make_unique<CommonStates>(core->GetDevice());
 }
 
