@@ -32,14 +32,18 @@ class Console
 	int maxLines;
 	int currentLine;
 	int height;
+	int caretPosition;
 	float delayTime;
 	std::vector<std::wstring> buffer;
 	std::wstringstream currentCommand;
 	std::stack<std::wstring> commandHistory;
 	std::stack<std::wstring> commandHistoryUp;
-
+	std::stack<char> spaceStack;
 	CommandMap commandMap;
 	Keyboard* keyboard;
+
+	float CalculateCaretX();
+
 	/// <summary>
 	/// Invokes the command with given command name if it was registered with the console.
 	/// </summary>
