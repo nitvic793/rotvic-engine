@@ -11,6 +11,7 @@ from the SFML project on https://github.com/SFML/SFML/
 
 enum Keys
 {
+	Undefined = -1,
 	A = 0,        ///< The A key
 	B,            ///< The B key
 	C,            ///< The C key
@@ -114,6 +115,8 @@ enum Keys
 	Pause,        ///< The Pause key
 };
 
+typedef std::pair<std::string, Keys> KeyEnumMap;
+
 /// <summary>
 /// Keyboard class for all keyboard related input data. 
 /// </summary>
@@ -121,11 +124,14 @@ class Keyboard
 {
 protected:
 	std::map<std::string, std::vector<Keys>> actionMap;
+	std::map<std::string, Keys> inputEnumMap;
 	static Keyboard* instance;
 public:
 	Keyboard();
 	~Keyboard();
 	static Keyboard* GetInstance();
+	const Keys GetKeyEnumValue(std::string key);
+	std::vector<Keys> GetKeyEnumValue(std::vector<std::string> keys);
 	virtual bool IsKeyPressed(Keys key);
 	virtual bool IsKeyPressed(wchar_t key);
 	virtual bool IsActionPressed(std::string action);

@@ -228,14 +228,14 @@ void CoreGame::Run()
 
 void CoreGame::RegisterConsoleCommands()
 {
-	console->RegisterCommand("SetWireFrame", [&](std::vector<std::string> params)
+	console->RegisterCommand("Rebind", [&](std::vector<std::string> params)
 	{
-		if (params.size() < 1) return;
-		bool setWireFrame = std::stoi(params[0]);
-		if (setWireFrame)
-			Core->GetDeviceContext()->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_LINELIST);
-		else
-			Core->GetDeviceContext()->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+		if (params.size() < 2)
+			console->WriteLine(L"Invalid params supplied");
+		auto action = params[0];
+		params.erase(params.begin());
+		auto keys = keyboard->GetKeyEnumValue(params);
+		keyboard->AddAction(action, keys);
 	});
 }
 

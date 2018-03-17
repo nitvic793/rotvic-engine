@@ -24,6 +24,7 @@ typedef std::unordered_map<std::string, CommandCallback> CommandMap;
 /// </summary>
 class Console
 {
+	static Console* instance;
 	SystemCore *core;
 	std::unique_ptr<SpriteBatch> spriteBatch;
 	std::unique_ptr<SpriteFont> spriteFont;
@@ -51,6 +52,11 @@ class Console
 	/// <param name="params">Params to pass to command</param>
 	void ProcessCommand(std::string commandName, std::vector<std::string> params);
 public:
+	/// <summary>
+	/// Get current console instance
+	/// </summary>
+	/// <returns></returns>
+	static Console* GetInstance();
 
 	/// <summary>
 	/// Flag which enables or disables the console rendering and command processing.

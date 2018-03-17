@@ -1,4 +1,5 @@
 #include "Keyboard.h"
+#include "Console.h"
 
 Keyboard* Keyboard::instance = nullptr;
 
@@ -151,6 +152,34 @@ bool Keyboard::IsKeyPressed(Keys key)
 Keyboard::Keyboard()
 {
 	instance = this;
+	inputEnumMap.insert(KeyEnumMap("A", Keys::A));
+	inputEnumMap.insert(KeyEnumMap("B", Keys::B));
+	inputEnumMap.insert(KeyEnumMap("C", Keys::C));
+	inputEnumMap.insert(KeyEnumMap("D", Keys::D));
+	inputEnumMap.insert(KeyEnumMap("E", Keys::E));
+	inputEnumMap.insert(KeyEnumMap("F", Keys::F));
+	inputEnumMap.insert(KeyEnumMap("G", Keys::G));
+	inputEnumMap.insert(KeyEnumMap("H", Keys::H));
+	inputEnumMap.insert(KeyEnumMap("I", Keys::I));
+	inputEnumMap.insert(KeyEnumMap("J", Keys::J));
+	inputEnumMap.insert(KeyEnumMap("K", Keys::K));
+	inputEnumMap.insert(KeyEnumMap("L", Keys::L));
+	inputEnumMap.insert(KeyEnumMap("M", Keys::M));
+	inputEnumMap.insert(KeyEnumMap("N", Keys::N));
+	inputEnumMap.insert(KeyEnumMap("O", Keys::O));
+	inputEnumMap.insert(KeyEnumMap("P", Keys::P));
+	inputEnumMap.insert(KeyEnumMap("Q", Keys::Q));
+	inputEnumMap.insert(KeyEnumMap("R", Keys::R));
+	inputEnumMap.insert(KeyEnumMap("S", Keys::S));
+	inputEnumMap.insert(KeyEnumMap("T", Keys::T));
+	inputEnumMap.insert(KeyEnumMap("U", Keys::U));
+	inputEnumMap.insert(KeyEnumMap("V", Keys::V));
+	inputEnumMap.insert(KeyEnumMap("W", Keys::W));
+	inputEnumMap.insert(KeyEnumMap("X", Keys::X));
+	inputEnumMap.insert(KeyEnumMap("Y", Keys::Y));
+	inputEnumMap.insert(KeyEnumMap("Z", Keys::Z));
+	inputEnumMap.insert(KeyEnumMap("ArrowUp", Keys::Up));
+	inputEnumMap.insert(KeyEnumMap("ArrowDown", Keys::Down));
 }
 
 Keyboard::~Keyboard()
@@ -161,4 +190,21 @@ Keyboard::~Keyboard()
 Keyboard * Keyboard::GetInstance()
 {
 	return instance;
+}
+
+const Keys Keyboard::GetKeyEnumValue(std::string key)
+{
+	if (inputEnumMap.find(key) == inputEnumMap.end())
+		return Undefined;
+	return inputEnumMap[key];
+}
+
+std::vector<Keys> Keyboard::GetKeyEnumValue(std::vector<std::string> keys)
+{
+	std::vector<Keys> enumKeys;
+	for (auto key : keys) 
+	{
+		enumKeys.push_back(GetKeyEnumValue(key));
+	}
+	return enumKeys;
 }

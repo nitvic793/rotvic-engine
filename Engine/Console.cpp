@@ -1,10 +1,12 @@
 #include "Console.h"
 
+Console* Console::instance = nullptr;
+
 float Console::CalculateCaretX()
 {
 	float xLength = DirectX::XMVectorGetX(spriteFont->MeasureString(L"_"));
 	float stringLength = 0;
-	int currentCommandLength = currentCommand.str().length();
+	int currentCommandLength = (int)currentCommand.str().length();
 	if (!spaceStack.empty())
 	{
 		int extraLength = (int)spaceStack.size();
@@ -30,6 +32,11 @@ void Console::ProcessCommand(std::string commandName, std::vector<std::string> p
 	}
 }
 
+Console * Console::GetInstance()
+{
+	return instance;
+}
+
 void Console::Update(float deltaTime)
 {
 	delayTime += deltaTime;
@@ -37,7 +44,7 @@ void Console::Update(float deltaTime)
 	{
 		currentCommand.str(std::wstring());
 		currentCommand.str(commandHistory.top());
-		caretPosition = commandHistory.top().length();
+		caretPosition = (int)commandHistory.top().length();
 		currentCommand.seekp(commandHistory.top().length());
 		commandHistoryUp.push(commandHistory.top());
 		commandHistory.pop();
@@ -49,7 +56,7 @@ void Console::Update(float deltaTime)
 	{
 		currentCommand.str(std::wstring());
 		currentCommand.str(commandHistoryUp.top());
-		caretPosition = commandHistoryUp.top().length();
+		caretPosition = (int)commandHistoryUp.top().length();
 		currentCommand.seekp(commandHistoryUp.top().length());
 		commandHistory.push(commandHistoryUp.top());
 		commandHistoryUp.pop();
@@ -176,6 +183,7 @@ Console::Console(SystemCore* sysCore)
 	delayTime = 0;
 	caretPosition = 0;
 	//buffer = std::vector<std::wstring>(maxLines);
+	instance = this;
 }
 
 

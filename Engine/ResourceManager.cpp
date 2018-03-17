@@ -101,6 +101,7 @@ ResourceManager::~ResourceManager()
 	delete vertexShader;
 	delete pixelShader;
 	delete debugShader;
+	delete debugVertexShader;
 	if (sampler)
 		sampler->Release();
 }

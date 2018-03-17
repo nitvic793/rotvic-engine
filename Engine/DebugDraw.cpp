@@ -333,17 +333,20 @@ void DebugDraw::Render(Camera* camera)
 	vs->SetMatrix4x4(WORLD_STR, world);
 	vs->CopyAllBufferData();
 	vs->SetShader();
-	context->IASetInputLayout(layout.Get());
+
+	BoundingSphere sphere;
+	sphere.Center = XMFLOAT3(0, 0, 0);
+	sphere.Radius = 1;
 	batch->Begin();
 
 
 	//DrawTriangle(batch.get(), XMVectorSet(-1, 0, 0, 0), XMVectorSet(0, 1, 0, 0), XMVectorSet(1, 0, 0, 0), Colors::White);
 	//DrawRay(batch.get(), XMVectorSet(0, 0, 0, 0), XMVectorSet(10, 10, 10, 0), false, Colors::White);
+	::Draw(batch.get(), sphere, Colors::Azure);
 	DrawGrid(batch.get(), XMVectorSet(100, 0, 0, 0), XMVectorSet(0, 0, 100, 0), XMVectorSet(0, -3, 0, 0), 100, 100, Colors::Green);
 	batch->End();
 
 	//Reset Pipeline 
-	context->IASetInputLayout(nullptr);
 	context->OMSetBlendState(0, 0, 0xFFFFFFFF);
 	context->OMSetDepthStencilState(0, 0);
 	context->RSSetState(nullptr);
