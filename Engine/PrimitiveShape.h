@@ -6,9 +6,16 @@
 #include "Transform.h"
 #include <memory>
 
+enum PrimitiveShapesType
+{
+	CUBE,
+	SPHERE,
+	CONE
+};
+
 class PrimitiveShape
 {
-	void Initialize(Vertex *vertices, UINT vertexCount, UINT *indices, UINT indexCount, ID3D11Device* device);
+	void Initialize(VertexColor *vertices, UINT vertexCount, UINT *indices, UINT indexCount, ID3D11Device* device);
 	PrimitiveShape();
 public:
 	Transform transform;
@@ -16,6 +23,7 @@ public:
 	ID3D11Buffer* vertexBuffer;
 	UINT indexCount;
 	static PrimitiveShape* InstantiateCube(SystemCore* core);
+	static PrimitiveShape* Instantiate(PrimitiveShapesType type, SystemCore* core);
 	~PrimitiveShape();
 };
 

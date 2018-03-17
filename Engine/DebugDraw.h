@@ -17,12 +17,7 @@
 
 using namespace DirectX;
 
-enum PrimitiveShapesType 
-{
-	CUBE,
-	SPHERE,
-	CONE
-};
+
 
 struct DrawCallPayLoad
 {
@@ -32,13 +27,18 @@ struct DrawCallPayLoad
 
 class DebugDraw
 {
+	std::unique_ptr<DirectX::BasicEffect> effect;
+	std::unique_ptr<DirectX::PrimitiveBatch<DirectX::VertexPositionColor>> batch;
+	Microsoft::WRL::ComPtr<ID3D11InputLayout> layout;
+	static DebugDraw* instance;
 	SystemCore *core;
 	std::unique_ptr<CommonStates> states;
-	PrimitiveShape* cube;
+	PrimitiveShape* GetShape(PrimitiveShapesType type);
 	std::queue<DrawCallPayLoad> drawCalls;
 	std::map<PrimitiveShapesType, PrimitiveShape*> shapeBuffers;
 	void Draw(ID3D11DeviceContext *context, ID3D11Buffer* vertexBuffer, ID3D11Buffer* indexBuffer, UINT indexCount);
 public:
+	static DebugDraw* GetInstance();
 	void Draw(PrimitiveShapesType shape, Transform transform);
 	void Render(Camera* camera);
 	DebugDraw(SystemCore* core);

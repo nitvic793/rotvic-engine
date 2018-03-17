@@ -1,11 +1,11 @@
 #include "PrimitiveShape.h"
 
-void PrimitiveShape::Initialize(Vertex *vertices, UINT vertexCount, UINT *indices, UINT indexCount, ID3D11Device* device)
+void PrimitiveShape::Initialize(VertexColor *vertices, UINT vertexCount, UINT *indices, UINT indexCount, ID3D11Device* device)
 {
 	this->indexCount = indexCount;
 	D3D11_BUFFER_DESC vbd;
 	vbd.Usage = D3D11_USAGE_IMMUTABLE;
-	vbd.ByteWidth = sizeof(Vertex) * vertexCount;
+	vbd.ByteWidth = sizeof(VertexColor) * vertexCount;
 	vbd.BindFlags = D3D11_BIND_VERTEX_BUFFER;
 	vbd.CPUAccessFlags = 0;
 	vbd.MiscFlags = 0;
@@ -65,16 +65,27 @@ PrimitiveShape *PrimitiveShape::InstantiateCube(SystemCore * core)
 		3, 7
 	}; //12
 	auto identity = XMMatrixIdentity();
-	Vertex verts[8];
+	VertexColor verts[8];
 	for (size_t i = 0; i < 8; ++i)
 	{
 		verts[i] = {};
 		XMVECTOR v = XMVector3Transform(s_verts[i], identity);
 		XMStoreFloat3(&verts[i].Position, v);
+		XMStoreFloat4(&verts[i].Color, XMVectorSet(1, 1, 1, 0));
 	}
 
 	shape->Initialize(verts, 8, s_indices, 24, core->GetDevice());
 	return shape;
+}
+
+PrimitiveShape * PrimitiveShape::Instantiate(PrimitiveShapesType type, SystemCore* core)
+{
+	switch (type)
+	{
+	case CUBE:
+		return InstantiateCube(core);
+	}
+	return nullptr;
 }
 
 PrimitiveShape::~PrimitiveShape()

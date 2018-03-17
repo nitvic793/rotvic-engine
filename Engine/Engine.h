@@ -16,3 +16,4 @@
 #include "ICollider2D.h"
 #include "Utility.h"
 #include "Lights.h"
+#include "DebugDraw.h"

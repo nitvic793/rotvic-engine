@@ -278,6 +278,7 @@ void CoreGame::Draw()
 	{
 		renderer->Draw(entity);
 	}
+
 	if (console->enabled)console->Render(); //Render console if required.
 	debugDraw->Render(gameInstance->GetCamera()); //Debug Draw
 	Core->GetDeviceContext()->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);

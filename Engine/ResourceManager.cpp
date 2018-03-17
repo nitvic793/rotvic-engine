@@ -24,6 +24,8 @@ void ResourceManager::LoadResources(ConfigMap config, SystemCore* core)
 	pixelShader->LoadShaderFile(L"PixelShader.cso");
 	debugShader = new SimplePixelShader(device, context);
 	debugShader->LoadShaderFile(L"DebugShader.cso");
+	debugVertexShader = new SimpleVertexShader(device, context);
+	debugVertexShader->LoadShaderFile(L"DebugVertexShader.cso");
 
 	Material *material = nullptr;
 	ID3D11ShaderResourceView *srv = nullptr;

@@ -20,6 +20,7 @@ public:
 	SimpleVertexShader *vertexShader;
 	SimplePixelShader *pixelShader;
 	SimplePixelShader *debugShader;
+	SimpleVertexShader *debugVertexShader;
 
 	/// <summary>
 	/// Loads resources based on given config data.

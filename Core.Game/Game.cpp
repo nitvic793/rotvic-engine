@@ -129,6 +129,9 @@ int Game::GetInstanceCount()
 /// <param name="deltaTime"></param>
 void Game::Update(float deltaTime)
 {
+	Transform t;
+	t.SetPosition(2, 2, 10);
+	DebugDraw::GetInstance()->Draw(CUBE, t);
 	delayTime += deltaTime;
 	if (keyboard->IsKeyPressed(Tilde) && delayTime>0.2f)
 	{
