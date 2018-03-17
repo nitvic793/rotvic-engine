@@ -101,10 +101,29 @@ void Camera::Update(float deltaTime)
 
 void Camera::OnMouseMove(WPARAM wParam, int x, int y)
 {
+	if (isMouseDown)
+	{
+		rotationY += (float)(x - mousePrevX) * 0.1f * XM_PI / 180;
+		rotationX += (float)(y - mousePrevY) * 0.1f * XM_PI / 180;
+	}
+	mousePrevX = x;
+	mousePrevY = y;
+}
+
+void Camera::OnMouseUp(WPARAM wParam, int x, int y)
+{
+	isMouseDown = false;
+}
+
+void Camera::OnMouseDown(WPARAM wParam, int x, int y)
+{
+	isMouseDown = true;
 }
 
 Camera::Camera(float aspectRatio)
 {
+	mousePrevX = mousePrevY = 0;
+	isMouseDown = false;
 	position = XMFLOAT3(0.f, 0.f, -8.f);
 	direction = XMFLOAT3(0.f, 0.f, 1.f);
 	rotationX = rotationY = 0.f;
@@ -125,9 +144,19 @@ Camera::Camera(float aspectRatio)
 		100.0f);					// Far clip plane distance
 	XMStoreFloat4x4(&projectionMatrix, XMMatrixTranspose(P));
 	auto mouse = Mouse::GetInstance();
-	mouse->RegisterOnMouseMoveCallback([&](WPARAM wParam, int x, int y) 
+	mouse->RegisterOnMouseMoveCallback([&](WPARAM wParam, int x, int y)
 	{
-		OnMouseMove(wParam, x, y); 
+		OnMouseMove(wParam, x, y);
+	});
+
+	mouse->RegisterOnButtonUpCallback([&](WPARAM wParam, int x, int y)
+	{
+		OnMouseUp(wParam, x, y);
+	});
+
+	mouse->RegisterOnButtonDownCallback([&](WPARAM wParam, int x, int y)
+	{
+		OnMouseDown(wParam, x, y);
 	});
 }
 

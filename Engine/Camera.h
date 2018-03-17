@@ -11,6 +11,9 @@ class Camera
 	XMFLOAT3 direction;
 	float rotationY;
 	float rotationX;
+	bool isMouseDown;
+	int mousePrevX;
+	int mousePrevY;
 public:
 	XMFLOAT3 GetPosition();
 	void RotateX(float x);
@@ -20,6 +23,8 @@ public:
 	void SetProjectionMatrix(float aspectRatio);
 	virtual void Update(float deltaTime);
 	virtual void OnMouseMove(WPARAM wParam, int x, int y);
+	virtual void OnMouseUp(WPARAM wParam, int x, int y);
+	virtual void OnMouseDown(WPARAM wParam, int x, int y);
 	Camera(float aspectRatio);
 	~Camera();
 };

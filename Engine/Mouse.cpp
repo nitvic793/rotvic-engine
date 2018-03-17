@@ -70,6 +70,11 @@ void Mouse::RegisterOnButtonUpCallback(std::function<void(WPARAM, int, int)> cal
 	buttonUpCallbacks.push_back(callback);
 }
 
+void Mouse::RegisterOnButtonDownCallback(std::function<void(WPARAM, int, int)> callback)
+{
+	buttonDownCallbacks.push_back(callback);
+}
+
 void Mouse::RegisterOnMouseMoveCallback(std::function<void(WPARAM, int, int)> callback)
 {
 	mouseMoveCallbacks.push_back(callback);

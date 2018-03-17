@@ -60,6 +60,8 @@ public:
 
 	void RegisterOnMouseMoveCallback(std::function<void(WPARAM, int, int)> callback);
 
+	void RegisterOnButtonDownCallback(std::function<void(WPARAM, int, int)> callback);
+
 	void OnMouseUp(WPARAM wParam, int x, int y);
 
 	void OnMouseDown(WPARAM wParam, int x, int y);
