@@ -152,6 +152,7 @@ bool Keyboard::IsKeyPressed(Keys key)
 Keyboard::Keyboard()
 {
 	instance = this;
+	//Incomplete. Need to finish all keys
 	inputEnumMap.insert(KeyEnumMap("A", Keys::A));
 	inputEnumMap.insert(KeyEnumMap("B", Keys::B));
 	inputEnumMap.insert(KeyEnumMap("C", Keys::C));
