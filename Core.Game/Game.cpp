@@ -129,9 +129,20 @@ int Game::GetInstanceCount()
 /// <param name="deltaTime"></param>
 void Game::Update(float deltaTime)
 {
-	Transform t;
-	t.SetPosition(2, 2, 10);
-	DebugDraw::GetInstance()->Draw(CUBE, t);
+	Ray ray;
+	ray.color = XMFLOAT4(1,1,1,1);
+	ray.origin = XMFLOAT3(0, 0, 0);
+	ray.direction = XMFLOAT3(0, 1, 0);
+	ray.length = 2.f;
+
+	Sphere sphere;	
+	sphere.color = XMFLOAT4(1, 1, 1, 1);
+	sphere.bounding.Center = XMFLOAT3(-1, 0, 0);
+	sphere.bounding.Radius = 0.5;
+
+	DebugDraw::GetInstance()->Draw(ray);
+	DebugDraw::GetInstance()->Draw(sphere, "Collision");
+
 	delayTime += deltaTime;
 	if (keyboard->IsKeyPressed(Tilde) && delayTime>0.2f)
 	{

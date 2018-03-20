@@ -20,26 +20,107 @@ using namespace DirectX;
 struct DrawCallPayLoad
 {
 	PrimitiveShapesType shape;
+	void* payload;
 	Transform transform;
 };
 
 class DebugDraw
 {
-	std::unique_ptr<DirectX::BasicEffect> effect;
-	std::unique_ptr<DirectX::PrimitiveBatch<DirectX::VertexPositionColor>> batch;
-	Microsoft::WRL::ComPtr<ID3D11InputLayout> layout;
-	static DebugDraw* instance;
-	SystemCore *core;
+	//DirectX Related 
 	std::unique_ptr<CommonStates> states;
-	PrimitiveShape* GetShape(PrimitiveShapesType type);
+	std::unique_ptr<DirectX::PrimitiveBatch<DirectX::VertexPositionColor>> batch;
+
+	//Debug Draw Instance
+	static DebugDraw* instance;
+
+	//Reference to system core object.
+	SystemCore *core;
+
+	//Primitive items draw queue
+	std::queue<Ray>		rays;
+	std::queue<Grid>	grids;
+	std::queue<Box>		boxes;
+	std::queue<Sphere>	spheres;
+	std::queue<Frustum> frustums;
+
+	std::map<std::string, bool> groups;
 	std::queue<DrawCallPayLoad> drawCalls;
-	std::map<PrimitiveShapesType, PrimitiveShape*> shapeBuffers;
+
+	/// <summary>
+	/// Returns true if drawing of given group is enabled. Also adds group name to group map if group name is not found in map. 
+	/// </summary>
+	/// <param name="groupName">Name of group to check if it is enabled</param>
+	/// <returns>Boolean value indicating if group is enabled or not</returns>
+	bool IsGroupEnabled(std::string groupName);
 	void Draw(ID3D11DeviceContext *context, ID3D11Buffer* vertexBuffer, ID3D11Buffer* indexBuffer, UINT indexCount);
 public:
+	/// <summary>
+	/// Get instance of debug draw
+	/// </summary>
+	/// <returns></returns>
 	static DebugDraw* GetInstance();
-	void Draw(PrimitiveShapesType shape, Transform transform);
+
+	/// <summary>
+	/// Sets the active value of the group. If true, all draw calls with given group name are rendered by debug draw system.  
+	/// </summary>
+	/// <param name="group">The name of the group</param>
+	/// <param name="active">Boolean value to indicate if group should be active or not</param>
+	void SetGroupActive(std::string group, bool active);
+
+	/// <summary>
+	/// Draw given shape type
+	/// </summary>
+	/// <param name="shape"></param>
+	/// <param name="payload"></param>
+	void Draw(PrimitiveShapesType shape, void* payload);
+
+	/// <summary>
+	/// Draws a ray according to given parameters. Will not be drawn if group is disabled
+	/// </summary>
+	/// <param name="ray"></param>
+	/// <param name="group">Group name to associate this shape with.</param>
+	void Draw(Ray ray, std::string group = "default");
+
+	/// <summary>
+	/// Draws a grid according to given parameters. Will not be drawn if group is disabled
+	/// </summary>
+	/// <param name="grid"></param>
+	/// <param name="group">Group name to associate this shape with.</param>
+	void Draw(Grid grid, std::string group = "default");
+
+	/// <summary>
+	/// Draws a sphere according to given paramters. Will not be drawn if group is disabled
+	/// </summary>
+	/// <param name="shape"></param>
+	/// <param name="group">Group name to associate this shape with.</param>
+	void Draw(Sphere shape, std::string group = "default");
+
+	/// <summary>
+	/// Draws a box according to given paramters. Will not be drawn if group is disabled
+	/// </summary>
+	/// <param name="shape"></param>
+	/// <param name="group">Group name to associate this shape with.</param>
+	void Draw(Box shape, std::string group = "default");
+
+	/// <summary>
+	/// Draws a frustum according to given paramters. Will not be drawn if group is disabled
+	/// </summary>
+	/// <param name="shape"></param>
+	/// <param name="group">Group name to associate this shape with.</param>
+	void Draw(Frustum shape, std::string group = "default");
+
+	/// <summary>
+	/// Renders all queued up draw calls to the screen.
+	/// </summary>
+	/// <param name="camera">The camera object to read the view and projection matrices</param>
 	void Render(Camera* camera);
+
+	/// <summary>
+	/// Instantiates debug draw system.
+	/// </summary>
+	/// <param name="core">System core object provides required context to the debug draw system.</param>
 	DebugDraw(SystemCore* core);
+
 	~DebugDraw();
 };
 

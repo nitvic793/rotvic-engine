@@ -2,6 +2,7 @@
 
 #include "DebugDraw.h"
 #include "Entity.h"
+#include "Mouse.h"
 
 DebugDraw* DebugDraw::instance = nullptr;
 
@@ -265,14 +266,14 @@ void XM_CALLCONV Draw(PrimitiveBatch<VertexPositionColor>* batch,
 	batch->Draw(D3D11_PRIMITIVE_TOPOLOGY_LINELIST, verts, _countof(verts));
 }
 
-PrimitiveShape * DebugDraw::GetShape(PrimitiveShapesType type)
+bool DebugDraw::IsGroupEnabled(std::string groupName)
 {
-	if (shapeBuffers.find(type) == shapeBuffers.end())
+	if (groups.find(groupName) == groups.end())
 	{
-		shapeBuffers.insert(std::pair<PrimitiveShapesType, PrimitiveShape*>(type, PrimitiveShape::Instantiate(type, core)));
+		groups.insert(std::pair<std::string, bool>(groupName, true));
 	}
 
-	return shapeBuffers[type];
+	return groups[groupName];
 }
 
 void DebugDraw::Draw(ID3D11DeviceContext *context, ID3D11Buffer* vertexBuffer, ID3D11Buffer* indexBuffer, UINT indexCount)
@@ -290,9 +291,51 @@ DebugDraw * DebugDraw::GetInstance()
 	return instance;
 }
 
-void DebugDraw::Draw(PrimitiveShapesType shape, Transform transform)
+void DebugDraw::SetGroupActive(std::string group, bool active)
 {
-	drawCalls.push({ shape, transform });
+	if (groups.find(group) != groups.end())
+	{
+		groups[group] = active;
+	}
+}
+
+void DebugDraw::Draw(PrimitiveShapesType shape, void* payload)
+{
+	DrawCallPayLoad call;
+	call.shape = shape;
+	call.payload = payload;
+	drawCalls.push(call);
+	//drawCalls.push({ shape, payload, transform });
+}
+
+void DebugDraw::Draw(Ray ray, std::string group)
+{
+	if (IsGroupEnabled(group))
+		rays.push(ray);
+}
+
+void DebugDraw::Draw(Grid grid, std::string group)
+{
+	if (IsGroupEnabled(group))
+		grids.push(grid);
+}
+
+void DebugDraw::Draw(Sphere shape, std::string group)
+{
+	if (IsGroupEnabled(group))
+		spheres.push(shape);
+}
+
+void DebugDraw::Draw(Box shape, std::string group)
+{
+	if (IsGroupEnabled(group))
+		boxes.push(shape);
+}
+
+void DebugDraw::Draw(Frustum shape, std::string group)
+{
+	if (IsGroupEnabled(group))
+		frustums.push(shape);
 }
 
 void DebugDraw::Render(Camera* camera)
@@ -308,41 +351,89 @@ void DebugDraw::Render(Camera* camera)
 	auto vs = rm->debugVertexShader;
 
 	context->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_LINELIST); //Ensure only lines are drawn
-
+	vs->SetMatrix4x4(WORLD_STR, Transform().GetWorldMatrix());
+	vs->SetMatrix4x4(VIEW_STR, camera->GetViewMatrix());
+	vs->SetMatrix4x4(PROJECTION_STR, camera->GetProjectionMatrix());
+	vs->CopyAllBufferData();
+	ps->CopyAllBufferData();
+	ps->SetShader();
+	vs->SetShader();
+	batch->Begin();
 	while (!drawCalls.empty())
 	{
 		auto call = drawCalls.front();
 		drawCalls.pop();
-		vs->SetMatrix4x4(WORLD_STR, call.transform.GetWorldMatrix());
-		vs->SetMatrix4x4(VIEW_STR, camera->GetViewMatrix());
-		vs->SetMatrix4x4(PROJECTION_STR, camera->GetProjectionMatrix());
-		vs->CopyAllBufferData();
-		ps->CopyAllBufferData();
-		ps->SetShader();
-		vs->SetShader();
-		auto shape = GetShape(call.shape);
-		Draw(core->GetDeviceContext(), shape->vertexBuffer, shape->indexBuffer, shape->indexCount);
+
+		switch (call.shape)
+		{
+		case RAY:
+		{
+			Ray* ray = reinterpret_cast<Ray*>(call.payload);
+			DrawRay(batch.get(), XMLoadFloat3(&ray->origin), XMLoadFloat3(&ray->direction) * ray->length, false, XMLoadFloat4(&ray->color));
+			break;
+		}
+		case GRID:
+		{
+			auto grid = reinterpret_cast<Grid*>(call.payload);
+			DrawGrid(batch.get(), XMLoadFloat3(&grid->xAxis), XMLoadFloat3(&grid->yAxis), XMLoadFloat3(&grid->origin), grid->xDivs, grid->yDivs, XMLoadFloat4(&grid->color));
+			break;
+		}
+		case BOX:
+		{
+			auto shape = reinterpret_cast<Box*>(call.payload);
+			::Draw(batch.get(), shape->bounding, XMLoadFloat4(&shape->color));
+			break;
+		}
+		case SPHERE:
+		{
+			auto shape = reinterpret_cast<Sphere*>(call.payload);
+			::Draw(batch.get(), shape->bounding, XMLoadFloat4(&shape->color));
+			break;
+		}
+		case FRUSTUM:
+		{
+			auto shape = reinterpret_cast<Frustum*>(call.payload);
+			::Draw(batch.get(), shape->bounding, XMLoadFloat4(&shape->color));
+			break;
+		}
+		}
 	}
-	
-	auto view = camera->GetViewMatrix();
-	auto projection = camera->GetProjectionMatrix();
-	auto world = Transform().GetWorldMatrix();
-	auto viewMat = XMLoadFloat4x4(&view);
-	auto projMat = XMLoadFloat4x4(&projection);
-	auto worldMat = XMLoadFloat4x4(&world);
-	vs->SetMatrix4x4(WORLD_STR, world);
-	vs->CopyAllBufferData();
-	vs->SetShader();
 
-	BoundingSphere sphere;
-	sphere.Center = XMFLOAT3(0, 0, 0);
-	sphere.Radius = 1;
-	batch->Begin();
+	while (!rays.empty())
+	{
+		auto ray = rays.front();
+		rays.pop();
+		DrawRay(batch.get(), XMLoadFloat3(&ray.origin), XMLoadFloat3(&ray.direction) * ray.length, false, XMLoadFloat4(&ray.color));
+	}
 
+	while (!grids.empty())
+	{
+		auto grid = grids.front();
+		grids.pop();
+		DrawGrid(batch.get(), XMLoadFloat3(&grid.xAxis), XMLoadFloat3(&grid.yAxis), XMLoadFloat3(&grid.origin), grid.xDivs, grid.yDivs, XMLoadFloat4(&grid.color));
+	}
 
-	//DrawTriangle(batch.get(), XMVectorSet(-1, 0, 0, 0), XMVectorSet(0, 1, 0, 0), XMVectorSet(1, 0, 0, 0), Colors::White);
-	//DrawRay(batch.get(), XMVectorSet(0, 0, 0, 0), XMVectorSet(10, 10, 10, 0), false, Colors::White);
-	::Draw(batch.get(), sphere, Colors::Azure);
+	while (!boxes.empty())
+	{
+		auto shape = boxes.front();
+		boxes.pop();
+		::Draw(batch.get(), shape.bounding, XMLoadFloat4(&shape.color));
+	}
+
+	while (!spheres.empty())
+	{
+		auto shape = spheres.front();
+		spheres.pop();
+		::Draw(batch.get(), shape.bounding, XMLoadFloat4(&shape.color));
+	}
+
+	while (!frustums.empty())
+	{
+		auto shape = frustums.front();
+		frustums.pop();
+		::Draw(batch.get(), shape.bounding, XMLoadFloat4(&shape.color));
+	}
+
 	DrawGrid(batch.get(), XMVectorSet(100, 0, 0, 0), XMVectorSet(0, 0, 100, 0), XMVectorSet(0, -3, 0, 0), 100, 100, Colors::Green);
 	batch->End();
 
@@ -356,28 +447,11 @@ DebugDraw::DebugDraw(SystemCore* core)
 {
 	this->core = core;
 	batch = std::make_unique<PrimitiveBatch<VertexPositionColor>>(core->GetDeviceContext());
-	effect = std::make_unique<BasicEffect>(core->GetDevice());
-	effect->SetVertexColorEnabled(true);
 	states = std::make_unique<CommonStates>(core->GetDevice());
-	{
-		void const* shaderByteCode;
-		size_t byteCodeLength;
-
-		effect->GetVertexShaderBytecode(&shaderByteCode, &byteCodeLength);
-
-		core->GetDevice()->CreateInputLayout(
-			VertexPositionColor::InputElements, VertexPositionColor::InputElementCount,
-			shaderByteCode, byteCodeLength,
-			layout.ReleaseAndGetAddressOf());
-	}
 	instance = this;
 }
 
 
 DebugDraw::~DebugDraw()
 {
-	for (auto it : shapeBuffers) {
-		delete it.second;
-	}
-	shapeBuffers.clear();
 }

@@ -1,4 +1,5 @@
 #include "Mouse.h"
+#include "Console.h"
 
 Mouse* Mouse::instance = nullptr;
 

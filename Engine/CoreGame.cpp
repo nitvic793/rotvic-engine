@@ -36,8 +36,8 @@ bool CoreGame::Initialize(HINSTANCE hInstance, int nCmdShow)
 	mouse = new Mouse(Core->GetWindowHandle());
 	Core->BindMouse(mouse);
 	resourceManager->LoadResources(config, Core);
-	RegisterConsoleCommands();
 	debugDraw = std::unique_ptr<DebugDraw>(new DebugDraw(Core));
+	RegisterConsoleCommands();
 	return true;
 }
 
@@ -240,6 +240,18 @@ void CoreGame::RegisterConsoleCommands()
 		auto keys = keyboard->GetKeyEnumValue(params);
 		keyboard->AddAction(action, keys);
 	});
+
+	console->RegisterCommand("ToggleDebug", [&](std::vector<std::string> params)
+	{
+		if (params.size() != 2)
+		{
+			console->WriteLine(L"Invalid params supplied");
+			return;
+		}
+		auto group = params[0];
+		auto active = std::stoi(params[1].c_str());
+		debugDraw->SetGroupActive(group, active);
+	});
 }
 
 /// <summary>
@@ -281,9 +293,8 @@ void CoreGame::Draw()
 	{
 		renderer->Draw(entity);
 	}
-
-	if (console->enabled)console->Render(); //Render console if required.
 	debugDraw->Render(gameInstance->GetCamera()); //Debug Draw
+	if (console->enabled)console->Render(); //Render console if required.
 	Core->GetDeviceContext()->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 	renderer->Present();
 }

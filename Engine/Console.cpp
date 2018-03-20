@@ -154,6 +154,7 @@ void Console::Render()
 		spriteFont->DrawString(spriteBatch.get(), line.c_str(), XMVectorSet(10, (float)height * counter, 0, 0));
 		counter++;
 	}
+
 	float xLength = DirectX::XMVectorGetX(spriteFont->MeasureString(L"_"));
 	spriteFont->DrawString(spriteBatch.get(), L":", XMVectorSet(10, (float)height * counter, 0, 0));
 	spriteFont->DrawString(spriteBatch.get(), currentCommand.str().c_str(), XMVectorSet(15 + DirectX::XMVectorGetX(spriteFont->MeasureString(L":")), (float)height * counter, 0, 0));

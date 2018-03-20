@@ -82,8 +82,6 @@ PrimitiveShape * PrimitiveShape::Instantiate(PrimitiveShapesType type, SystemCor
 {
 	switch (type)
 	{
-	case CUBE:
-		return InstantiateCube(core);
 	}
 	return nullptr;
 }
@@ -92,4 +90,16 @@ PrimitiveShape::~PrimitiveShape()
 {
 	if (indexBuffer)indexBuffer->Release();
 	if (vertexBuffer)vertexBuffer->Release();
+}
+
+Grid Grid::GetDefaultGrid()
+{
+	return { 
+		XMFLOAT4(1,1,1,1), 
+		XMFLOAT3(100,0,0),
+		XMFLOAT3(0,0,100),
+		XMFLOAT3(0,-2,0),
+		100,
+		100 
+	};
 }

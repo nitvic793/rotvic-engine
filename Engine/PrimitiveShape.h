@@ -5,12 +5,60 @@
 #include <d3d11.h>
 #include "Transform.h"
 #include <memory>
+#include <DirectXMath.h>
+#include <DirectXCollision.h>
+
+using namespace DirectX;
 
 enum PrimitiveShapesType
 {
-	CUBE,
+	BOX,
 	SPHERE,
-	CONE
+	CONE, 
+	GRID,
+	RAY,
+	FRUSTUM
+};
+
+class BasicShape
+{};
+
+struct Ray
+{
+	XMFLOAT4 color;
+	XMFLOAT3 origin;
+	float length;
+	XMFLOAT3 direction;
+};
+
+struct Grid 
+{
+	XMFLOAT4 color;
+	XMFLOAT3 origin;
+	XMFLOAT3 xAxis;
+	XMFLOAT3 yAxis;
+	size_t xDivs;
+	size_t yDivs;
+
+	static Grid GetDefaultGrid();
+};
+
+struct Sphere 
+{
+	XMFLOAT4 color;
+	BoundingSphere bounding;
+};
+
+struct Box 
+{
+	XMFLOAT4 color;
+	BoundingSphere bounding;
+};
+
+struct Frustum 
+{
+	XMFLOAT4 color;
+	BoundingFrustum bounding;
 };
 
 class PrimitiveShape
