@@ -24,6 +24,9 @@ struct DrawCallPayLoad
 	Transform transform;
 };
 
+/// <summary>
+/// Debug Draw system.
+/// </summary>
 class DebugDraw
 {
 	//DirectX Related 
@@ -121,6 +124,21 @@ public:
 	/// <param name="core">System core object provides required context to the debug draw system.</param>
 	DebugDraw(SystemCore* core);
 
+	/// <summary>
+	/// Generic static draw function draws any valid debug shape parameter.
+	/// </summary>
+	template<typename DebugDrawType>
+	static void Draw(DebugDrawType debugDrawType, std::string group = "default");
+
 	~DebugDraw();
 };
 
+/// <summary>
+/// Generic static draw function draws any valid debug shape parameter. Sample -
+/// <code>DebugDraw::Draw&lt;Ray&gt;(rayObject)</code>
+/// </summary>
+template<typename DebugDrawType>
+inline void DebugDraw::Draw(DebugDrawType debugDrawType, std::string group)
+{
+	instance->Draw(debugDrawType, group);
+}

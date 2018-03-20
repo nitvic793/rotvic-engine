@@ -140,8 +140,8 @@ void Game::Update(float deltaTime)
 	sphere.bounding.Center = XMFLOAT3(-1, 0, 0);
 	sphere.bounding.Radius = 0.5;
 
-	DebugDraw::GetInstance()->Draw(ray);
-	DebugDraw::GetInstance()->Draw(sphere, "Collision");
+	DebugDraw::Draw<Ray>(ray);
+	DebugDraw::Draw<Sphere>(sphere, "Collision");
 
 	delayTime += deltaTime;
 	if (keyboard->IsKeyPressed(Tilde) && delayTime>0.2f)
@@ -153,7 +153,7 @@ void Game::Update(float deltaTime)
 	if (keyboard->IsActionPressed("up") && delayTime > 0.2f)
 	{
 		delayTime = 0.f;
-		console->WriteLine(L"Up action pressed");
+		//console->WriteLine(L"Up action pressed");
 	}
 
 	delayTime += deltaTime;
