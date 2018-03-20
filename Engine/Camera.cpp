@@ -12,17 +12,11 @@ XMFLOAT3 Camera::GetPosition()
 void Camera::RotateX(float x)
 {
 	rotationX += x;
-	//Clamp to [90, -90] degrees.
-	//if (rotationX > XM_PI/2) rotationX = XM_PI / 2;
-	//if (rotationX < -XM_PI/2) rotationX = -XM_PI / 2;
 }
 
 void Camera::RotateY(float y)
 {
 	rotationY += y;
-	//Clamp to [90, -90] degrees.
-	//if (rotationY > XM_PI / 2) rotationY = XM_PI / 2;
-	//if (rotationY < -XM_PI / 2) rotationY = -XM_PI / 2;
 }
 
 XMFLOAT4X4 Camera::GetViewMatrix()
@@ -51,7 +45,7 @@ void Camera::SetProjectionMatrix(float aspectRatio)
 		0.25f * XM_PI,
 		aspectRatio,
 		0.1f,
-		100.0f);
+		800.0f);
 	XMStoreFloat4x4(&projectionMatrix, XMMatrixTranspose(P));
 }
 

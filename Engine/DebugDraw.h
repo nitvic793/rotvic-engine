@@ -17,8 +17,6 @@
 
 using namespace DirectX;
 
-
-
 struct DrawCallPayLoad
 {
 	PrimitiveShapesType shape;

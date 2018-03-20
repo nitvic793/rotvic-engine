@@ -231,7 +231,10 @@ void CoreGame::RegisterConsoleCommands()
 	console->RegisterCommand("Rebind", [&](std::vector<std::string> params)
 	{
 		if (params.size() < 2)
+		{
 			console->WriteLine(L"Invalid params supplied");
+			return;
+		}
 		auto action = params[0];
 		params.erase(params.begin());
 		auto keys = keyboard->GetKeyEnumValue(params);

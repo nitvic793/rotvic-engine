@@ -178,7 +178,7 @@
       <Filter>Header Files\CoreTypes</Filter>
     </ClInclude>
     <ClInclude Include="PrimitiveShape.h">
-      <Filter>Header Files\Debug</Filter>
+      <Filter>Header Files\CoreTypes</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
