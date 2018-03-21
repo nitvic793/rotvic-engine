@@ -29,7 +29,7 @@ void ResourceManager::LoadResources(ConfigMap config, SystemCore* core)
 
 	Material *material = nullptr;
 	ID3D11ShaderResourceView *srv = nullptr;
-	ID3D11ShaderResourceView *normalSrv = nullptr; 
+	ID3D11ShaderResourceView *normalSrv = nullptr;
 	CreateWICTextureFromFile(device, context, L"../../Assets/Textures/metal.jpg", nullptr, &srv);
 	CreateWICTextureFromFile(device, context, L"../../Assets/Textures/metalNormal.png", nullptr, &normalSrv);
 	textures.insert(std::pair<std::string, ID3D11ShaderResourceView*>("metal", srv));
@@ -44,13 +44,20 @@ void ResourceManager::LoadResources(ConfigMap config, SystemCore* core)
 	material = new Material(core, vertexShader, pixelShader, srv, normalSrv, sampler);
 
 	materials.insert(std::pair<std::string, Material*>("fabric", material));
+
 	CreateWICTextureFromFile(device, context, L"../../Assets/Textures/wood.jpg", nullptr, &srv);
 	CreateWICTextureFromFile(device, context, L"../../Assets/Textures/woodNormal.png", nullptr, &normalSrv);
 	textures.insert(std::pair<std::string, ID3D11ShaderResourceView*>("wood", srv));
 	textures.insert(std::pair<std::string, ID3D11ShaderResourceView*>("woodNormal", normalSrv));
 	material = new Material(core, vertexShader, pixelShader, srv, normalSrv, sampler);
-
 	materials.insert(std::pair<std::string, Material*>("wood", material));
+
+	CreateWICTextureFromFile(device, context, L"../../Assets/Textures/default.png", nullptr, &srv);
+	CreateWICTextureFromFile(device, context, L"../../Assets/Textures/defaultNormal.png", nullptr, &normalSrv);
+	textures.insert(std::pair<std::string, ID3D11ShaderResourceView*>("default", srv));
+	textures.insert(std::pair<std::string, ID3D11ShaderResourceView*>("defaultNormal", normalSrv));
+	material = new Material(core, vertexShader, pixelShader, srv, normalSrv, sampler);
+	materials.insert(std::pair<std::string, Material*>("default", material));
 
 	meshes.insert(std::pair<std::string, Mesh*>("sphere", new Mesh("../../Assets/Models/sphere.obj", core)));
 	meshes.insert(std::pair<std::string, Mesh*>("cone", new Mesh("../../Assets/Models/cone.obj", core)));
@@ -62,12 +69,16 @@ void ResourceManager::LoadResources(ConfigMap config, SystemCore* core)
 
 Mesh * ResourceManager::GetMesh(std::string meshName)
 {
-	return meshes[meshName];
+	if (meshes.find(meshName) != meshes.end())
+		return meshes[meshName];
+	return nullptr;
 }
 
 Material * ResourceManager::GetMaterial(std::string materialName)
 {
-	return materials[materialName];
+	if (materials.find(materialName) != materials.end())
+		return materials[materialName];
+	return nullptr;
 }
 
 ResourceManager* ResourceManager::GetInstance()

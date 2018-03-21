@@ -36,6 +36,16 @@ std::vector<Entity*> IGame::GetEntities()
 	return vEntities;
 }
 
+GameEntity* IGame::GetEntity(std::string entity)
+{
+	if (entities.find(entity) != entities.end())
+	{
+		return entities[entity];
+	}
+
+	return nullptr;
+}
+
 void IGame::BindConsole(Console * console)
 {
 	this->console = console;

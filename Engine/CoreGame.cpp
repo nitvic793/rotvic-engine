@@ -252,6 +252,44 @@ void CoreGame::RegisterConsoleCommands()
 		auto active = std::stoi(params[1].c_str());
 		debugDraw->SetGroupActive(group, active);
 	});
+
+	console->RegisterCommand("Instantiate", [&](std::vector<std::string> params)
+	{
+		if (params.size() < 2)
+		{
+			console->WriteLine(L"Invalid params supplied");
+			return;
+		}
+		auto shapeName = params[0];
+		auto uniqueName = params[1];
+		auto shapeMesh = resourceManager->GetMesh(shapeName);
+		if (shapeMesh == nullptr)
+		{
+			console->WriteLine(L"Invalid shape");
+			return;
+		}
+		auto entity = new GameEntity(shapeMesh, resourceManager->GetMaterial("default"));
+		entity->SetPosition(0, 0, 0);
+		gameInstance->AddEntity(entity, uniqueName);
+	});
+
+	console->RegisterCommand("SetPosition", [&](std::vector<std::string> params)
+	{
+		if (params.size() != 4)
+		{
+			console->WriteLine(L"Invalid params supplied");
+			return;
+		}
+
+		auto entityName = params[0];
+		float x = std::atof(params[1].c_str());
+		float y = std::atof(params[2].c_str());
+		float z = std::atof(params[3].c_str());
+
+		auto entity = gameInstance->GetEntity(entityName);
+		entity->SetPosition(x, y, z);
+	});
+
 }
 
 /// <summary>

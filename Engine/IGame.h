@@ -49,6 +49,7 @@ public:
 	virtual bool Save();
 	virtual bool Load();
 	virtual std::vector<Entity*> GetEntities();
+	GameEntity* GetEntity(std::string entity);
 	void AddEntity(GameEntity *entity, std::string entityName);
 	Camera* GetCamera();
 	LightsMap GetLights();
