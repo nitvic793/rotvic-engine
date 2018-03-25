@@ -37,9 +37,9 @@ Entity::Entity(Mesh *m, Material* mat)
 XMFLOAT4X4 Entity::GetWorldMatrix() 
 {
 	XMMATRIX trans = XMMatrixTranslation(Position.x, Position.y, Position.z);
-	XMMATRIX rotY = XMMatrixRotationZ(rotation.z);
+	XMMATRIX rot = XMMatrixRotationRollPitchYawFromVector(XMLoadFloat3(&rotation));
 	XMMATRIX scle = XMMatrixScaling(scale.x, scale.y, scale.z);
-	XMMATRIX world = scle * rotY * trans;
+	XMMATRIX world = scle * rot * trans;
 	XMStoreFloat4x4(&worldMatrix, XMMatrixTranspose(world));
 	return worldMatrix;
 }
@@ -60,6 +60,19 @@ const Vector3f &Entity::GetPosition()
 void Entity::SetRotationZ(float angle)
 {
 	rotation.z = angle;
+}
+
+/// <summary>
+/// Sets the euler rotation angles(in degrees) of given entity.
+/// </summary>
+/// <param name="roll">The roll angle in degrees</param>
+/// <param name="pitch">The pitch in degrees</param>
+/// <param name="yaw">The yaw in degrees</param>
+void Entity::SetRotation(float roll, float pitch, float yaw)
+{
+	rotation.x = roll * XM_PI/180;
+	rotation.y = pitch * XM_PI / 180;
+	rotation.z = yaw * XM_PI / 180;
 }
 
 void Entity::SetPosition(float x, float y, float z)

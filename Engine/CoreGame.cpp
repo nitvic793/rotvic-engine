@@ -282,12 +282,61 @@ void CoreGame::RegisterConsoleCommands()
 		}
 
 		auto entityName = params[0];
-		float x = std::atof(params[1].c_str());
-		float y = std::atof(params[2].c_str());
-		float z = std::atof(params[3].c_str());
+		float x = (float)std::atof(params[1].c_str());
+		float y = (float)std::atof(params[2].c_str());
+		float z = (float)std::atof(params[3].c_str());
 
 		auto entity = gameInstance->GetEntity(entityName);
+		if (entity == nullptr)
+		{
+			console->WriteLine(L"Entity with given name not found");
+			return;
+		}
 		entity->SetPosition(x, y, z);
+	});
+
+	console->RegisterCommand("SetRotation", [&](std::vector<std::string> params)
+	{
+		if (params.size() != 4)
+		{
+			console->WriteLine(L"Invalid params supplied");
+			return;
+		}
+
+		auto entityName = params[0];
+		float x = (float)std::atof(params[1].c_str());
+		float y = (float)std::atof(params[2].c_str());
+		float z = (float)std::atof(params[3].c_str());
+
+		auto entity = gameInstance->GetEntity(entityName);
+		if (entity == nullptr)
+		{
+			console->WriteLine(L"Entity with given name not found");
+			return;
+		}
+		entity->SetRotation(x, y, z);
+	});
+
+	console->RegisterCommand("SetScale", [&](std::vector<std::string> params)
+	{
+		if (params.size() != 4)
+		{
+			console->WriteLine(L"Invalid params supplied");
+			return;
+		}
+
+		auto entityName = params[0];
+		float x = (float)std::atof(params[1].c_str());
+		float y = (float)std::atof(params[2].c_str());
+		float z = (float)std::atof(params[3].c_str());
+
+		auto entity = gameInstance->GetEntity(entityName);
+		if (entity == nullptr)
+		{
+			console->WriteLine(L"Entity with given name not found");
+			return;
+		}
+		entity->SetScale(x, y, z);
 	});
 
 }

@@ -37,6 +37,7 @@ public:
 	void SetContext(EntityContextWrapper context);
 	void SetPosition(const Vector3f& position);
 	void SetRotationZ(float angle);
+	void SetRotation(float roll, float pitch, float yaw);
 	void SetPosition(float x, float y, float z);
 	void SetScale(float x, float y, float z);
 	void Move(const Vector3f& offset);

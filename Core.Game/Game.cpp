@@ -140,6 +140,12 @@ void Game::Update(float deltaTime)
 	sphere.bounding.Center = XMFLOAT3(-1, 0, 0);
 	sphere.bounding.Radius = 0.5;
 
+	Box box;
+	box.color = XMFLOAT4(1, 1, 1, 1);
+	box.bounding.Center = XMFLOAT3(2, 1, 0);
+	box.bounding.Extents = XMFLOAT3(1, 1, 1);
+
+	DebugDraw::Draw<Box>(box, "Collision");
 	DebugDraw::Draw<Ray>(ray);
 	DebugDraw::Draw<Sphere>(sphere, "Collision");
 

@@ -52,7 +52,7 @@ struct Sphere
 struct Box 
 {
 	XMFLOAT4 color;
-	BoundingSphere bounding;
+	BoundingBox bounding;
 };
 
 struct Frustum 
