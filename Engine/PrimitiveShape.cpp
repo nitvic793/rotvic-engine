@@ -80,9 +80,6 @@ PrimitiveShape *PrimitiveShape::InstantiateCube(SystemCore * core)
 
 PrimitiveShape * PrimitiveShape::Instantiate(PrimitiveShapesType type, SystemCore* core)
 {
-	switch (type)
-	{
-	}
 	return nullptr;
 }
 
@@ -96,9 +93,9 @@ Grid Grid::GetDefaultGrid()
 {
 	return { 
 		XMFLOAT4(1,1,1,1), 
+		XMFLOAT3(0,-2,0),
 		XMFLOAT3(100,0,0),
 		XMFLOAT3(0,0,100),
-		XMFLOAT3(0,-2,0),
 		100,
 		100 
 	};

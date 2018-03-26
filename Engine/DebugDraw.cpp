@@ -434,7 +434,7 @@ void DebugDraw::Render(Camera* camera)
 		::Draw(batch.get(), shape.bounding, XMLoadFloat4(&shape.color));
 	}
 
-	DrawGrid(batch.get(), XMVectorSet(100, 0, 0, 0), XMVectorSet(0, 0, 100, 0), XMVectorSet(0, -3, 0, 0), 100, 100, Colors::Green);
+	//DrawGrid(batch.get(), XMVectorSet(100, 0, 0, 0), XMVectorSet(0, 0, 100, 0), XMVectorSet(0, -3, 0, 0), 100, 100, Colors::Green);
 	batch->End();
 
 	//Reset Pipeline 

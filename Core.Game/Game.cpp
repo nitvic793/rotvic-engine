@@ -145,9 +145,12 @@ void Game::Update(float deltaTime)
 	box.bounding.Center = XMFLOAT3(2, 1, 0);
 	box.bounding.Extents = XMFLOAT3(1, 1, 1);
 
+	Grid grid = Grid::GetDefaultGrid();
+	XMStoreFloat4(&grid.color, Colors::Green);
 	DebugDraw::Draw<Box>(box, "Collision");
 	DebugDraw::Draw<Ray>(ray);
 	DebugDraw::Draw<Sphere>(sphere, "Collision");
+	DebugDraw::Draw<Grid>(grid, "Collision");
 
 	delayTime += deltaTime;
 	if (keyboard->IsKeyPressed(Tilde) && delayTime>0.2f)

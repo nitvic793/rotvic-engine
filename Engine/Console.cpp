@@ -40,7 +40,7 @@ Console * Console::GetInstance()
 void Console::Update(float deltaTime)
 {
 	delayTime += deltaTime;
-	if (keyboard->IsKeyPressed(Down) && delayTime > 0.1f && !commandHistory.empty())
+	if (keyboard->IsKeyPressed(Up) && delayTime > 0.1f && !commandHistory.empty())
 	{
 		currentCommand.str(std::wstring());
 		currentCommand.str(commandHistory.top());
@@ -52,7 +52,7 @@ void Console::Update(float deltaTime)
 		delayTime = 0;
 	}
 
-	if (keyboard->IsKeyPressed(Up) && delayTime > 0.1f && !commandHistoryUp.empty())
+	if (keyboard->IsKeyPressed(Down) && delayTime > 0.1f && !commandHistoryUp.empty())
 	{
 		currentCommand.str(std::wstring());
 		currentCommand.str(commandHistoryUp.top());
@@ -72,7 +72,11 @@ void Console::OnKeyPress(char key)
 		return;
 	}
 
-	if (key == '\b') //Backspace
+	if (key == VK_ESCAPE)
+	{
+		enabled = false;
+	}
+	else if (key == '\b') //Backspace
 	{
 		if (caretPosition == 0) return;
 		if(currentCommand.str()[caretPosition-1]==L' ' && !spaceStack.empty())spaceStack.pop();

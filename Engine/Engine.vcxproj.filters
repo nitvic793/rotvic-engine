@@ -260,11 +260,11 @@
     <ClCompile Include="ConfigLoader.cpp">
       <Filter>Source Files\Management</Filter>
     </ClCompile>
-    <ClCompile Include="Transform.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="PrimitiveShape.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\CoreTypes</Filter>
+    </ClCompile>
+    <ClCompile Include="Transform.cpp">
+      <Filter>Source Files\CoreTypes</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
