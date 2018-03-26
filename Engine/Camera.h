@@ -5,6 +5,7 @@ using namespace DirectX;
 
 class Camera
 {
+protected:
 	XMFLOAT4X4 viewMatrix;
 	XMFLOAT4X4 projectionMatrix;
 	XMFLOAT3 position;

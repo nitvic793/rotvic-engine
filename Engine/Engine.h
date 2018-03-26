@@ -17,3 +17,4 @@
 #include "Utility.h"
 #include "Lights.h"
 #include "DebugDraw.h"
+#include "FirstPersonCamera.h"

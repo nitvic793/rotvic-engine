@@ -43,6 +43,11 @@ class Console
 	CommandMap commandMap;
 	Keyboard* keyboard;
 
+	/// <summary>
+	/// Calculates where the caret should be
+	/// </summary>
+	/// <remarks>Backspace doesn't work as intended when there are "spaces". No arrow key support yet.</remarks>
+	/// <returns></returns>
 	float CalculateCaretX();
 
 	/// <summary>

@@ -11,6 +11,7 @@ Game::Game(float speed)
 
 Game::~Game()
 {
+	delete firstPersonCamera;
 	InstanceCount--;
 }
 
@@ -40,6 +41,9 @@ Game* Game::CreateInstance()
 /// </summary>
 void Game::Initialize()
 {
+	firstPersonCamera = new FirstPersonCamera((float)renderer->screenWidth / renderer->screenHeight);
+	freeCam = camera;
+
 	light.AmbientColor = XMFLOAT4(0.1f, 0.1f, 0.1f, 0);
 	light.DiffuseColor = XMFLOAT4(0.4f, 0.4f, 0.9f, 1.f);
 	light.Direction = XMFLOAT3(1.f, 0, 0.f);
@@ -129,6 +133,7 @@ int Game::GetInstanceCount()
 /// <param name="deltaTime"></param>
 void Game::Update(float deltaTime)
 {
+	//camera = firstPersonCamera;
 	Ray ray;
 	ray.color = XMFLOAT4(1,1,1,1);
 	ray.origin = XMFLOAT3(0, 0, 0);

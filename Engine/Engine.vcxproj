@@ -123,6 +123,7 @@
     <ClInclude Include="Entity.h" />
     <ClInclude Include="EntityContextWrapper.h" />
     <ClInclude Include="FileBuffer.h" />
+    <ClInclude Include="FirstPersonCamera.h" />
     <ClInclude Include="GameEntity.h" />
     <ClInclude Include="ICollider2D.h" />
     <ClInclude Include="IFileLoader.h" />
@@ -160,6 +161,7 @@
     <ClCompile Include="DebugDraw.cpp" />
     <ClCompile Include="Entity.cpp" />
     <ClCompile Include="FileBuffer.cpp" />
+    <ClCompile Include="FirstPersonCamera.cpp" />
     <ClCompile Include="GameEntity.cpp" />
     <ClCompile Include="IGame.cpp" />
     <ClCompile Include="jsoncpp.cpp" />

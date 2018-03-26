@@ -21,6 +21,9 @@ protected:
 	Mesh *mesh;
 	Material *mat;
 
+	Camera* freeCam;
+	FirstPersonCamera* firstPersonCamera;
+
 public:
 	static Game* CreateInstance();
 	static int GetInstanceCount();
