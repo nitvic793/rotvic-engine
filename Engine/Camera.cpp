@@ -3,6 +3,7 @@
 #include "Mouse.h"
 #include <Windows.h>
 #include <algorithm>
+#include "Console.h"
 
 XMFLOAT3 Camera::GetPosition()
 {
@@ -51,12 +52,15 @@ void Camera::SetProjectionMatrix(float aspectRatio)
 
 void Camera::Update(float deltaTime)
 {
+	auto console = Console::GetInstance();
 	float speed = 10.f;
 	XMVECTOR pos = XMVectorSet(position.x, position.y, position.z, 0);
 	XMVECTOR dir = XMVectorSet(direction.x, direction.y, direction.z, 0);
 	auto rotQuaternion = XMQuaternionRotationRollPitchYaw(rotationX, rotationY, 0);
 	dir = XMVector3Rotate(dir, rotQuaternion);
 	XMVECTOR up = XMVectorSet(0, 1, 0, 0); // Y is up!
+
+	if (console->enabled) return;
 
 	if (GetAsyncKeyState('W') & 0x8000)
 	{

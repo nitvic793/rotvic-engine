@@ -339,6 +339,27 @@ void CoreGame::RegisterConsoleCommands()
 		entity->SetScale(x, y, z);
 	});
 
+	console->RegisterCommand("SetMaterial", [&](std::vector<std::string> params)
+	{
+		if (params.size() != 2)
+		{
+			console->WriteLine(L"Invalid params supplied");
+			return;
+		}
+
+		auto entityName = params[0];
+		auto materialName = params[1];
+		auto material = resourceManager->GetMaterial(materialName);
+
+		auto entity = gameInstance->GetEntity(entityName);
+		if (entity == nullptr || material == nullptr)
+		{
+			console->WriteLine(L"Entity or Material not found");
+			return;
+		}
+		entity->SetMaterial(material);
+	});
+
 }
 
 /// <summary>
