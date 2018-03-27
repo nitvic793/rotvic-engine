@@ -72,15 +72,9 @@ void Game::LoadLevel()
 	AddEntity(entity, "Test");
 	entity->SetPosition(0, 2, 0);
 
-	console->RegisterCommand("AddSphere", [&](std::vector<std::string> params)->void 
+	console->RegisterCommand("SwitchCam", [=](std::vector<std::string> params)
 	{
-		if (params.size() < 3)return;
-		float x = (float)atof(params[0].c_str());
-		float y = (float)atof(params[1].c_str());
-		float z = (float)atof(params[2].c_str());
-		auto entity = new GameEntity(resource->GetMesh("sphere"), resource->GetMaterial("metal"));
-		AddEntity(entity, "Test");
-		entity->SetPosition(x, y, z);
+		camera = camera == freeCam ? firstPersonCamera : freeCam;
 	});
 }
 
@@ -150,12 +144,19 @@ void Game::Update(float deltaTime)
 	box.bounding.Center = XMFLOAT3(2, 1, 0);
 	box.bounding.Extents = XMFLOAT3(1, 1, 1);
 
+	Frustum fr;
+	fr.color = XMFLOAT4(1, 1, 1, 1);
+	fr.bounding.Origin = XMFLOAT3(-4, 0, 1);
+
 	Grid grid = Grid::GetDefaultGrid();
 	XMStoreFloat4(&grid.color, Colors::Green);
+	DebugDraw::Draw<Frustum>(fr, "Test");
 	DebugDraw::Draw<Box>(box, "Collision");
 	DebugDraw::Draw<Ray>(ray);
 	DebugDraw::Draw<Sphere>(sphere, "Collision");
 	DebugDraw::Draw<Grid>(grid, "Collision");
+
+
 
 	delayTime += deltaTime;
 	if (keyboard->IsKeyPressed(Tilde) && delayTime>0.2f)

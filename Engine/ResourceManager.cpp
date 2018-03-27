@@ -5,6 +5,18 @@ ResourceManager* ResourceManager::instance = nullptr;
 
 void ResourceManager::LoadResources(ConfigMap config, SystemCore* core)
 {
+	std::vector<Vertex> planeVertices = {
+		{ XMFLOAT3(-0.5f,0,0.5f), XMFLOAT3(0,1,0), XMFLOAT2(0,0) },
+		{ XMFLOAT3(0.5f,0,0.5f), XMFLOAT3(0,1,0), XMFLOAT2(1,0) },
+		{ XMFLOAT3(0.5f,0,-0.5f), XMFLOAT3(0,1,0), XMFLOAT2(1,1) },
+		{ XMFLOAT3(-0.5f,0,-0.5f), XMFLOAT3(0,1,0), XMFLOAT2(0,1)}
+	};
+
+	UINT indices[] = { 0,1,2,0,2,3 };
+	auto plane = new Mesh(core);
+	plane->Initialize(planeVertices.data(), 4, indices, 6);
+	meshes.insert(std::pair<std::string, Mesh*>("plane", plane));
+
 	auto device = core->GetDevice();
 	auto context = core->GetDeviceContext();
 
@@ -90,7 +102,6 @@ ResourceManager::ResourceManager()
 {
 	instance = this;
 }
-
 
 ResourceManager::~ResourceManager()
 {
