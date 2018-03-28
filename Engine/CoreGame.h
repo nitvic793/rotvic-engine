@@ -1,4 +1,5 @@
 #pragma once
+#define NOMINMAX
 #include <Windows.h>
 #include <d3d11.h>
 #include <DirectXMath.h>
@@ -13,6 +14,7 @@
 #include "Lights.h"
 #include "Console.h"
 #include "DebugDraw.h"
+#include "reactphysics3d.h"
 
 #pragma comment(lib, "d3d11.lib")
 
@@ -43,6 +45,8 @@ protected:
 	ResourceManager* resourceManager;
 	std::unique_ptr<Console> console;
 	std::unique_ptr<DebugDraw> debugDraw;
+	rp3d::Vector3 gravity;
+	rp3d::DynamicsWorld* dynamicsWorld;
 
 	void RegisterConsoleCommands();
 public:

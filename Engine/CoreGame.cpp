@@ -59,6 +59,7 @@ CoreGame::CoreGame(std::string configFileName)
 	screenTitle = config[TITLE];
 	screenHeight = std::stoi(config[HEIGHT]);
 	screenWidth = std::stoi(config[WIDTH]);
+	gravity = rp3d::Vector3(0,-9.81,0);
 	if (screenHeight == 0 || screenWidth == 0) {
 		throw std::exception("Invalid Screen Height or Width");
 	}
@@ -430,7 +431,7 @@ void CoreGame::UpdateTimer()
 	__int64 now;
 	QueryPerformanceCounter((LARGE_INTEGER*)&now);
 	currentTime = now;
-	deltaTime = max((float)((currentTime - previousTime) * perfCounterSeconds), 0.0f);
+	deltaTime = std::max((float)((currentTime - previousTime) * perfCounterSeconds), 0.0f);
 	totalTime = (float)((currentTime - startTime) * perfCounterSeconds);
 	previousTime = currentTime;
 }

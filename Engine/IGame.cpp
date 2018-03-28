@@ -62,6 +62,17 @@ void IGame::BindKeyboard(Keyboard* keyboard)
 }
 
 /// <summary>
+/// Bind physics world to game instance.
+/// </summary>
+/// <param name="grav">Gravity force vector</param>
+/// <param name="world">Pointer to instantiated dynamics world</param>
+void IGame::SetPhysics(rp3d::Vector3 grav, rp3d::DynamicsWorld* world)
+{
+	this->gravity = grav;
+	this->dynamicsWorld = world;
+}
+
+/// <summary>
 /// Set system core to game instance.
 /// </summary>
 /// <param name="core"></param>

@@ -11,6 +11,7 @@
 #include "Camera.h"
 #include "Lights.h"
 #include "Console.h"
+#include "reactphysics3d.h"
 #include "Skybox.h"
 
 /// <summary>
@@ -32,6 +33,8 @@ protected:
 	Camera* camera;
 	LightsMap lightsMap;
 	Console* console;
+	rp3d::Vector3 gravity;
+	rp3d::DynamicsWorld* dynamicsWorld;
 	Skybox* skybox;
 	void ClearEntities();
 	const Vector2f& GetMousePosition2D();
@@ -44,6 +47,7 @@ public:
 	void BindMouse(Mouse *mouse);
 	void SetRenderer(Renderer* renderer);
 	void SetResourceManager(ResourceManager *rm);
+	void SetPhysics(rp3d::Vector3 grav, rp3d::DynamicsWorld* world);
 	virtual void UpdateEntities(float deltaTime);
 	virtual void Update(float) = 0;
 	virtual void Initialize() = 0;
