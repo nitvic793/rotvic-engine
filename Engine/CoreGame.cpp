@@ -253,6 +253,17 @@ void CoreGame::RegisterConsoleCommands()
 		debugDraw->SetGroupActive(group, active);
 	});
 
+	console->RegisterCommand("SetDebugDraw", [&](std::vector<std::string> params)
+	{
+		if (params.size() != 1)
+		{
+			console->WriteLine(L"Invalid params supplied");
+			return;
+		}
+		auto enable = std::stoi(params[0].c_str());
+		debugDraw->SetEnabled(enable);
+	});
+
 	console->RegisterCommand("Instantiate", [&](std::vector<std::string> params)
 	{
 		if (params.size() < 2)
@@ -405,7 +416,7 @@ void CoreGame::Draw()
 	{
 		renderer->Draw(gameInstance->GetSkybox());
 	}
-	debugDraw->Render(gameInstance->GetCamera()); //Debug Draw
+	if(debugDraw->IsEnabled())debugDraw->Render(gameInstance->GetCamera()); //Debug Draw
 	if (console->enabled)console->Render(); //Render console if required.
 	Core->GetDeviceContext()->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 	renderer->Present();

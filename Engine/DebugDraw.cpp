@@ -285,6 +285,16 @@ void DebugDraw::Draw(ID3D11DeviceContext *context, ID3D11Buffer* vertexBuffer, I
 	context->DrawIndexed(indexCount, 0, 0);
 }
 
+bool DebugDraw::IsEnabled()
+{
+	return enabled;
+}
+
+void DebugDraw::SetEnabled(bool enable)
+{
+	enabled = enable;
+}
+
 
 DebugDraw * DebugDraw::GetInstance()
 {
@@ -449,6 +459,7 @@ DebugDraw::DebugDraw(SystemCore* core)
 	batch = std::make_unique<PrimitiveBatch<VertexPositionColor>>(core->GetDeviceContext());
 	states = std::make_unique<CommonStates>(core->GetDevice());
 	instance = this;
+	enabled = true;
 }
 
 

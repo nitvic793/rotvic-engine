@@ -48,6 +48,7 @@ class DebugDraw
 
 	std::map<std::string, bool> groups;
 	std::queue<DrawCallPayLoad> drawCalls;
+	bool enabled;
 
 	/// <summary>
 	/// Returns true if drawing of given group is enabled. Also adds group name to group map if group name is not found in map. 
@@ -57,6 +58,8 @@ class DebugDraw
 	bool IsGroupEnabled(std::string groupName);
 	void Draw(ID3D11DeviceContext *context, ID3D11Buffer* vertexBuffer, ID3D11Buffer* indexBuffer, UINT indexCount);
 public:
+	bool IsEnabled();
+	void SetEnabled(bool enable);
 	/// <summary>
 	/// Get instance of debug draw
 	/// </summary>
