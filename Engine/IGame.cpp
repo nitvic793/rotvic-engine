@@ -5,6 +5,7 @@
 IGame::IGame()
 {
 	camera = nullptr;
+	skybox = nullptr;
 }
 
 IGame::~IGame()
@@ -137,7 +138,7 @@ void IGame::AddEntity(GameEntity *entity, std::string entityName)
 	vEntities.push_back(entity);
 }
 
-Camera * IGame::GetCamera()
+Camera* IGame::GetCamera()
 {
 	return camera;
 }
@@ -145,6 +146,11 @@ Camera * IGame::GetCamera()
 LightsMap IGame::GetLights()
 {
 	return lightsMap;
+}
+
+Skybox* IGame::GetSkybox()
+{
+	return skybox;
 }
 
 /// <summary>

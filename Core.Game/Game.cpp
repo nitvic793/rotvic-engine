@@ -11,6 +11,7 @@ Game::Game(float speed)
 
 Game::~Game()
 {
+	delete skybox;
 	delete firstPersonCamera;
 	InstanceCount--;
 }
@@ -58,6 +59,8 @@ void Game::Initialize()
 	lightsMap.insert(std::pair<std::string, Light*>("light", new Light{ &light, Directional }));
 	lightsMap.insert(std::pair<std::string, Light*>("secondaryLight", new Light{ &secondaryLight, Directional }));
 	lightsMap.insert(std::pair<std::string, Light*>("pointLight", new Light{ &pointLight, Point }));
+
+	skybox = new Skybox(resource->GetMesh("cube"), resource->vertexShaders["sky"], resource->pixelShaders["sky"], resource->GetTexture("skybox"), core->GetDevice());
 	LoadLevel();
 }
 
@@ -129,12 +132,12 @@ void Game::Update(float deltaTime)
 {
 	//camera = firstPersonCamera;
 	Ray ray;
-	ray.color = XMFLOAT4(1,1,1,1);
+	ray.color = XMFLOAT4(1, 1, 1, 1);
 	ray.origin = XMFLOAT3(0, 0, 0);
 	ray.direction = XMFLOAT3(0, 1, 0);
 	ray.length = 2.f;
 
-	Sphere sphere;	
+	Sphere sphere;
 	sphere.color = XMFLOAT4(1, 1, 1, 1);
 	sphere.bounding.Center = XMFLOAT3(-1, 0, 0);
 	sphere.bounding.Radius = 0.5;
@@ -159,12 +162,12 @@ void Game::Update(float deltaTime)
 
 
 	delayTime += deltaTime;
-	if (keyboard->IsKeyPressed(Tilde) && delayTime>0.2f)
+	if (keyboard->IsKeyPressed(Tilde) && delayTime > 0.2f)
 	{
 		delayTime = 0.f;
 		console->enabled = !console->enabled;
 	}
-	
+
 	if (keyboard->IsActionPressed("up") && delayTime > 0.2f)
 	{
 		delayTime = 0.f;

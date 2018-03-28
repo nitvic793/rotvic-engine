@@ -179,8 +179,20 @@ Keyboard::Keyboard()
 	inputEnumMap.insert(KeyEnumMap("X", Keys::X));
 	inputEnumMap.insert(KeyEnumMap("Y", Keys::Y));
 	inputEnumMap.insert(KeyEnumMap("Z", Keys::Z));
+	inputEnumMap.insert(KeyEnumMap("F1", Keys::F1));
+	inputEnumMap.insert(KeyEnumMap("F2", Keys::F2));
 	inputEnumMap.insert(KeyEnumMap("ArrowUp", Keys::Up));
 	inputEnumMap.insert(KeyEnumMap("ArrowDown", Keys::Down));
+	inputEnumMap.insert(KeyEnumMap("ArrowLeft", Keys::Left));
+	inputEnumMap.insert(KeyEnumMap("ArrowRight", Keys::Right));
+	inputEnumMap.insert(KeyEnumMap("Delete", Keys::Delete));
+	inputEnumMap.insert(KeyEnumMap("Space", Keys::Space));
+	inputEnumMap.insert(KeyEnumMap("LShift", Keys::LShift));
+	inputEnumMap.insert(KeyEnumMap("RShift", Keys::RShift));
+	inputEnumMap.insert(KeyEnumMap("RCtrl", Keys::RControl));
+	inputEnumMap.insert(KeyEnumMap("LCtrl", Keys::LControl));
+	inputEnumMap.insert(KeyEnumMap("Backspace", Keys::BackSpace));
+	inputEnumMap.insert(KeyEnumMap("Backslash", Keys::BackSlash));
 }
 
 Keyboard::~Keyboard()

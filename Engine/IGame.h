@@ -11,6 +11,7 @@
 #include "Camera.h"
 #include "Lights.h"
 #include "Console.h"
+#include "Skybox.h"
 
 /// <summary>
 /// The game instance interface. The actual game should inherit and implement this abstract class and bind it to the core game instance. 
@@ -31,6 +32,7 @@ protected:
 	Camera* camera;
 	LightsMap lightsMap;
 	Console* console;
+	Skybox* skybox;
 	void ClearEntities();
 	const Vector2f& GetMousePosition2D();
 public:
@@ -53,8 +55,9 @@ public:
 	void AddEntity(GameEntity *entity, std::string entityName);
 	Camera* GetCamera();
 	LightsMap GetLights();
+	Skybox* GetSkybox();
 
 	IGame();
-	~IGame();
+	virtual ~IGame();
 };
 

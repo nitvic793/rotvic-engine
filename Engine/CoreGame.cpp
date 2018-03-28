@@ -401,6 +401,10 @@ void CoreGame::Draw()
 	{
 		renderer->Draw(entity);
 	}
+	if (gameInstance->GetSkybox() != nullptr)
+	{
+		renderer->Draw(gameInstance->GetSkybox());
+	}
 	debugDraw->Render(gameInstance->GetCamera()); //Debug Draw
 	if (console->enabled)console->Render(); //Render console if required.
 	Core->GetDeviceContext()->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
