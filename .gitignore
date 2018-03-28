@@ -263,3 +263,5 @@ __pycache__/
 ## Exceptions
 
 !Assets/Models/*.obj
+!Physics/reactphysics3d.pdb
+!Physics/reactphysics3d.lib
