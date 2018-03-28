@@ -1,4 +1,5 @@
 #include "FileBuffer.h"
+#define NOMINMAX
 #include <Windows.h>
 
 

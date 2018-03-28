@@ -1,5 +1,5 @@
 #include "Camera.h"
-
+#define NOMINMAX
 #include "Mouse.h"
 #include <Windows.h>
 #include <algorithm>

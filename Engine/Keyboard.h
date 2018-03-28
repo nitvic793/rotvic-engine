@@ -4,7 +4,7 @@ from the SFML project on https://github.com/SFML/SFML/
 */
 
 #pragma once
-
+#define NOMINMAX
 #include <Windows.h>
 #include <map>
 #include <vector>
