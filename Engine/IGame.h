@@ -12,6 +12,7 @@
 #include "Lights.h"
 #include "Console.h"
 #include "reactphysics3d.h"
+#include "Skybox.h"
 
 /// <summary>
 /// The game instance interface. The actual game should inherit and implement this abstract class and bind it to the core game instance. 
@@ -34,6 +35,7 @@ protected:
 	Console* console;
 	rp3d::Vector3 gravity;
 	rp3d::DynamicsWorld* dynamicsWorld;
+	Skybox* skybox;
 	void ClearEntities();
 	const Vector2f& GetMousePosition2D();
 public:
@@ -57,8 +59,9 @@ public:
 	void AddEntity(GameEntity *entity, std::string entityName);
 	Camera* GetCamera();
 	LightsMap GetLights();
+	Skybox* GetSkybox();
 
 	IGame();
-	~IGame();
+	virtual ~IGame();
 };
 

@@ -5,13 +5,16 @@
 #include "WICTextureLoader.h"
 #include <map>
 
+typedef std::map<std::string, SimpleVertexShader*> VertexShaderMap;
+typedef std::map<std::string, SimplePixelShader*> PixelShaderMap;
+typedef std::pair<std::string, SimpleVertexShader*> VertexShaderMapType;
+typedef std::pair<std::string, SimplePixelShader*> PixelShaderMapType;
+
 /// <summary>
 /// Resource manager class. A central class to manage all resources required by the game. 
 /// </summary>
 class ResourceManager
 {
-	ID3D11SamplerState *sampler;
-
 	std::map<std::string, Mesh*> meshes;
 	std::map<std::string, Material*> materials;
 	std::map<std::string, ID3D11ShaderResourceView*> textures;
@@ -21,6 +24,9 @@ public:
 	SimplePixelShader *pixelShader;
 	SimplePixelShader *debugShader;
 	SimpleVertexShader *debugVertexShader;
+	ID3D11SamplerState *sampler;
+	VertexShaderMap vertexShaders;
+	PixelShaderMap pixelShaders;
 
 	/// <summary>
 	/// Loads resources based on given config data.
@@ -42,6 +48,13 @@ public:
 	/// <param name="materialName">Name of material</param>
 	/// <returns>Material</returns>
 	Material* GetMaterial(std::string materialName);
+
+	/// <summary>
+	/// Gets the Shader Resource View associated with given name
+	/// </summary>
+	/// <param name="textureName">Name of shader resource view.</param>
+	/// <returns>Texuture/Shader Resource View</returns>
+	ID3D11ShaderResourceView* GetTexture(std::string textureName);
 
 	static ResourceManager* GetInstance();
 	ResourceManager();

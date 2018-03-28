@@ -1,5 +1,6 @@
 #include "ResourceManager.h"
 #include "MeshLoader.h"
+#include "DDSTextureLoader.h"
 
 ResourceManager* ResourceManager::instance = nullptr;
 
@@ -32,16 +33,35 @@ void ResourceManager::LoadResources(ConfigMap config, SystemCore* core)
 
 	vertexShader = new SimpleVertexShader(device, context);
 	vertexShader->LoadShaderFile(L"VertexShader.cso");
+	vertexShaders.insert(VertexShaderMapType("default", vertexShader));
+
 	pixelShader = new SimplePixelShader(device, context);
 	pixelShader->LoadShaderFile(L"PixelShader.cso");
+	pixelShaders.insert(PixelShaderMapType("default", pixelShader));
+
 	debugShader = new SimplePixelShader(device, context);
 	debugShader->LoadShaderFile(L"DebugShader.cso");
+	pixelShaders.insert(PixelShaderMapType("debug", debugShader));
+
 	debugVertexShader = new SimpleVertexShader(device, context);
 	debugVertexShader->LoadShaderFile(L"DebugVertexShader.cso");
+	vertexShaders.insert(VertexShaderMapType("debug", debugVertexShader));
+
+	auto skyVS = new SimpleVertexShader(device, context);
+	skyVS->LoadShaderFile(L"SkyVS.cso");
+	vertexShaders.insert(VertexShaderMapType("sky", skyVS));
+
+	auto skyPS = new SimplePixelShader(device, context);
+	skyPS->LoadShaderFile(L"SkyPS.cso");
+	pixelShaders.insert(PixelShaderMapType("sky", skyPS));
 
 	Material *material = nullptr;
 	ID3D11ShaderResourceView *srv = nullptr;
 	ID3D11ShaderResourceView *normalSrv = nullptr;
+
+	CreateDDSTextureFromFile(device, L"../../Assets/Textures/SunnyCubeMap.dds", 0, &srv);
+	textures.insert(std::pair<std::string, ID3D11ShaderResourceView*>("skybox", srv));
+
 	CreateWICTextureFromFile(device, context, L"../../Assets/Textures/metal.jpg", nullptr, &srv);
 	CreateWICTextureFromFile(device, context, L"../../Assets/Textures/metalNormal.png", nullptr, &normalSrv);
 	textures.insert(std::pair<std::string, ID3D11ShaderResourceView*>("metal", srv));
@@ -93,6 +113,13 @@ Material * ResourceManager::GetMaterial(std::string materialName)
 	return nullptr;
 }
 
+ID3D11ShaderResourceView* ResourceManager::GetTexture(std::string textureName)
+{
+	if (textures.find(textureName) != textures.end())
+		return textures[textureName];
+	return nullptr;
+}
+
 ResourceManager* ResourceManager::GetInstance()
 {
 	return instance;
@@ -117,13 +144,17 @@ ResourceManager::~ResourceManager()
 		item.second->Release();
 	}
 
+	for (auto item : vertexShaders) {
+		delete item.second;
+	}
+
+	for (auto item : pixelShaders) {
+		delete item.second;
+	}
+
 	textures.clear();
 	meshes.clear();
 	materials.clear();
-	delete vertexShader;
-	delete pixelShader;
-	delete debugShader;
-	delete debugVertexShader;
 	if (sampler)
 		sampler->Release();
 }

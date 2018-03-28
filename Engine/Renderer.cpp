@@ -1,4 +1,5 @@
 #include "Renderer.h"
+#include "ResourceManager.h"
 
 /// <summary>
 /// Draw given mesh object. 
@@ -112,7 +113,6 @@ void Renderer::Initialize()
 XMFLOAT4X4 Renderer::GetViewMatrix()
 {
 	return camera->GetViewMatrix();
-	//return viewMatrix;
 }
 
 /// <summary>
@@ -122,7 +122,6 @@ XMFLOAT4X4 Renderer::GetViewMatrix()
 XMFLOAT4X4 Renderer::GetProjectionMatrix()
 {
 	return camera->GetProjectionMatrix();
-	//return projectionMatrix;
 }
 
 void Renderer::SetProjectionMatrix(int width, int height)
@@ -194,4 +193,24 @@ void Renderer::Draw(Entity *entity)
 	internalRenderer->SetShaders(entity, camera, lights);
 	Draw(entity->GetMesh());
 	core->Draw();
+}
+
+void Renderer::Draw(Skybox* sky)
+{
+	auto rm = ResourceManager::GetInstance();
+	auto mesh = sky->GetMesh();
+	auto ps = sky->GetPixelShader();
+	auto vs = sky->GetVertexShader();
+	vs->SetMatrix4x4("view", camera->GetViewMatrix());
+	vs->SetMatrix4x4("projection", camera->GetProjectionMatrix());
+	vs->CopyAllBufferData();
+	vs->SetShader();
+
+	ps->SetShaderResourceView("SkyTexture", sky->GetSkySRV());
+	ps->SetSamplerState("BasicSampler", rm->sampler);
+	ps->SetShader();
+
+	core->GetDeviceContext()->RSSetState(sky->GetRasterizerState());
+	core->GetDeviceContext()->OMSetDepthStencilState(sky->GetDepthStencilState(), 0);
+	Draw(mesh);
 }

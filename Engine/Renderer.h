@@ -5,6 +5,7 @@
 #include "Constants.h"
 #include "Camera.h"
 #include "Lights.h"
+#include "Skybox.h"
 
 /// <summary>
 /// Internal render class to abstract the draw calls. 
@@ -31,6 +32,7 @@ public:
 	virtual SystemRenderer* GetInternalRenderer();
 	virtual void			Draw(Mesh *mesh);
 	virtual void			Draw(Entity *entity);
+	virtual void			Draw(Skybox* sky);
 	virtual void			Initialize();
 
 	XMFLOAT4X4				GetViewMatrix();

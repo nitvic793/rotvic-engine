@@ -152,6 +152,7 @@
     <ClInclude Include="ResourceManager.h" />
     <ClInclude Include="SaveSystem.h" />
     <ClInclude Include="SimpleShader.h" />
+    <ClInclude Include="Skybox.h" />
     <ClInclude Include="States.h" />
     <ClInclude Include="SystemCore.h" />
     <ClInclude Include="Keyboard.h" />
@@ -186,6 +187,7 @@
     <ClCompile Include="ResourceManager.cpp" />
     <ClCompile Include="SaveSystem.cpp" />
     <ClCompile Include="SimpleShader.cpp" />
+    <ClCompile Include="Skybox.cpp" />
     <ClCompile Include="SystemCore.cpp" />
     <ClCompile Include="Transform.cpp" />
     <ClCompile Include="Utility.cpp" />
@@ -210,6 +212,14 @@
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">5.0</ShaderModel>
+    </FxCompile>
+    <FxCompile Include="SkyPS.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
+    </FxCompile>
+    <FxCompile Include="SkyVS.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
     </FxCompile>
     <FxCompile Include="VertexShader.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Vertex</ShaderType>
