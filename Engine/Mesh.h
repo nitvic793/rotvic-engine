@@ -1,5 +1,5 @@
 #pragma once
-
+#define NOMINMAX
 #include "SystemCore.h"
 #include "Material.h"
 #include "Vertex.h"

@@ -14,7 +14,6 @@ Entity::Entity()
 	XMStoreFloat3(&rotation, v);
 	mesh = nullptr;	
 	material = nullptr;
-
 }
 
 Entity::Entity(Mesh *m, Material* mat)
@@ -36,16 +35,21 @@ Entity::Entity(Mesh *m, Material* mat)
 /// <returns>Returns 4x4 world matrix for this entity.</returns>
 XMFLOAT4X4 Entity::GetWorldMatrix() 
 {
-	XMMATRIX trans = XMMatrixTranslation(Position.x, Position.y, Position.z);
+	/*XMMATRIX trans = XMMatrixTranslation(Position.x, Position.y, Position.z);
 	XMMATRIX rot = XMMatrixRotationRollPitchYawFromVector(XMLoadFloat3(&rotation));
 	XMMATRIX scle = XMMatrixScaling(scale.x, scale.y, scale.z);
-	XMMATRIX world = scle * rot * trans;
+	XMMATRIX world = scle * rot * trans;*/
+	rp3d::Transform transform = rigidBody->getTransform();
+	float matrix[16];
+	transform.getOpenGLMatrix(matrix);
+	XMMATRIX world = XMMATRIX(matrix);
 	XMStoreFloat4x4(&worldMatrix, XMMatrixTranspose(world));
 	return worldMatrix;
 }
 
 Entity::~Entity()
 {
+	//if (rigidBody) delete rigidBody;
 }
 
 /// <summary>
@@ -105,6 +109,24 @@ void Entity::SetContext(EntityContextWrapper context)
 }
 
 /// <summary>
+/// Set rigidbody for the entity. This keeps track of the object's position and physics
+/// </summary>
+/// <param name="position">The position to be used by the entity. (rp3d vector3)</param>
+/// <param name="orientation">The rotation to be used by the entity. (Use rp3d quaternion identity for 0)</param>
+/// <param name="physicsWorld">The dynamics world to be used by the entity.</param>
+void Entity::StartRigidBody(rp3d::Vector3 position, rp3d::Quaternion orientation, rp3d::DynamicsWorld* physicsWorld)
+{
+	rp3d::Transform transform(position, orientation);
+
+	// Create a rigid body in the world 
+	rigidBody = physicsWorld->createRigidBody(transform);
+	rigidBody->enableGravity(false);
+	shape = new rp3d::SphereShape(.5);
+	proxyShape = rigidBody->addCollisionShape(shape, rp3d::Transform::identity(), rp3d::decimal(1.0));
+}
+
+
+/// <summary>
 /// Set position of entity
 /// </summary>
 /// <param name="position"></param>
@@ -120,6 +142,7 @@ void Entity::SetPosition(const Vector3f& position)
 void Entity::Move(const Vector3f& offset)
 {
 	Position = Position + offset;
+	rigidBody->applyForceToCenterOfMass(rp3d::Vector3(offset.x, offset.y, offset.z));
 }
 
 /// <summary>

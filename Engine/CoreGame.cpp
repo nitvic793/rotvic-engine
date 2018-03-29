@@ -59,7 +59,6 @@ CoreGame::CoreGame(std::string configFileName)
 	screenTitle = config[TITLE];
 	screenHeight = std::stoi(config[HEIGHT]);
 	screenWidth = std::stoi(config[WIDTH]);
-	gravity = rp3d::Vector3(0,-9.81,0);
 	if (screenHeight == 0 || screenWidth == 0) {
 		throw std::exception("Invalid Screen Height or Width");
 	}
@@ -69,6 +68,8 @@ CoreGame::CoreGame(std::string configFileName)
 	renderer = new Renderer(Core, screenWidth, screenHeight);
 	saveSystem = new SaveSystem();
 	resourceManager = new ResourceManager();
+	gravity = rp3d::Vector3(0, -9.81, 0);
+	dynamicsWorld = new rp3d::DynamicsWorld(gravity);
 }
 
 void CoreGame::OnResizeCallback(int width, int height)
@@ -110,6 +111,8 @@ CoreGame::CoreGame(int height, int width, std::string title)
 	renderer = new Renderer(Core, width, height);
 	saveSystem = new SaveSystem();
 	resourceManager = new ResourceManager();
+	gravity = rp3d::Vector3(0, -9.81, 0);
+	dynamicsWorld = new rp3d::DynamicsWorld(gravity);
 	mouse = nullptr;
 }
 
@@ -125,6 +128,7 @@ CoreGame::~CoreGame()
 	if (saveSystem) delete saveSystem;
 	if (mouse) delete mouse;
 	if (resourceManager) delete resourceManager;
+	if (dynamicsWorld) delete dynamicsWorld;
 }
 
 /// <summary>
@@ -165,6 +169,7 @@ void CoreGame::Bind(IGame* gInstance)
 	gameInstance->SetRenderer(renderer);
 	gameInstance->SetResourceManager(resourceManager);
 	gameInstance->BindConsole(console.get());
+	gameInstance->SetPhysics(gravity, dynamicsWorld);
 }
 
 /// <summary>

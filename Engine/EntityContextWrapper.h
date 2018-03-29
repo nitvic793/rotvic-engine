@@ -1,5 +1,5 @@
 #pragma once
-
+#define NOMINMAX
 #include "Keyboard.h"
 #include "Mouse.h"
 #include <functional>

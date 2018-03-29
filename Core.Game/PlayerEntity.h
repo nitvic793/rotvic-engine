@@ -1,5 +1,5 @@
 #pragma once
-
+#define NOMINMAX
 #include "Core.h"
 
 const float DEFAULTSPEED = 20.f;

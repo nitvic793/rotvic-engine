@@ -1,5 +1,5 @@
 #pragma once
-
+#define NOMINMAX
 class Rect
 {
 public:

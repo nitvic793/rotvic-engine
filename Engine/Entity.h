@@ -1,9 +1,12 @@
 #pragma once
+#undef min
+#undef max
 #include "Vector3.h"
 #include "Mesh.h"
 #include <DirectXMath.h>
 #include <d3d11.h>
 #include "EntityContextWrapper.h"
+#include "reactphysics3d.h"
 
 using namespace DirectX;
 
@@ -24,6 +27,9 @@ protected:
 	DirectX::XMFLOAT3 rotation;
 	Mesh *mesh;
 	Material *material;
+	rp3d::RigidBody *rigidBody;
+	rp3d::ProxyShape* proxyShape;
+	rp3d::CollisionShape* shape;
 public:
 	XMFLOAT4X4 GetWorldMatrix();
 	virtual void MoveUp(float);
@@ -34,6 +40,7 @@ public:
 
 	const Vector3f &GetPosition();
 
+	void Entity::StartRigidBody(rp3d::Vector3 position, rp3d::Quaternion orientation, rp3d::DynamicsWorld* physicsWorld);
 	void SetContext(EntityContextWrapper context);
 	void SetPosition(const Vector3f& position);
 	void SetRotationZ(float angle);

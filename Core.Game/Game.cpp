@@ -59,7 +59,6 @@ void Game::Initialize()
 	lightsMap.insert(std::pair<std::string, Light*>("light", new Light{ &light, Directional }));
 	lightsMap.insert(std::pair<std::string, Light*>("secondaryLight", new Light{ &secondaryLight, Directional }));
 	lightsMap.insert(std::pair<std::string, Light*>("pointLight", new Light{ &pointLight, Point }));
-
 	skybox = new Skybox(resource->GetMesh("cube"), resource->vertexShaders["sky"], resource->pixelShaders["sky"], resource->GetTexture("skybox"), core->GetDevice());
 	LoadLevel();
 }
@@ -74,6 +73,15 @@ void Game::LoadLevel()
 	auto entity = new GameEntity(resource->GetMesh("sphere"), resource->GetMaterial("metal"));
 	AddEntity(entity, "Test");
 	entity->SetPosition(0, 2, 0);
+
+	entity->StartRigidBody(rp3d::Vector3(0, 2, 0), rp3d::Quaternion::identity(), dynamicsWorld);
+
+	auto entity2 = new GameEntity(resource->GetMesh("sphere"), resource->GetMaterial("metal"));
+	AddEntity(entity2, "Test2");
+	entity2->SetPosition(5, 2, 0);
+
+	entity2->StartRigidBody(rp3d::Vector3(5, 2, 0), rp3d::Quaternion::identity(), dynamicsWorld);
+	
 
 	console->RegisterCommand("SwitchCam", [=](std::vector<std::string> params)
 	{
@@ -174,6 +182,7 @@ void Game::Update(float deltaTime)
 		//console->WriteLine(L"Up action pressed");
 	}
 
+	entities["Test2"]->Move(Vector3f(-.01, 0, 0));
 	delayTime += deltaTime;
 }
 

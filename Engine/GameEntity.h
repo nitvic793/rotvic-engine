@@ -1,5 +1,5 @@
 #pragma once
-
+#define NOMINMAX
 #include "Entity.h"
 #include "Rect.h"
 
