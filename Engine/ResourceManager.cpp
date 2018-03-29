@@ -91,6 +91,13 @@ void ResourceManager::LoadResources(ConfigMap config, SystemCore* core)
 	material = new Material(core, vertexShader, pixelShader, srv, normalSrv, sampler);
 	materials.insert(std::pair<std::string, Material*>("default", material));
 
+	CreateWICTextureFromFile(device, context, L"../../Assets/Textures/grass01.jpg", nullptr, &srv);
+	CreateWICTextureFromFile(device, context, L"../../Assets/Textures/grass01_n.jpg", nullptr, &normalSrv);
+	textures.insert(std::pair<std::string, ID3D11ShaderResourceView*>("grass", srv));
+	textures.insert(std::pair<std::string, ID3D11ShaderResourceView*>("grassNormal", normalSrv));
+	material = new Material(core, vertexShader, pixelShader, srv, normalSrv, sampler);
+	materials.insert(std::pair<std::string, Material*>("grass", material));
+
 	meshes.insert(std::pair<std::string, Mesh*>("sphere", new Mesh("../../Assets/Models/sphere.obj", core)));
 	meshes.insert(std::pair<std::string, Mesh*>("cone", new Mesh("../../Assets/Models/cone.obj", core)));
 	meshes.insert(std::pair<std::string, Mesh*>("cylinder", new Mesh("../../Assets/Models/cylinder.obj", core)));

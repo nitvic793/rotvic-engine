@@ -19,3 +19,4 @@
 #include "DebugDraw.h"
 #include "FirstPersonCamera.h"
 #include "Skybox.h"
+#include "Terrain.h"

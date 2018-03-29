@@ -156,6 +156,7 @@
     <ClInclude Include="States.h" />
     <ClInclude Include="SystemCore.h" />
     <ClInclude Include="Keyboard.h" />
+    <ClInclude Include="Terrain.h" />
     <ClInclude Include="Transform.h" />
     <ClInclude Include="Utility.h" />
     <ClInclude Include="Vector2f.h" />
@@ -189,6 +190,7 @@
     <ClCompile Include="SimpleShader.cpp" />
     <ClCompile Include="Skybox.cpp" />
     <ClCompile Include="SystemCore.cpp" />
+    <ClCompile Include="Terrain.cpp" />
     <ClCompile Include="Transform.cpp" />
     <ClCompile Include="Utility.cpp" />
     <ClCompile Include="Vector2f.cpp" />

@@ -44,7 +44,6 @@ void Game::Initialize()
 {
 	firstPersonCamera = new FirstPersonCamera((float)renderer->screenWidth / renderer->screenHeight);
 	freeCam = camera;
-
 	light.AmbientColor = XMFLOAT4(0.1f, 0.1f, 0.1f, 0);
 	light.DiffuseColor = XMFLOAT4(0.4f, 0.4f, 0.9f, 1.f);
 	light.Direction = XMFLOAT3(1.f, 0, 0.f);
@@ -74,6 +73,12 @@ void Game::LoadLevel()
 	auto entity = new GameEntity(resource->GetMesh("sphere"), resource->GetMaterial("metal"));
 	AddEntity(entity, "Test");
 	entity->SetPosition(0, 2, 0);
+
+	auto terrain = new Terrain(core);
+	terrain->Initialize("../../Assets/Terrain/heightmap.bmp");
+	terrain->SetMaterial(resource->GetMaterial("grass"));
+	terrain->SetPosition(-100, -5, -40);
+	AddEntity(terrain, "Terrain");	
 
 	console->RegisterCommand("SwitchCam", [=](std::vector<std::string> params)
 	{
