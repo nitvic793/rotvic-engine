@@ -56,6 +56,6 @@ public:
 	Material *GetMaterial();
 	Entity();
 	Entity(Mesh *m, Material* mat);
-	~Entity();
+	virtual ~Entity();
 };
 

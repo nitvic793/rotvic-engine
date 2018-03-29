@@ -139,7 +139,7 @@ Camera::Camera(float aspectRatio)
 		0.25f * XM_PI,		// Field of View Angle
 		aspectRatio,		// Aspect ratio
 		0.1f,						// Near clip plane distance
-		100.0f);					// Far clip plane distance
+		800.0f);					// Far clip plane distance
 	XMStoreFloat4x4(&projectionMatrix, XMMatrixTranspose(P));
 	auto mouse = Mouse::GetInstance();
 	mouse->RegisterOnMouseMoveCallback([&](WPARAM wParam, int x, int y)

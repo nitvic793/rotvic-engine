@@ -35,7 +35,7 @@ bool CoreGame::Initialize(HINSTANCE hInstance, int nCmdShow)
 	});
 	mouse = new Mouse(Core->GetWindowHandle());
 	Core->BindMouse(mouse);
-	resourceManager->LoadResources(config, Core);
+	resourceManager->LoadResources(config, Core); 
 	debugDraw = std::unique_ptr<DebugDraw>(new DebugDraw(Core));
 	RegisterConsoleCommands();
 	return true;

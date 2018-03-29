@@ -18,6 +18,6 @@ public:
 	void SetRect(const Rect& rect);
 	GameEntity();
 	GameEntity(Mesh* m, Material *mat);
-	~GameEntity();
+	virtual ~GameEntity();
 };
 
