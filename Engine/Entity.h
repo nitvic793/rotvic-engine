@@ -44,7 +44,7 @@ public:
 	void ApplyForce(rp3d::Vector3 force);
 	void SetMesh(Mesh *mesh);
 	void SetMaterial(Material *mat);
-	void SetRigidBodyParameters(bool enableGravity, rp3d::BodyType bodyType);
+	void SetRigidBodyParameters(bool enableGravity, rp3d::BodyType bodyType = rp3d::DYNAMIC);
 	void CreateSphereCollider(rp3d::decimal radius);
 	void Entity::CreateBoxCollider(rp3d::Vector3 halfwidths);
 	void Entity::CreateCapsuleCollider(rp3d::decimal radius, rp3d::decimal height);

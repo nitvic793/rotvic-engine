@@ -73,12 +73,14 @@ void Game::LoadLevel()
 	entity->CreateSphereCollider(.5);
 	AddEntity(entity, "Test");
 	entity->SetPosition(0, 2, 0);
+	entity->SetRigidBodyParameters(true);
 
 	auto entity2 = new Entity(resource->GetMesh("sphere"), resource->GetMaterial("metal"), rp3d::Vector3(2, 2, 0), dynamicsWorld);
 	entity2->CreateSphereCollider(.5);
 	AddEntity(entity2, "Test2");
 	entity2->SetPosition(2, 2, 0);
 	entity2->SetRotation(180, -90, -20);
+	entity2->SetRigidBodyParameters(true);
 	
 	auto terrain = new Terrain(core, dynamicsWorld);
 	terrain->Initialize("../../Assets/Terrain/heightmap.bmp");

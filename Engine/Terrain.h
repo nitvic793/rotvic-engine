@@ -13,7 +13,10 @@ class Terrain : public Entity
 {
 	int terrainHeight;
 	int terrainWidth;
+	float minHeight;
+	float maxHeight;
 	XMFLOAT3* heightMap;
+	float* heightValues;
 	XMFLOAT3* heightNormals;
 	XMFLOAT2* textureCoords;
 	Vertex *vertices;

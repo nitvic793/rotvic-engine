@@ -321,6 +321,8 @@ void Terrain::Initialize()
 
 bool Terrain::Initialize(const char * filename)
 {
+	minHeight = 9000;
+	maxHeight = -9000;
 	auto device = core->GetDevice();
 	auto context = core->GetDeviceContext();
 
@@ -384,6 +386,7 @@ bool Terrain::Initialize(const char * filename)
 	{
 		return false;
 	}
+	heightValues = new float[terrainWidth * terrainHeight];
 
 	k = 0;
 
@@ -392,7 +395,8 @@ bool Terrain::Initialize(const char * filename)
 		for (i = 0; i<terrainWidth; i++)
 		{
 			height = bitmapImage[k];
-
+			if (height < minHeight) minHeight = height;
+			if (height > maxHeight) maxHeight = height;
 			index = (terrainWidth * (terrainHeight - 1 - j)) + i;
 
 			heightMap[index].x = (float)i;
@@ -410,6 +414,7 @@ bool Terrain::Initialize(const char * filename)
 		for (i = 0; i<terrainWidth; i++)
 		{
 			heightMap[(terrainHeight * j) + i].y /= 15.0f;
+			heightValues[(terrainHeight * j) + i] = heightMap[(terrainHeight*j) + i].y;
 		}
 	}
 
@@ -512,6 +517,8 @@ bool Terrain::Initialize(const char * filename)
 	mesh->Initialize(vertices, vertexCount, indices, indexCount);
 	delete vertices;
 	delete indices;
+	shape = new rp3d::HeightFieldShape(terrainWidth, terrainHeight, minHeight, maxHeight, heightValues, rp3d::HeightFieldShape::HEIGHT_FLOAT_TYPE);
+	proxyShape = rigidBody->addCollisionShape(shape, rp3d::Transform::identity(), rp3d::decimal(1.0));
 	return true;
 }
 
@@ -527,6 +534,7 @@ Terrain::~Terrain()
 {
 	delete mesh;
 	delete heightMap;
+	delete heightValues;
 	delete heightNormals;
 	delete textureCoords;
 }
