@@ -267,5 +267,4 @@ __pycache__/
 !Physics/reactphysics3d.lib
 !FBXSDK/lib/libfbxsdk.lib
 !FBXSDK/lib/libfbxsdk.pdb
-!x64/Debug/TwoLegModel.fbx
-!DX11Starter/x64/Debug/TwoLegModel.fbx
+!TwoLegModel.fbx
