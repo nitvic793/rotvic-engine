@@ -265,5 +265,5 @@ __pycache__/
 !Assets/Models/*.obj
 !Physics/reactphysics3d.pdb
 !Physics/reactphysics3d.lib
-!2018.1.1/lib/vs2015/x64/debug/libfbxsdk.lib
-!2018.1.1/lib/vs2015/x64/debug/libfbxsdk.pdb
+!/2018.1.1/lib/vs2015/x64/debug/libfbxsdk.lib
+!/2018.1.1/lib/vs2015/x64/debug/libfbxsdk.pdb
