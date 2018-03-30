@@ -29,5 +29,6 @@ public:
 	void CalculateTangents(Vertex *vertices, UINT vertexCount, UINT *indices, UINT indexCount);
 	UINT GetIndexCount();
 	void Mesh::Initialize(Vertex *vertices, UINT vertexCount, UINT *indices, UINT indexCount);
+	void InitializeRiggedMesh(BoneVertex * vertices, UINT vertexCount, UINT * indices, UINT indexCount);
 };
 

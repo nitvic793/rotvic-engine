@@ -113,6 +113,11 @@ Mesh * ResourceManager::GetMesh(std::string meshName)
 	return nullptr;
 }
 
+void ResourceManager::InsertMesh(std::string name, Mesh * m)
+{
+	meshes.insert(std::pair<std::string, Mesh*>("sphere", m));
+}
+
 Material * ResourceManager::GetMaterial(std::string materialName)
 {
 	if (materials.find(materialName) != materials.end())

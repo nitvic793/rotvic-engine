@@ -242,7 +242,7 @@ void Entity::Update(float deltaTime)
 	{
 		for each (Script* s in scripts)
 		{
-			s->Update();
+			s->Update(deltaTime);
 		}
 	}
 }

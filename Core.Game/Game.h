@@ -2,6 +2,7 @@
 
 #include "Core.h"
 #include <map>
+//#include "FBXLoader.h"
 
 const float DefaultSpeed = 20.0f;
 
@@ -25,6 +26,8 @@ protected:
 	FirstPersonCamera* firstPersonCamera;
 
 public:
+
+
 	static Game* CreateInstance();
 	static int GetInstanceCount();
 	void SetSpeed(float);

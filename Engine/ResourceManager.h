@@ -42,6 +42,8 @@ public:
 	/// <returns>Mesh</returns>
 	Mesh* GetMesh(std::string meshName);
 
+	void InsertMesh(std::string name, Mesh* m);
+
 	/// <summary>
 	/// Returns the material associated with given string
 	/// </summary>
