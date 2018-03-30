@@ -59,12 +59,9 @@ void Game::Initialize()
 	lightsMap.insert(std::pair<std::string, Light*>("secondaryLight", new Light{ &secondaryLight, Directional }));
 	lightsMap.insert(std::pair<std::string, Light*>("pointLight", new Light{ &pointLight, Point }));
 	skybox = new Skybox(resource->GetMesh("cube"), resource->vertexShaders["sky"], resource->pixelShaders["sky"], resource->GetTexture("skybox"), core->GetDevice());
-	/*
-	fbxLoader.LoadNodes(fbxLoader.scene->GetRootNode(), device);
-	FbxNode* childNode = fbxLoader.scene->GetRootNode()->GetChild(0);
-	FbxString name1 = childNode->GetName();
-	fbxLoader.GetMesh(childNode, device);
-	*/
+	
+	fbxLoader.LoadFromFile(resource,core);
+
 	LoadLevel();
 
 }

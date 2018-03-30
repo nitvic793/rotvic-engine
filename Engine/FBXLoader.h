@@ -77,6 +77,7 @@ public:
 	FBXLoader();
 	~FBXLoader();
 
+	void LoadFromFile(ResourceManager* resource, SystemCore *core);
 	void InitializeSdkObjects();
 	void DestroySdkObjects(bool);
 	bool LoadScene(const char*);

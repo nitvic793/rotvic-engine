@@ -12,6 +12,7 @@
 #include "Console.h"
 #include "reactphysics3d.h"
 #include "Skybox.h"
+#include "FBXLoader.h"
 
 /// <summary>
 /// The game instance interface. The actual game should inherit and implement this abstract class and bind it to the core game instance. 
@@ -64,5 +65,7 @@ public:
 
 	IGame();
 	virtual ~IGame();
+
+	FBXLoader fbxLoader;
 };
 
