@@ -50,12 +50,13 @@ struct Skeleton {
 	std::vector<Joint> mJoints;
 };
 
+/*
 struct Bones
 {
 	DirectX::XMFLOAT4X4 BoneTransform = {};
 	DirectX::XMFLOAT4X4 InvBoneTransform = {};
 };
-
+*/
 
 class FBXLoader
 {
@@ -70,7 +71,7 @@ public:
 	double T = 0.0;
 
 	FbxAnimStack * animStack;
-	Bones bones[72];
+	Bones bones[20];
 
 
 	Skeleton skeleton;

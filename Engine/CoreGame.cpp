@@ -421,6 +421,7 @@ void CoreGame::Draw()
 	{
 		renderer->Draw(gameInstance->GetSkybox());
 	}
+	renderer->AnimationDraw(resourceManager->GetMesh["RiggedModel"], gameInstance->fbxLoader.bones, resourceManager->vertexShaders["animation"], resourceManager->pixelShaders["animation"]);
 	if(debugDraw->IsEnabled())debugDraw->Render(gameInstance->GetCamera()); //Debug Draw
 	if (console->enabled)console->Render(); //Render console if required.
 	Core->GetDeviceContext()->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);

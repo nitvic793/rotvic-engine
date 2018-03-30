@@ -7,6 +7,16 @@
 #include "Lights.h"
 #include "Skybox.h"
 
+
+struct Bones
+{
+	DirectX::XMFLOAT4X4 BoneTransform = {};
+	DirectX::XMFLOAT4X4 InvBoneTransform = {};
+};
+
+
+
+
 /// <summary>
 /// Internal render class to abstract the draw calls. 
 /// </summary>
@@ -16,7 +26,7 @@ public:
 	virtual void Draw(Mesh *mesh, ID3D11DeviceContext *context);
 	virtual void SetShaders(Entity *entity, Camera* camera, LightsMap lights);
 	void AnimationDraw(Mesh *mesh, ID3D11DeviceContext *context);
-	void SetAnimationShaders(VertexShaderMap, PixelShaderMap ,Camera* , LightsMap ,Bones[]);
+	void SetAnimationShaders(SimpleVertexShader*, SimplePixelShader*,Camera* , LightsMap ,Bones[]);
 };
 
 /// <summary>
@@ -51,11 +61,6 @@ public:
 	Renderer(SystemCore* core, int width = DEFAULT_WIDTH, int height = DEFAULT_HEIGHT);
 	~Renderer();
 
-	void AnimationDraw(Mesh* , Bones []);
+	void AnimationDraw(Mesh* , Bones [], SimpleVertexShader* vertexShader, SimplePixelShader* pixelShader);
 };
 
-struct Bones
-{
-	DirectX::XMFLOAT4X4 BoneTransform = {};
-	DirectX::XMFLOAT4X4 InvBoneTransform = {};
-};

@@ -61,18 +61,18 @@ void SystemRenderer::SetShaders(Entity *entity, Camera *camera, LightsMap lights
 	pixelShader->SetShader();
 }
 
-void SystemRenderer::SetAnimationShaders(VertexShaderMap vertexShaders, PixelShaderMap pixelShaders, Camera *camera, LightsMap lights,Bones bones[])
+void SystemRenderer::SetAnimationShaders(SimpleVertexShader *VertexShader, SimplePixelShader *PixelShader, Camera *camera, LightsMap lights,Bones bones[])
 {
 	//auto material = entity->GetMaterial();
-	auto pixelShader = pixelShaders["animation"];
-	auto vertexShader = vertexShaders["animation"];
+	auto pixelShader = PixelShader;
+	auto vertexShader = VertexShader;
 	vertexShader->SetMatrix4x4("world",XMFLOAT4X4(1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1));
 	vertexShader->SetMatrix4x4("view", camera->GetViewMatrix());
 	vertexShader->SetMatrix4x4("projection", camera->GetProjectionMatrix());
 
 	int bonesSize = 0;
 
-	bonesSize = (sizeof(XMFLOAT4X4) * 72 * 2);
+	bonesSize = (sizeof(XMFLOAT4X4) * 20 * 2);
 
 	vertexShader->SetData("bones", &bones, bonesSize);
 
@@ -236,13 +236,13 @@ void Renderer::Draw(Mesh *mesh)
 	core->Draw();
 }
 
-void Renderer::AnimationDraw(Mesh *mesh,Bones bones[])
+void Renderer::AnimationDraw(Mesh *mesh,Bones bones[],SimpleVertexShader* vertexShader, SimplePixelShader* pixelShader)
 {
 	auto context = core->GetDeviceContext();
 	if (mesh == nullptr) {
 		throw std::exception("Null Mesh");
 	}
-
+	internalRenderer->SetAnimationShaders(vertexShader, pixelShader , camera, lights,bones);
 	internalRenderer->AnimationDraw(mesh, context);
 	core->Draw();
 }

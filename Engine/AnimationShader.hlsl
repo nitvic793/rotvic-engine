@@ -15,7 +15,7 @@ struct Bones
 
 cbuffer bones : register(b1)
 {
-	Bones bones[72];
+	Bones bones[20];
 }
 
 
@@ -51,9 +51,6 @@ VertexToPixel main(VertexShaderInput input)
 
 	matrix worldViewProj = mul(mul(world, view), projection);
 
-	float4 preFinalPosition = 0;
-	float4 finalPosition = 0;
-
 	matrix bonetransform = 0;
 
 
@@ -75,14 +72,8 @@ VertexToPixel main(VertexShaderInput input)
 		bonetransform += mul(mul(bones[input.boneid.w].BoneTransform, input.weight.w), bones[input.boneid.w].InvBoneTransform);
 	}
 
-	
 
 	output.position = mul(mul(bonetransform, input.position), worldViewProj);
-
-
-	//output.color = input.color;
 	output.normal = mul(mul(bonetransform, input.normal), (float3x3)world);
-	//output.uv = input.uv;
-
 	return output;
 }
