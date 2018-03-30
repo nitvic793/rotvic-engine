@@ -31,15 +31,15 @@ FBXLoader::FBXLoader()
 	
 
 	//FbxClassId k = FbxMesh::ClassId;
-	
+	/*
 	int numAnimations = scene->GetSrcObjectCount<FbxAnimStack>();
 	animStack = scene->GetSrcObject<FbxAnimStack>(0);
 	FbxString lOutputString = animStack->GetName();
 	int nbAnimLayers = animStack->GetMemberCount<FbxAnimLayer>();
-
+	
 	lEvaluator = scene->GetAnimationEvaluator();
 	//evaluator->SetContext(lAnimStack);
-
+	*/
 }
 
 FBXLoader::~FBXLoader()
