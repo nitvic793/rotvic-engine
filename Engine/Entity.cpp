@@ -3,12 +3,12 @@
 /// <summary>
 /// Constructor initializes the world matrix
 /// </summary>
-Entity::Entity(rp3d::DynamicsWorld* physicsWorld):
-	Entity(nullptr, nullptr, rp3d::Vector3(0,0,0), rp3d::Quaternion::identity(), physicsWorld)
+Entity::Entity(rp3d::DynamicsWorld* physicsWorld, std::vector<Script*> pScripts):
+	Entity(nullptr, nullptr, rp3d::Vector3(0,0,0), rp3d::Quaternion::identity(), physicsWorld, pScripts)
 {
 }
 
-Entity::Entity(Mesh *m, Material* mat, rp3d::Vector3 position, rp3d::Quaternion orientation, rp3d::DynamicsWorld* physicsWorld)
+Entity::Entity(Mesh *m, Material* mat, rp3d::Vector3 position, rp3d::Quaternion orientation, rp3d::DynamicsWorld* physicsWorld, std::vector<Script*> pScripts)
 {
 	dynamicsWorld = physicsWorld;
 	XMVECTOR sc = XMVectorSet(1.0f, 1.0f, 1.0f, 0.0f);
@@ -22,10 +22,19 @@ Entity::Entity(Mesh *m, Material* mat, rp3d::Vector3 position, rp3d::Quaternion 
 	XMStoreFloat4x4(&worldMatrix, XMMatrixTranspose(world));
 	mesh = m;
 	material = mat;
+	scripts = pScripts;
+
+	if (scripts.size() > 0) // Call the update for each script each cycle
+	{
+		for each (Script* s in scripts)
+		{
+			s->Start(this);
+		}
+	}
 }
 
-Entity::Entity(Mesh *m, Material* mat, rp3d::Vector3 position, rp3d::DynamicsWorld* physicsWorld):
-	Entity(m, mat, position, rp3d::Quaternion::identity(), physicsWorld)
+Entity::Entity(Mesh *m, Material* mat, rp3d::Vector3 position, rp3d::DynamicsWorld* physicsWorld, std::vector<Script*> pScripts):
+	Entity(m, mat, position, rp3d::Quaternion::identity(), physicsWorld, pScripts)
 {
 }
 
@@ -153,6 +162,18 @@ void Entity::CreateCapsuleCollider(rp3d::decimal radius, rp3d::decimal height)
 }
 
 /// <summary>
+/// Set a new collider for the entity
+/// </summary>
+/// <param name="radius">The radius of the cylinder collider</param>
+/// <param name="height">The height of the cylinder collider</param>
+void Entity::CreateCylinderCollider(rp3d::decimal radius, rp3d::decimal height)
+{
+	shape = new rp3d::CylinderShape(radius, height, .001);
+	proxyShape = rigidBody->addCollisionShape(shape, rp3d::Transform::identity(), rp3d::decimal(1.0));
+	rigidBody->setAngularDamping(rp3d::decimal(1)); // 1 is maximum
+}
+
+/// <summary>
 /// Set rigidbody for the entity. This keeps track of the object's position and physics
 /// </summary>
 /// <param name="enableGravity">Apply gravity force to this object?</param>
@@ -215,6 +236,13 @@ Material * Entity::GetMaterial()
 	return material;
 }
 
-void Entity::Update(float)
+void Entity::Update(float deltaTime)
 {
+	if (scripts.size() > 0) // Call the update for each script each cycle
+	{
+		for each (Script* s in scripts)
+		{
+			s->Update();
+		}
+	}
 }

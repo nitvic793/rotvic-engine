@@ -171,6 +171,9 @@
     <ClInclude Include="Entity.h">
       <Filter>Header Files\CoreTypes</Filter>
     </ClInclude>
+    <ClInclude Include="Script.h">
+      <Filter>Header Files\CoreTypes</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CoreGame.cpp">
@@ -256,6 +259,9 @@
     </ClCompile>
     <ClCompile Include="Terrain.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Script.cpp">
+      <Filter>Source Files\CoreTypes</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

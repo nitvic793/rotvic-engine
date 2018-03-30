@@ -147,6 +147,7 @@
     <ClInclude Include="Renderer.h" />
     <ClInclude Include="ResourceManager.h" />
     <ClInclude Include="SaveSystem.h" />
+    <ClInclude Include="Script.h" />
     <ClInclude Include="SimpleShader.h" />
     <ClInclude Include="Skybox.h" />
     <ClInclude Include="States.h" />
@@ -180,6 +181,7 @@
     <ClCompile Include="Renderer.cpp" />
     <ClCompile Include="ResourceManager.cpp" />
     <ClCompile Include="SaveSystem.cpp" />
+    <ClCompile Include="Script.cpp" />
     <ClCompile Include="SimpleShader.cpp" />
     <ClCompile Include="Skybox.cpp" />
     <ClCompile Include="SystemCore.cpp" />

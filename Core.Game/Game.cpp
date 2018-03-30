@@ -69,18 +69,32 @@ void Game::LoadLevel()
 {
 	keyboard->AddAction("up", { Up,W });
 	console->WriteLine(L"Level loaded");
-	auto entity = new Entity(resource->GetMesh("sphere"), resource->GetMaterial("metal"), rp3d::Vector3(0, 2, 0), dynamicsWorld);
-	entity->CreateSphereCollider(.5);
-	AddEntity(entity, "Test");
-	entity->SetPosition(0, 2, 0);
-	entity->SetRigidBodyParameters(true);
+	
+	/* Add Entitites */
+	auto entity = new Entity(resource->GetMesh("cylinder"), resource->GetMaterial("metal"), rp3d::Vector3(2, 0, 0), dynamicsWorld);
+	entity->CreateCylinderCollider(.5, 1);
+	AddEntity(entity, "Flocker1");  // Flocker 1
+	//entity->SetRigidBodyParameters(true); 
 
-	auto entity2 = new Entity(resource->GetMesh("sphere"), resource->GetMaterial("metal"), rp3d::Vector3(2, 2, 0), dynamicsWorld);
-	entity2->CreateSphereCollider(.5);
-	AddEntity(entity2, "Test2");
-	entity2->SetPosition(2, 2, 0);
-	entity2->SetRotation(180, -90, -20);
-	entity2->SetRigidBodyParameters(true);
+	entity = new Entity(resource->GetMesh("cylinder"), resource->GetMaterial("metal"), rp3d::Vector3(0, 0, 0), dynamicsWorld);
+	entity->CreateCylinderCollider(.5, 1);
+	AddEntity(entity, "Flocker2");
+	//entity2->SetRigidBodyParameters(true);
+
+	entity = new Entity(resource->GetMesh("cylinder"), resource->GetMaterial("metal"), rp3d::Vector3(-2, 0, 0), dynamicsWorld);
+	entity->CreateCylinderCollider(.5, 1);
+	AddEntity(entity, "Flocker3");
+	//entity2->SetRigidBodyParameters(true);
+
+	entity = new Entity(resource->GetMesh("cylinder"), resource->GetMaterial("metal"), rp3d::Vector3(0, 0, 2), dynamicsWorld);
+	entity->CreateCylinderCollider(.5, 1);
+	AddEntity(entity, "Flocker4");
+	//entity2->SetRigidBodyParameters(true);
+
+	entity = new Entity(resource->GetMesh("cylinder"), resource->GetMaterial("metal"), rp3d::Vector3(0, 0, -2), dynamicsWorld);
+	entity->CreateCylinderCollider(.5, 1);
+	AddEntity(entity, "Flocker5");
+	//entity2->SetRigidBodyParameters(true);
 	
 	auto terrain = new Terrain(core, dynamicsWorld);
 	terrain->Initialize("../../Assets/Terrain/heightmap.bmp");
@@ -187,7 +201,7 @@ void Game::Update(float deltaTime)
 		//console->WriteLine(L"Up action pressed");
 	}
 
-	entities["Test2"]->ApplyForce(rp3d::Vector3(-.1, 0, 0));
+	entities["Flocker2"]->ApplyForce(rp3d::Vector3(-.1, 0, 0));
 	delayTime += deltaTime;
 }
 

@@ -3,7 +3,7 @@
 #include "CoreGame.h"
 #include "Vector3.h"
 #include "Entity.h"
-#include "GameEntity.h"
+#include "Entity.h"
 #include "Keyboard.h"
 #include "Mesh.h"
 #include "Renderer.h"
@@ -18,3 +18,4 @@
 #include "FirstPersonCamera.h"
 #include "Skybox.h"
 #include "Terrain.h"
+#include "Script.h"

@@ -120,11 +120,13 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Core.h" />
+    <ClInclude Include="Flocker.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="PlayerEntity.h" />
     <ClInclude Include="SaveState.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Flocker.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="PlayerEntity.cpp" />
     <ClCompile Include="SaveState.cpp" />

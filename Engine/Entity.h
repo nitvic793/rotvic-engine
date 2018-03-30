@@ -7,6 +7,7 @@
 #include <d3d11.h>
 #include "EntityContextWrapper.h"
 #include "reactphysics3d.h"
+#include "Script.h"
 
 using namespace DirectX;
 
@@ -30,7 +31,8 @@ protected:
 	rp3d::DynamicsWorld* dynamicsWorld;
 public:
 	XMFLOAT4X4 GetWorldMatrix();
-	virtual void Update(float);
+	virtual void Update(float deltaTime);
+	std::vector<Script*> scripts;
 
 	rp3d::Vector3 GetPosition();
 
@@ -48,13 +50,14 @@ public:
 	void CreateSphereCollider(rp3d::decimal radius);
 	void Entity::CreateBoxCollider(rp3d::Vector3 halfwidths);
 	void Entity::CreateCapsuleCollider(rp3d::decimal radius, rp3d::decimal height);
+	void Entity::CreateCylinderCollider(rp3d::decimal radius, rp3d::decimal height);
 
 	XMFLOAT3 GetScale();
 	Mesh* GetMesh();
 	Material *GetMaterial();
-	Entity(rp3d::DynamicsWorld* physicsWorld);
-	Entity(Mesh *m, Material* mat, rp3d::Vector3 position, rp3d::Quaternion orientation, rp3d::DynamicsWorld* physicsWorld);
-	Entity(Mesh *m, Material* mat, rp3d::Vector3 position, rp3d::DynamicsWorld* physicsWorld);
+	Entity(rp3d::DynamicsWorld* physicsWorld, std::vector<Script*> pScripts = std::vector<Script*>());
+	Entity(Mesh *m, Material* mat, rp3d::Vector3 position, rp3d::Quaternion orientation, rp3d::DynamicsWorld* physicsWorld, std::vector<Script*> pScripts = std::vector<Script*>());
+	Entity(Mesh *m, Material* mat, rp3d::Vector3 position, rp3d::DynamicsWorld* physicsWorld, std::vector<Script*> pScripts = std::vector<Script*>());
 	virtual ~Entity();
 };
 
