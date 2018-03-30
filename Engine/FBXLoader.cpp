@@ -583,29 +583,32 @@ void FBXLoader::GetAnimatedMatrixExtra()
 
 	for (int i = 0; i < skeleton.mJoints.size(); i++)
 	{
-		/*
-		FbxAMatrix jointTransform;
-		jointTransform = lEvaluator->GetNodeLocalTransform(skeleton.mJoints[i].mNode, time);
-		FbxVector4 vec = {};
-		vec = lEvaluator->GetNodeLocalRotation(skeleton.mJoints[i].mNode, time);
-		jointTransform = skeleton.mJoints[i].mNode->EvaluateLocalTransform(time);
-
-		jointTransform = jointTransform * skeleton.mJoints[i].mFbxTransform.Transpose();
-		jointTransform = jointTransform.Transpose();
-
-		skeleton.mJoints[i].mTransform = XMFLOAT4X4(jointTransform.GetRow(0)[0], jointTransform.GetRow(0)[1], jointTransform.GetRow(0)[2], jointTransform.GetRow(0)[3], jointTransform.GetRow(1)[0], jointTransform.GetRow(1)[1], jointTransform.GetRow(1)[2], jointTransform.GetRow(1)[3], jointTransform.GetRow(2)[0], jointTransform.GetRow(2)[1], jointTransform.GetRow(2)[2], jointTransform.GetRow(2)[3], jointTransform.GetRow(3)[0], jointTransform.GetRow(3)[1], jointTransform.GetRow(3)[2], jointTransform.GetRow(3)[3]);
-		*/
+		
 		skeleton.mJoints[i].mTransform = GetJointGlobalTransform(i);
+
+		XMMATRIX jointTransformMatrix = XMLoadFloat4x4(&skeleton.mJoints[i].mTransform);
+		XMMATRIX invJointTransformMatrix = XMLoadFloat4x4(&skeleton.mJoints[i].mGlobalBindposeInverse);
+
+		//XMMATRIX jointTransformMatrix = XMLoadFloat4x4(&animatedMatrix);
+
+		XMFLOAT4X4 ident = {};
+		XMStoreFloat4x4(&ident, jointTransformMatrix * invJointTransformMatrix);
+
+		/*
+		XMFLOAT4X4 sample = XMFLOAT4X4(1, 1, 0, 0, -1, 1, 0, 0, 0, 0, 1, 1, 1, 1, 0, 1);
+		XMMATRIX sampleMatrix = XMLoadFloat4x4(&sample);
+		*/
+
+		XMFLOAT4X4 trans = {};
+		XMStoreFloat4x4(&trans, XMMatrixTranspose(jointTransformMatrix));
+		bones[i].BoneTransform = trans;
+		XMFLOAT4X4 trans2 = {};
+		XMStoreFloat4x4(&trans2, XMMatrixTranspose(invJointTransformMatrix));
+		bones[i].InvBoneTransform = trans2;
 	}
 
-	/*
-	FbxAMatrix jointTransform1;
-	jointTransform1 = skeleton.mJoints[1].mNode->EvaluateLocalTransform(time);
-	jointTransform1 = jointTransform1 * skeleton.mJoints[1].mFbxTransform.Transpose();
-	jointTransform1 = jointTransform1 * skeleton.mJoints[0].mFbxTransform.Transpose();
-	jointTransform1 = jointTransform1.Transpose();
-	skeleton.mJoints[1].mTransform = XMFLOAT4X4(jointTransform1.GetRow(0)[0], jointTransform1.GetRow(0)[1], jointTransform1.GetRow(0)[2], jointTransform1.GetRow(0)[3], jointTransform1.GetRow(1)[0], jointTransform1.GetRow(1)[1], jointTransform1.GetRow(1)[2], jointTransform1.GetRow(1)[3], jointTransform1.GetRow(2)[0], jointTransform1.GetRow(2)[1], jointTransform1.GetRow(2)[2], jointTransform1.GetRow(2)[3], jointTransform1.GetRow(3)[0], jointTransform1.GetRow(3)[1], jointTransform1.GetRow(3)[2], jointTransform1.GetRow(3)[3]);
-	*/
+
+
 }
 
 

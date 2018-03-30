@@ -15,6 +15,8 @@ class SystemRenderer {
 public:
 	virtual void Draw(Mesh *mesh, ID3D11DeviceContext *context);
 	virtual void SetShaders(Entity *entity, Camera* camera, LightsMap lights);
+	void AnimationDraw(Mesh *mesh, ID3D11DeviceContext *context);
+	void SetAnimationShaders(VertexShaderMap, PixelShaderMap ,Camera* , LightsMap ,Bones[]);
 };
 
 /// <summary>
@@ -48,5 +50,12 @@ public:
 	int	screenWidth;
 	Renderer(SystemCore* core, int width = DEFAULT_WIDTH, int height = DEFAULT_HEIGHT);
 	~Renderer();
+
+	void AnimationDraw(Mesh* , Bones []);
 };
 
+struct Bones
+{
+	DirectX::XMFLOAT4X4 BoneTransform = {};
+	DirectX::XMFLOAT4X4 InvBoneTransform = {};
+};

@@ -70,6 +70,7 @@ public:
 	double T = 0.0;
 
 	FbxAnimStack * animStack;
+	Bones bones[72];
 
 
 	Skeleton skeleton;

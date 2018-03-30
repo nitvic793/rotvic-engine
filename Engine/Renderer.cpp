@@ -1,6 +1,9 @@
 #include "Renderer.h"
 #include "ResourceManager.h"
 
+
+
+
 /// <summary>
 /// Draw given mesh object. 
 /// </summary>
@@ -15,6 +18,9 @@ void SystemRenderer::Draw(Mesh *mesh, ID3D11DeviceContext *context)
 	context->IASetIndexBuffer(mesh->GetIndexBuffer(), DXGI_FORMAT_R32_UINT, 0);
 	context->DrawIndexed(mesh->GetIndexCount(), 0, 0);
 }
+
+
+
 
 /// <summary>
 /// Sets shader data in the GPU before drawing. 
@@ -55,6 +61,53 @@ void SystemRenderer::SetShaders(Entity *entity, Camera *camera, LightsMap lights
 	pixelShader->SetShader();
 }
 
+void SystemRenderer::SetAnimationShaders(VertexShaderMap vertexShaders, PixelShaderMap pixelShaders, Camera *camera, LightsMap lights,Bones bones[])
+{
+	//auto material = entity->GetMaterial();
+	auto pixelShader = pixelShaders["animation"];
+	auto vertexShader = vertexShaders["animation"];
+	vertexShader->SetMatrix4x4("world",XMFLOAT4X4(1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1));
+	vertexShader->SetMatrix4x4("view", camera->GetViewMatrix());
+	vertexShader->SetMatrix4x4("projection", camera->GetProjectionMatrix());
+
+	int bonesSize = 0;
+
+	bonesSize = (sizeof(XMFLOAT4X4) * 72 * 2);
+
+	vertexShader->SetData("bones", &bones, bonesSize);
+
+	for (auto lightPair : lights)
+	{
+		auto light = lightPair.second;
+		if (light->Type == Directional)
+			pixelShader->SetData("light1", light->GetLight<DirectionalLight>(), sizeof(DirectionalLight));
+	}
+
+
+	vertexShader->CopyAllBufferData();
+	pixelShader->CopyAllBufferData();
+	vertexShader->SetShader();
+	pixelShader->SetShader();
+}
+
+
+void SystemRenderer::AnimationDraw(Mesh *mesh, ID3D11DeviceContext *context)
+{
+	UINT stride = sizeof(BoneVertex);
+	UINT offset = 0;
+	auto vertexBuffer = mesh->GetVertexBuffer();
+
+
+	context->IASetVertexBuffers(0, 1, &vertexBuffer, &stride, &offset);
+	context->IASetIndexBuffer(mesh->GetIndexBuffer(), DXGI_FORMAT_R32_UINT, 0);
+	context->DrawIndexed(mesh->GetIndexCount(), 0, 0);
+}
+
+
+
+
+
+
 /// <summary>
 /// Renderer class constructor.
 /// </summary>
@@ -88,6 +141,8 @@ Renderer::~Renderer()
 {
 	delete internalRenderer;
 }
+
+
 
 /// <summary>
 /// Gets the internal renderer class.
@@ -178,6 +233,17 @@ void Renderer::Draw(Mesh *mesh)
 	}
 
 	internalRenderer->Draw(mesh, context);
+	core->Draw();
+}
+
+void Renderer::AnimationDraw(Mesh *mesh,Bones bones[])
+{
+	auto context = core->GetDeviceContext();
+	if (mesh == nullptr) {
+		throw std::exception("Null Mesh");
+	}
+
+	internalRenderer->AnimationDraw(mesh, context);
 	core->Draw();
 }
 

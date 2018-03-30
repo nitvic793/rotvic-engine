@@ -24,6 +24,8 @@ public:
 	SimplePixelShader *pixelShader;
 	SimplePixelShader *debugShader;
 	SimpleVertexShader *debugVertexShader;
+	SimpleVertexShader *animationShader;
+	SimplePixelShader *animationPixelShader;
 	ID3D11SamplerState *sampler;
 	VertexShaderMap vertexShaders;
 	PixelShaderMap pixelShaders;

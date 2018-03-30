@@ -102,10 +102,14 @@ void Game::LoadLevel()
 	AddEntity(entity, "Flocker5");
 	//entity2->SetRigidBodyParameters(true);
 
+	
+
+	/*
 	entity = new Entity(resource->GetMesh("RiggedMesh"), resource->GetMaterial("metal"), rp3d::Vector3(0, 0, 20), dynamicsWorld);
 	entity->CreateCylinderCollider(.5, 1);
 	AddEntity(entity, "Flocker5");
-	
+	*/
+
 	auto terrain = new Terrain(core, dynamicsWorld);
 	terrain->Initialize("../../Assets/Terrain/heightmap.bmp");
 	terrain->SetMaterial(resource->GetMaterial("grass"));

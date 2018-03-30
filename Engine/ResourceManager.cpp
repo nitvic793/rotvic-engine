@@ -47,6 +47,14 @@ void ResourceManager::LoadResources(ConfigMap config, SystemCore* core)
 	debugVertexShader->LoadShaderFile(L"DebugVertexShader.cso");
 	vertexShaders.insert(VertexShaderMapType("debug", debugVertexShader));
 
+	animationShader = new SimpleVertexShader(device, context);
+	animationShader->LoadShaderFile(L"AnimationShader.cso");
+	vertexShaders.insert(VertexShaderMapType("animation", animationShader));
+
+	animationPixelShader = new SimplePixelShader(device, context);
+	animationPixelShader->LoadShaderFile(L"AnimationPixelShader.cso");
+	pixelShaders.insert(PixelShaderMapType("animation", animationPixelShader));
+
 	auto skyVS = new SimpleVertexShader(device, context);
 	skyVS->LoadShaderFile(L"SkyVS.cso");
 	vertexShaders.insert(VertexShaderMapType("sky", skyVS));
