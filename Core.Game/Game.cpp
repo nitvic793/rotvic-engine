@@ -73,6 +73,8 @@ void Game::LoadLevel()
 {
 	keyboard->AddAction("up", { Up,W });
 	console->WriteLine(L"Level loaded");
+
+	Mesh* M = resource->GetMesh("RiggedMesh");
 	
 	/* Add Entitites */
 	auto entity = new Entity(resource->GetMesh("cylinder"), resource->GetMaterial("metal"), rp3d::Vector3(2, 0, 0), dynamicsWorld);
@@ -99,6 +101,10 @@ void Game::LoadLevel()
 	entity->CreateCylinderCollider(.5, 1);
 	AddEntity(entity, "Flocker5");
 	//entity2->SetRigidBodyParameters(true);
+
+	entity = new Entity(resource->GetMesh("RiggedMesh"), resource->GetMaterial("metal"), rp3d::Vector3(0, 0, 20), dynamicsWorld);
+	entity->CreateCylinderCollider(.5, 1);
+	AddEntity(entity, "Flocker5");
 	
 	auto terrain = new Terrain(core, dynamicsWorld);
 	terrain->Initialize("../../Assets/Terrain/heightmap.bmp");

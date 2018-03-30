@@ -115,7 +115,7 @@ Mesh * ResourceManager::GetMesh(std::string meshName)
 
 void ResourceManager::InsertMesh(std::string name, Mesh * m)
 {
-	meshes.insert(std::pair<std::string, Mesh*>("sphere", m));
+	meshes.insert(std::pair<std::string, Mesh*>(name, m));
 }
 
 Material * ResourceManager::GetMaterial(std::string materialName)

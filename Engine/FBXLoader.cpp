@@ -20,7 +20,7 @@ void FBXLoader::LoadFromFile(ResourceManager* resource, SystemCore *core)
 {
 	InitializeSdkObjects();
 
-	FbxString lFilePath("TwoLegModel.fbx");
+	FbxString lFilePath("FlexArm2.fbx");
 
 	if (lFilePath.IsEmpty())
 	{
@@ -42,19 +42,16 @@ void FBXLoader::LoadFromFile(ResourceManager* resource, SystemCore *core)
 
 	//FbxClassId k = FbxMesh::ClassId;
 
-	int numAnimations = scene->GetSrcObjectCount<FbxAnimStack>();
-	animStack = scene->GetSrcObject<FbxAnimStack>(0);
-	FbxString lOutputString = animStack->GetName();
-	int nbAnimLayers = animStack->GetMemberCount<FbxAnimLayer>();
 
 	lEvaluator = scene->GetAnimationEvaluator();
 
 	LoadBones(scene->GetRootNode(), core->GetDevice());
 	FbxNode* childNode = scene->GetRootNode()->GetChild(0);
-	FbxString name1 = childNode->GetName();
+	int k = scene->GetRootNode()->GetChildCount();
+	
 	GetMesh(childNode, core->GetDevice(), resource, core);
 	//evaluator->SetContext(lAnimStack);
-
+	FbxString name1 = childNode->GetName();
 }
 
 void FBXLoader::InitializeSdkObjects()
