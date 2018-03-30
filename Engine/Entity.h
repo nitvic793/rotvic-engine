@@ -21,41 +21,40 @@ class Entity
 	XMFLOAT4X4 worldMatrix;
 protected:
 	EntityContextWrapper context;
-	Vector3f Position;
-	DirectX::XMFLOAT3 position;
 	DirectX::XMFLOAT3 scale;
-	DirectX::XMFLOAT3 rotation;
 	Mesh *mesh;
 	Material *material;
 	rp3d::RigidBody *rigidBody;
 	rp3d::ProxyShape* proxyShape;
 	rp3d::CollisionShape* shape;
+	rp3d::DynamicsWorld* dynamicsWorld;
 public:
 	XMFLOAT4X4 GetWorldMatrix();
-	virtual void MoveUp(float);
-	virtual void MoveDown(float);
-	virtual void MoveLeft(float) ;
-	virtual void MoveRight(float);
 	virtual void Update(float);
 
-	const Vector3f &GetPosition();
+	rp3d::Vector3 GetPosition();
 
-	void Entity::StartRigidBody(rp3d::Vector3 position, rp3d::Quaternion orientation, rp3d::DynamicsWorld* physicsWorld);
+	void CreateRigidBody(rp3d::Vector3 position, rp3d::Quaternion orientation);
 	void SetContext(EntityContextWrapper context);
 	void SetPosition(const Vector3f& position);
-	void SetRotationZ(float angle);
 	void SetRotation(float roll, float pitch, float yaw);
 	void SetPosition(float x, float y, float z);
 	void SetScale(float x, float y, float z);
 	void Move(const Vector3f& offset);
+	void ApplyForce(rp3d::Vector3 force);
 	void SetMesh(Mesh *mesh);
 	void SetMaterial(Material *mat);
+	void SetRigidBodyParameters(bool enableGravity, rp3d::BodyType bodyType);
+	void CreateSphereCollider(rp3d::decimal radius);
+	void Entity::CreateBoxCollider(rp3d::Vector3 halfwidths);
+	void Entity::CreateCapsuleCollider(rp3d::decimal radius, rp3d::decimal height);
 
 	XMFLOAT3 GetScale();
 	Mesh* GetMesh();
 	Material *GetMaterial();
-	Entity();
-	Entity(Mesh *m, Material* mat);
+	Entity(rp3d::DynamicsWorld* physicsWorld);
+	Entity(Mesh *m, Material* mat, rp3d::Vector3 position, rp3d::Quaternion orientation, rp3d::DynamicsWorld* physicsWorld);
+	Entity(Mesh *m, Material* mat, rp3d::Vector3 position, rp3d::DynamicsWorld* physicsWorld);
 	virtual ~Entity();
 };
 

@@ -40,12 +40,6 @@
     <Filter Include="Header Files\CoreTypes">
       <UniqueIdentifier>{246b0483-0072-4f2c-81cb-198daf57ab98}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\Physics">
-      <UniqueIdentifier>{19632904-9dd0-4da6-910b-f9bd6a7efe91}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Physics">
-      <UniqueIdentifier>{8e4ee43d-c3f0-4844-b47a-db753ecce366}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files\Management">
       <UniqueIdentifier>{2b696e4d-dd3c-4e62-9ddd-e6b3d982d8f6}</UniqueIdentifier>
     </Filter>
@@ -79,12 +73,6 @@
       <Filter>Header Files\Core</Filter>
     </ClInclude>
     <ClInclude Include="Camera.h">
-      <Filter>Header Files\CoreTypes</Filter>
-    </ClInclude>
-    <ClInclude Include="Entity.h">
-      <Filter>Header Files\CoreTypes</Filter>
-    </ClInclude>
-    <ClInclude Include="GameEntity.h">
       <Filter>Header Files\CoreTypes</Filter>
     </ClInclude>
     <ClInclude Include="Material.h">
@@ -131,15 +119,6 @@
     </ClInclude>
     <ClInclude Include="MeshLoader.h">
       <Filter>Header Files\Helpers</Filter>
-    </ClInclude>
-    <ClInclude Include="Collision2D.h">
-      <Filter>Header Files\Physics</Filter>
-    </ClInclude>
-    <ClInclude Include="ICollider2D.h">
-      <Filter>Header Files\Physics</Filter>
-    </ClInclude>
-    <ClInclude Include="QuadTree.h">
-      <Filter>Header Files\Physics</Filter>
     </ClInclude>
     <ClInclude Include="EntityContextWrapper.h">
       <Filter>Header Files\CoreTypes</Filter>
@@ -189,6 +168,9 @@
     <ClInclude Include="Terrain.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Entity.h">
+      <Filter>Header Files\CoreTypes</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CoreGame.cpp">
@@ -221,9 +203,6 @@
     <ClCompile Include="Material.cpp">
       <Filter>Source Files\CoreTypes</Filter>
     </ClCompile>
-    <ClCompile Include="GameEntity.cpp">
-      <Filter>Source Files\CoreTypes</Filter>
-    </ClCompile>
     <ClCompile Include="Mesh.cpp">
       <Filter>Source Files\CoreTypes</Filter>
     </ClCompile>
@@ -238,12 +217,6 @@
     </ClCompile>
     <ClCompile Include="MeshLoader.cpp">
       <Filter>Source Files\Helpers</Filter>
-    </ClCompile>
-    <ClCompile Include="Collision2D.cpp">
-      <Filter>Source Files\Physics</Filter>
-    </ClCompile>
-    <ClCompile Include="QuadTree.cpp">
-      <Filter>Source Files\Physics</Filter>
     </ClCompile>
     <ClCompile Include="Console.cpp">
       <Filter>Source Files\Debug</Filter>

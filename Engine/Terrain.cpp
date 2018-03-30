@@ -515,12 +515,11 @@ bool Terrain::Initialize(const char * filename)
 	return true;
 }
 
-Terrain::Terrain(SystemCore* sysCore) :
-	GameEntity(nullptr, nullptr)
+Terrain::Terrain(SystemCore* sysCore, rp3d::DynamicsWorld* physicsWorld) :
+	Entity(nullptr, nullptr, rp3d::Vector3(0,0,0), physicsWorld)
 {
 	core = sysCore;
 	terrainHeight = terrainWidth = 100;
-	position = XMFLOAT3(0, 0, 0);
 }
 
 

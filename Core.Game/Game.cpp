@@ -69,19 +69,18 @@ void Game::LoadLevel()
 {
 	keyboard->AddAction("up", { Up,W });
 	console->WriteLine(L"Level loaded");
-	auto entity = new GameEntity(resource->GetMesh("sphere"), resource->GetMaterial("metal"));
+	auto entity = new Entity(resource->GetMesh("sphere"), resource->GetMaterial("metal"), rp3d::Vector3(0, 2, 0), dynamicsWorld);
+	entity->CreateSphereCollider(.5);
 	AddEntity(entity, "Test");
 	entity->SetPosition(0, 2, 0);
 
-	entity->StartRigidBody(rp3d::Vector3(0, 2, 0), rp3d::Quaternion::identity(), dynamicsWorld);
-
-	auto entity2 = new GameEntity(resource->GetMesh("sphere"), resource->GetMaterial("metal"));
+	auto entity2 = new Entity(resource->GetMesh("sphere"), resource->GetMaterial("metal"), rp3d::Vector3(2, 2, 0), dynamicsWorld);
+	entity2->CreateSphereCollider(.5);
 	AddEntity(entity2, "Test2");
-	entity2->SetPosition(5, 2, 0);
-
-	entity2->StartRigidBody(rp3d::Vector3(5, 2, 0), rp3d::Quaternion::identity(), dynamicsWorld);
+	entity2->SetPosition(2, 2, 0);
+	entity2->SetRotation(180, -90, -20);
 	
-	auto terrain = new Terrain(core);
+	auto terrain = new Terrain(core, dynamicsWorld);
 	terrain->Initialize("../../Assets/Terrain/heightmap.bmp");
 	terrain->SetMaterial(resource->GetMaterial("grass"));
 	terrain->SetPosition(-100, -5, -40);
@@ -186,7 +185,7 @@ void Game::Update(float deltaTime)
 		//console->WriteLine(L"Up action pressed");
 	}
 
-	entities["Test2"]->Move(Vector3f(-.01, 0, 0));
+	entities["Test2"]->ApplyForce(rp3d::Vector3(-.1, 0, 0));
 	delayTime += deltaTime;
 }
 

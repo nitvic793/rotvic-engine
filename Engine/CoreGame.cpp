@@ -285,8 +285,7 @@ void CoreGame::RegisterConsoleCommands()
 			console->WriteLine(L"Invalid shape");
 			return;
 		}
-		auto entity = new GameEntity(shapeMesh, resourceManager->GetMaterial("default"));
-		entity->SetPosition(0, 0, 0);
+		auto entity = new Entity(shapeMesh, resourceManager->GetMaterial("default"), rp3d::Vector3(0,0,0), dynamicsWorld);
 		gameInstance->AddEntity(entity, uniqueName);
 	});
 

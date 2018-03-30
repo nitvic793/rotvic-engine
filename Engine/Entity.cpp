@@ -3,30 +3,30 @@
 /// <summary>
 /// Constructor initializes the world matrix
 /// </summary>
-Entity::Entity()
+Entity::Entity(rp3d::DynamicsWorld* physicsWorld):
+	Entity(nullptr, nullptr, rp3d::Vector3(0,0,0), rp3d::Quaternion::identity(), physicsWorld)
 {
-	XMStoreFloat4x4(&worldMatrix, XMMatrixTranspose(XMMatrixIdentity()));
-	XMVECTOR v = XMVectorSet(0.0f, 0.0f, 0.0f, 0.0f);
-	XMVECTOR sc = XMVectorSet(1.0f, 1.0f, 1.0f, 0.0f);
-	Position = Vector3f(0, 0, 0);
-	XMStoreFloat3(&position, v);
-	XMStoreFloat3(&scale, sc);
-	XMStoreFloat3(&rotation, v);
-	mesh = nullptr;	
-	material = nullptr;
 }
 
-Entity::Entity(Mesh *m, Material* mat)
+Entity::Entity(Mesh *m, Material* mat, rp3d::Vector3 position, rp3d::Quaternion orientation, rp3d::DynamicsWorld* physicsWorld)
 {
-	XMStoreFloat4x4(&worldMatrix, XMMatrixTranspose(XMMatrixIdentity()));
-	XMVECTOR v = XMVectorSet(0.0f, 0.0f, 0.0f, 0.0f);
+	dynamicsWorld = physicsWorld;
 	XMVECTOR sc = XMVectorSet(1.0f, 1.0f, 1.0f, 0.0f);
-	Position = Vector3f(0,0,0);
-	XMStoreFloat3(&position, v);
 	XMStoreFloat3(&scale, sc);
-	XMStoreFloat3(&rotation, v);
+	CreateRigidBody(position, orientation);
+	XMMATRIX scle = XMMatrixScaling(scale.x, scale.y, scale.z);
+	rp3d::Transform transform = rigidBody->getTransform();
+	float matrix[16];
+	transform.getOpenGLMatrix(matrix);
+	XMMATRIX world = scle * XMMATRIX(matrix);
+	XMStoreFloat4x4(&worldMatrix, XMMatrixTranspose(world));
 	mesh = m;
 	material = mat;
+}
+
+Entity::Entity(Mesh *m, Material* mat, rp3d::Vector3 position, rp3d::DynamicsWorld* physicsWorld):
+	Entity(m, mat, position, rp3d::Quaternion::identity(), physicsWorld)
+{
 }
 
 /// <summary>
@@ -35,35 +35,33 @@ Entity::Entity(Mesh *m, Material* mat)
 /// <returns>Returns 4x4 world matrix for this entity.</returns>
 XMFLOAT4X4 Entity::GetWorldMatrix() 
 {
-	/*XMMATRIX trans = XMMatrixTranslation(Position.x, Position.y, Position.z);
-	XMMATRIX rot = XMMatrixRotationRollPitchYawFromVector(XMLoadFloat3(&rotation));
 	XMMATRIX scle = XMMatrixScaling(scale.x, scale.y, scale.z);
-	XMMATRIX world = scle * rot * trans;*/
 	rp3d::Transform transform = rigidBody->getTransform();
 	float matrix[16];
 	transform.getOpenGLMatrix(matrix);
-	XMMATRIX world = XMMATRIX(matrix);
+	XMMATRIX world = scle * XMMATRIX(matrix);
 	XMStoreFloat4x4(&worldMatrix, XMMatrixTranspose(world));
 	return worldMatrix;
 }
 
 Entity::~Entity()
 {
-	//if (rigidBody) delete rigidBody;
+	if (rigidBody) dynamicsWorld->destroyRigidBody(rigidBody);
+	dynamicsWorld = nullptr;
 }
 
 /// <summary>
 /// Get current position of entity
 /// </summary>
 /// <returns>3 Float Vector of current position of entity</returns>
-const Vector3f &Entity::GetPosition()
+rp3d::Vector3 Entity::GetPosition()
 {
-	return Position;
+	return rigidBody->getTransform().getPosition();
 }
 
-void Entity::SetRotationZ(float angle)
+void Entity::ApplyForce(rp3d::Vector3 force)
 {
-	rotation.z = angle;
+	rigidBody->applyForceToCenterOfMass(rp3d::Vector3(force.x, force.y, force.z));
 }
 
 /// <summary>
@@ -74,16 +72,16 @@ void Entity::SetRotationZ(float angle)
 /// <param name="yaw">The yaw in degrees</param>
 void Entity::SetRotation(float roll, float pitch, float yaw)
 {
-	rotation.x = roll * XM_PI/180;
-	rotation.y = pitch * XM_PI / 180;
-	rotation.z = yaw * XM_PI / 180;
+	rp3d::Transform t = rigidBody->getTransform();
+	t.setOrientation(rp3d::Quaternion(roll * XM_PI / 180, pitch * XM_PI / 180, yaw * XM_PI / 180));
+	rigidBody->setTransform(t);
 }
 
 void Entity::SetPosition(float x, float y, float z)
 {
-	this->Position.x = x;
-	this->Position.y = y;
-	this->Position.z = z;
+	rp3d::Transform t = rigidBody->getTransform();
+	t.setPosition(rp3d::Vector3(x, y, z));
+	rigidBody->setTransform(t);
 }
 
 void Entity::SetScale(float x, float y, float z)
@@ -114,15 +112,55 @@ void Entity::SetContext(EntityContextWrapper context)
 /// <param name="position">The position to be used by the entity. (rp3d vector3)</param>
 /// <param name="orientation">The rotation to be used by the entity. (Use rp3d quaternion identity for 0)</param>
 /// <param name="physicsWorld">The dynamics world to be used by the entity.</param>
-void Entity::StartRigidBody(rp3d::Vector3 position, rp3d::Quaternion orientation, rp3d::DynamicsWorld* physicsWorld)
+void Entity::CreateRigidBody(rp3d::Vector3 position, rp3d::Quaternion orientation)
 {
 	rp3d::Transform transform(position, orientation);
 
 	// Create a rigid body in the world 
-	rigidBody = physicsWorld->createRigidBody(transform);
+	rigidBody = dynamicsWorld->createRigidBody(transform);
 	rigidBody->enableGravity(false);
-	shape = new rp3d::SphereShape(.5);
+}
+
+/// <summary>
+/// Set a new collider for the entity
+/// </summary>
+/// <param name="radius">The radius of the sphere collider</param>
+void Entity::CreateSphereCollider(rp3d::decimal radius)
+{
+	shape = new rp3d::SphereShape(radius);
 	proxyShape = rigidBody->addCollisionShape(shape, rp3d::Transform::identity(), rp3d::decimal(1.0));
+}
+
+/// <summary>
+/// Set a new collider for the entity
+/// </summary>
+/// <param name="halfwidths">The halfwidth for each axis of the box</param>
+void Entity::CreateBoxCollider(rp3d::Vector3 halfwidths)
+{
+	shape = new rp3d::BoxShape(halfwidths);
+	proxyShape = rigidBody->addCollisionShape(shape, rp3d::Transform::identity(), rp3d::decimal(1.0));
+}
+
+/// <summary>
+/// Set a new collider for the entity
+/// </summary>
+/// <param name="radius">The radius of the capsule collider</param>
+/// <param name="height">The height of the capsule collider</param>
+void Entity::CreateCapsuleCollider(rp3d::decimal radius, rp3d::decimal height)
+{
+	shape = new rp3d::CapsuleShape(radius, height);
+	proxyShape = rigidBody->addCollisionShape(shape, rp3d::Transform::identity(), rp3d::decimal(1.0));
+}
+
+/// <summary>
+/// Set rigidbody for the entity. This keeps track of the object's position and physics
+/// </summary>
+/// <param name="enableGravity">Apply gravity force to this object?</param>
+/// <param name="bodyType">Kinematic and static do not check against each other, static can't move. Dynamic is default.</param>
+void Entity::SetRigidBodyParameters(bool enableGravity, rp3d::BodyType bodyType)
+{
+	rigidBody->enableGravity(enableGravity);
+	rigidBody->setType(bodyType);
 }
 
 
@@ -132,7 +170,9 @@ void Entity::StartRigidBody(rp3d::Vector3 position, rp3d::Quaternion orientation
 /// <param name="position"></param>
 void Entity::SetPosition(const Vector3f& position)
 {
-	Position = position;
+	rp3d::Transform t = rigidBody->getTransform();
+	t.setPosition(rp3d::Vector3(position.x, position.y, position.z));
+	rigidBody->setTransform(t);
 }
 
 /// <summary>
@@ -141,8 +181,9 @@ void Entity::SetPosition(const Vector3f& position)
 /// <param name="offset"></param>
 void Entity::Move(const Vector3f& offset)
 {
-	Position = Position + offset;
-	rigidBody->applyForceToCenterOfMass(rp3d::Vector3(offset.x, offset.y, offset.z));
+	rp3d::Transform t = rigidBody->getTransform();
+	t.setPosition(rp3d::Vector3(offset.x, offset.y, offset.z)+t.getPosition());
+	rigidBody->setTransform(t);
 }
 
 /// <summary>
@@ -174,34 +215,6 @@ Material * Entity::GetMaterial()
 	return material;
 }
 
-/**
-Stubs
-**/
-
-void Entity::MoveUp(float offset)
-{
-
-}
-
-void Entity::MoveDown(float offset)
-{
-
-}
-
-void Entity::MoveLeft(float offset)
-{
-
-}
-
-void Entity::MoveRight(float offset)
-{
-
-}
-
 void Entity::Update(float)
 {
 }
-
-/**
-End of Stubs
-**/

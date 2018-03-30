@@ -7,9 +7,9 @@
 /// <remarks>The player object moves for keyboard input as well as mouse input. For mouse input, the player object lerps to target position.</remarks>
 void PlayerEntity::Update(float deltaTime)
 {
-	prevPosition = Position;
+	rp3d::Transform t = rigidBody->getTransform();
+	prevPosition = t.getPosition();
 	std::vector<Keys> inputs = { Up, Down, Left, Right };
-	auto prevPos = Position;
 	for (auto input : inputs)
 	{
 		if (context.keyboard->IsKeyPressed(input)) {
@@ -25,34 +25,34 @@ void PlayerEntity::Update(float deltaTime)
 
 	if (hasTarget)
 	{
-		Position = Vector3f::Lerp(Position, target, 2.5f * deltaTime);
+		t.setPosition(Vector3f::Lerp(Vector3f(t.getPosition()), target, 2.5f * deltaTime).rp3dVec3());
 	}
 
-	if (hasTarget && Vector3f::Distance(Position, target) < 0.1f) {
+	if (hasTarget && Vector3f::Distance(Vector3f(t.getPosition()), target) < 0.1f) {
 		hasTarget = false;
 	}
 
-	if (inCollision) {
-		if (Collision2D::IsColliding(GetRect(), collisionEntity->GetRect())) {
-			Position = prevPos; //Stop movement if next step is still causing collision
-		}
-		else {
-			inCollision = false; //Allow movement if not colliding.
-		}
-	}
+	//if (inCollision) {
+	//	if (Collision2D::IsColliding(GetRect(), collisionEntity->GetRect())) {
+	//		Position = prevPos; //Stop movement if next step is still causing collision
+	//	}
+	//	else {
+	//		inCollision = false; //Allow movement if not colliding.
+	//	}
+	//}
 }
 
-/// <summary>
-/// On collision callback.
-/// </summary>
-/// <param name="entity">Entity with which this object collided</param>
-void PlayerEntity::OnCollision(GameEntity* entity)
-{
-	hasTarget = false;
-	inCollision = true;
-	collisionEntity = entity;
-	Position = prevPosition;
-}
+///// <summary>
+///// On collision callback.
+///// </summary>
+///// <param name="entity">Entity with which this object collided</param>
+//void PlayerEntity::OnCollision(GameEntity* entity)
+//{
+//	hasTarget = false;
+//	inCollision = true;
+//	collisionEntity = entity;
+//	Position = prevPosition;
+//}
 
 /// <summary>
 /// Process keyboard input.
@@ -63,24 +63,21 @@ void PlayerEntity::SendInput(Keys key, float deltaTime)
 {
 	hasTarget = false;
 	if (key == Keys::Up) {
-		MoveUp(speed * deltaTime);
 	}
 
 	if (key == Keys::Down) {
-		MoveDown(speed * deltaTime);
 	}
 
 	if (key == Keys::Left) {
-		MoveLeft(speed * deltaTime);
 	}
 
 	if (key == Keys::Right) {
-		MoveRight(speed * deltaTime);
 	}
 }
 
 
-PlayerEntity::PlayerEntity(float speed)
+PlayerEntity::PlayerEntity(rp3d::DynamicsWorld* physicsWorld, float speed):
+	Entity(physicsWorld)
 {
 	this->speed = speed;
 	hasTarget = false;

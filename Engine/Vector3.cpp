@@ -53,3 +53,24 @@ Vector3f Vector3f::operator+(const Vector3f& in)
 	z = z + in.z;
 	return *this;
 }
+
+Vector3f Vector3f::operator=(rp3d::Vector3 in)
+{
+	x = in.x;
+	y = in.y;
+	z = in.z;
+	return *this;
+}
+
+rp3d::Vector3 Vector3f::rp3dVec3()
+{
+	return rp3d::Vector3(this->x, this->y, this->z);
+}
+
+Vector3f::Vector3f(rp3d::Vector3 vec)
+{
+	x = vec.x;
+	y = vec.y;
+	z = vec.z;
+
+}

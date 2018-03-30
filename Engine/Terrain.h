@@ -1,15 +1,15 @@
 #pragma once
-
+#define NOMINMAX
 #include <d3d11.h>
 #include <DirectXMath.h>
-#include "GameEntity.h"
+#include "Entity.h"
 #include "SystemCore.h"
 
 using namespace DirectX;
 
 const int TEXTURE_REPEAT = 16;
 
-class Terrain : public GameEntity
+class Terrain : public Entity
 {
 	int terrainHeight;
 	int terrainWidth;
@@ -28,6 +28,6 @@ public:
 	void CalculateUVCoordinates();
 	void Initialize();
 	bool Initialize(const char* filename);
-	Terrain(SystemCore* sysCore);
+	Terrain(SystemCore* sysCore, rp3d::DynamicsWorld* physicsWorld);
 	~Terrain();
 };

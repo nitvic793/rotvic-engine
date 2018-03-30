@@ -122,7 +122,6 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Camera.h" />
-    <ClInclude Include="Collision2D.h" />
     <ClInclude Include="ConfigLoader.h" />
     <ClInclude Include="Console.h" />
     <ClInclude Include="Constants.h" />
@@ -133,8 +132,6 @@
     <ClInclude Include="EntityContextWrapper.h" />
     <ClInclude Include="FileBuffer.h" />
     <ClInclude Include="FirstPersonCamera.h" />
-    <ClInclude Include="GameEntity.h" />
-    <ClInclude Include="ICollider2D.h" />
     <ClInclude Include="IFileLoader.h" />
     <ClInclude Include="IGame.h" />
     <ClInclude Include="ISerializable.h" />
@@ -146,7 +143,6 @@
     <ClInclude Include="MeshLoader.h" />
     <ClInclude Include="Mouse.h" />
     <ClInclude Include="PrimitiveShape.h" />
-    <ClInclude Include="QuadTree.h" />
     <ClInclude Include="Rect.h" />
     <ClInclude Include="Renderer.h" />
     <ClInclude Include="ResourceManager.h" />
@@ -165,7 +161,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Camera.cpp" />
-    <ClCompile Include="Collision2D.cpp" />
     <ClCompile Include="ConfigLoader.cpp" />
     <ClCompile Include="Console.cpp" />
     <ClCompile Include="CoreGame.cpp" />
@@ -173,7 +168,6 @@
     <ClCompile Include="Entity.cpp" />
     <ClCompile Include="FileBuffer.cpp" />
     <ClCompile Include="FirstPersonCamera.cpp" />
-    <ClCompile Include="GameEntity.cpp" />
     <ClCompile Include="IGame.cpp" />
     <ClCompile Include="jsoncpp.cpp" />
     <ClCompile Include="Keyboard.cpp" />
@@ -182,7 +176,6 @@
     <ClCompile Include="MeshLoader.cpp" />
     <ClCompile Include="Mouse.cpp" />
     <ClCompile Include="PrimitiveShape.cpp" />
-    <ClCompile Include="QuadTree.cpp" />
     <ClCompile Include="Rect.cpp" />
     <ClCompile Include="Renderer.cpp" />
     <ClCompile Include="ResourceManager.cpp" />

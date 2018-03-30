@@ -12,8 +12,6 @@
 #include "SaveSystem.h"
 #include "Mouse.h"
 #include "Vector2f.h"
-#include "Collision2D.h"
-#include "ICollider2D.h"
 #include "Utility.h"
 #include "Lights.h"
 #include "DebugDraw.h"

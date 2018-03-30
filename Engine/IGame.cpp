@@ -37,7 +37,7 @@ std::vector<Entity*> IGame::GetEntities()
 	return vEntities;
 }
 
-GameEntity* IGame::GetEntity(std::string entity)
+Entity* IGame::GetEntity(std::string entity)
 {
 	if (entities.find(entity) != entities.end())
 	{
@@ -152,9 +152,9 @@ void IGame::UpdateEntities(float deltaTime)
 /// </summary>
 /// <param name="entity">Entity to be added</param>
 /// <param name="entityName">Name of entity</param>
-void IGame::AddEntity(GameEntity *entity, std::string entityName)
+void IGame::AddEntity(Entity *entity, std::string entityName)
 {
-	entities.insert(std::pair<std::string, GameEntity*>(entityName, entity));
+	entities.insert(std::pair<std::string, Entity*>(entityName, entity));
 	vEntities.push_back(entity);
 }
 

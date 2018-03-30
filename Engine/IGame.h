@@ -5,7 +5,6 @@
 #include "ConfigLoader.h"
 #include "SaveSystem.h"
 #include "Mouse.h"
-#include "GameEntity.h"
 #include "Renderer.h"
 #include "ResourceManager.h"
 #include "Camera.h"
@@ -21,7 +20,7 @@ class IGame
 {
 protected:
 	std::vector<Entity*> vEntities;
-	std::map<std::string, GameEntity*> entities;
+	std::map<std::string, Entity*> entities;
 	Keyboard *keyboard;
 	Mouse *mouse; 
 	SystemCore *core;
@@ -57,8 +56,8 @@ public:
 	virtual bool Save();
 	virtual bool Load();
 	virtual std::vector<Entity*> GetEntities();
-	GameEntity* GetEntity(std::string entity);
-	void AddEntity(GameEntity *entity, std::string entityName);
+	Entity* GetEntity(std::string entity);
+	void AddEntity(Entity *entity, std::string entityName);
 	Camera* GetCamera();
 	LightsMap GetLights();
 	Skybox* GetSkybox();
