@@ -2,6 +2,8 @@
 #define NOMINMAX
 #include <DirectXMath.h>
 #include <Windows.h>
+#include "Keyboard.h"
+
 using namespace DirectX;
 
 class Camera
@@ -16,6 +18,7 @@ protected:
 	bool isMouseDown;
 	int mousePrevX;
 	int mousePrevY;
+	Keyboard* keyboard;
 public:
 	XMFLOAT3 GetPosition();
 	void RotateX(float x);

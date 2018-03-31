@@ -68,7 +68,6 @@ void Game::Initialize()
 /// </summary>
 void Game::LoadLevel()
 {
-	keyboard->AddAction("up", { Up,W });
 	console->WriteLine(L"Level loaded");
 	
 	/* Add Entitites */

@@ -62,23 +62,23 @@ void Camera::Update(float deltaTime)
 
 	if (console->enabled) return;
 
-	if (GetAsyncKeyState('W') & 0x8000)
+	if (keyboard->IsActionPressed("up"))
 	{
 		pos = pos + dir * speed * deltaTime;;
 	}
 
-	if (GetAsyncKeyState('S') & 0x8000)
+	if (keyboard->IsActionPressed("down"))
 	{
 		pos = pos - dir * speed * deltaTime;;
 	}
 
-	if (GetAsyncKeyState('A') & 0x8000)
+	if (keyboard->IsActionPressed("left"))
 	{
 		auto leftDir = XMVector3Cross(dir, up);
 		pos = pos + leftDir * speed * deltaTime;;
 	}
 
-	if (GetAsyncKeyState('D') & 0x8000)
+	if (keyboard->IsActionPressed("right"))
 	{
 		auto rightDir = XMVector3Cross(-dir, up);
 		pos = pos + rightDir * speed * deltaTime;;
@@ -156,6 +156,11 @@ Camera::Camera(float aspectRatio)
 	{
 		OnMouseDown(wParam, x, y);
 	});
+	keyboard = Keyboard::GetInstance();
+	keyboard->AddAction("up", { Up,W });
+	keyboard->AddAction("left", { Left,A });
+	keyboard->AddAction("right", { Right,D });
+	keyboard->AddAction("down", { Down,S });
 }
 
 
