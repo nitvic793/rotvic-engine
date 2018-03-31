@@ -109,7 +109,17 @@ void Game::LoadLevel()
 
 	entity = new Entity(resource->GetMesh("cube"), resource->GetMaterial("metal"), rp3d::Vector3(7, 5, 0), dynamicsWorld);
 	entity->CreateBoxCollider(rp3d::Vector3(.5,.5,.5));
-	AddEntity(entity, "Collider2");  // Flocker 1
+	AddEntity(entity, "Collider2");  // Collider 2
+
+	entity = new Entity(resource->GetMesh("sphere"), resource->GetMaterial("metal"), rp3d::Vector3(-4, 2, 1), dynamicsWorld);
+	entity->CreateSphereCollider(.5);
+	AddEntity(entity, "Gravity1");  // Gravity-laden body 1
+	entity->SetRigidBodyParameters(true); 
+
+	entity = new Entity(resource->GetMesh("cube"), resource->GetMaterial("metal"), rp3d::Vector3(-2.5, 2, 0), dynamicsWorld);
+	entity->CreateBoxCollider(rp3d::Vector3(.5, .5, .5));
+	AddEntity(entity, "Gravity2");  // Gavrity-laden body 2
+	entity->SetRigidBodyParameters(true);
 
 	auto terrain = new Terrain(core, dynamicsWorld);
 	terrain->Initialize("../../Assets/Terrain/heightmap.bmp");
