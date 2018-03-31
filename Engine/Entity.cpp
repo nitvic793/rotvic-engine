@@ -91,6 +91,7 @@ void Entity::SetPosition(float x, float y, float z)
 	rp3d::Transform t = rigidBody->getTransform();
 	t.setPosition(rp3d::Vector3(x, y, z));
 	rigidBody->setTransform(t);
+	rigidBody->setIsSleeping(false);
 }
 
 void Entity::SetScale(float x, float y, float z)
@@ -242,7 +243,7 @@ void Entity::Update(float deltaTime)
 	{
 		for each (Script* s in scripts)
 		{
-			s->Update();
+			s->Update(deltaTime);
 		}
 	}
 }

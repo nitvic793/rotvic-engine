@@ -31,6 +31,7 @@ public:
 	void CalculateUVCoordinates();
 	void Initialize();
 	bool Initialize(const char* filename);
+	void _temp_Init();
 	Terrain(SystemCore* sysCore, rp3d::DynamicsWorld* physicsWorld);
 	~Terrain();
 };

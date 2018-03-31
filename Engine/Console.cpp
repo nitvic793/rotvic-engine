@@ -76,6 +76,10 @@ void Console::OnKeyPress(char key)
 	{
 		enabled = false;
 	}
+	else if (key == VK_TAB)
+	{
+		//Do nothing
+	}
 	else if (key == '\b') //Backspace
 	{
 		if (caretPosition == 0) return;

@@ -395,14 +395,35 @@ bool Terrain::Initialize(const char * filename)
 		for (i = 0; i<terrainWidth; i++)
 		{
 			height = bitmapImage[k];
+			float actualHeight = (float)height / 15;
+			if (actualHeight < minHeight) minHeight = actualHeight;
+			if (actualHeight > maxHeight) maxHeight = actualHeight;
+			heightValues[(terrainHeight * j) + i] = actualHeight;
+			k += 3;
+		}
+	}
+
+	shape = new rp3d::HeightFieldShape(terrainHeight, terrainWidth, minHeight, maxHeight, heightValues, rp3d::HeightFieldShape::HEIGHT_FLOAT_TYPE);
+	proxyShape = rigidBody->addCollisionShape(shape, rp3d::Transform::identity(), rp3d::decimal(1.0));
+	rigidBody->setType(rp3d::BodyType::STATIC);
+	rigidBody->enableGravity(false);
+	rp3d::Vector3 min, max;
+	shape->getLocalBounds(min, max);
+	k = 0;
+
+	for (j = 0; j<terrainHeight; j++)
+	{
+		for (i = 0; i<terrainWidth; i++)
+		{
+			height = bitmapImage[k];
 			if (height < minHeight) minHeight = height;
 			if (height > maxHeight) maxHeight = height;
 			index = (terrainWidth * (terrainHeight - 1 - j)) + i;
 
-			heightMap[index].x = (float)i;
+			heightMap[index].x = (float)i + min.x;
 			heightMap[index].y = (float)height;
 			heightMap[index].z = -(float)j;
-			heightMap[index].z += (float)(terrainHeight - 1);
+			heightMap[index].z += (float)(terrainHeight - 1) + min.z;
 
 			k += 3;
 		}
@@ -414,7 +435,7 @@ bool Terrain::Initialize(const char * filename)
 		for (i = 0; i<terrainWidth; i++)
 		{
 			heightMap[(terrainHeight * j) + i].y /= 15.0f;
-			heightValues[(terrainHeight * j) + i] = heightMap[(terrainHeight*j) + i].y;
+			//heightValues[(terrainHeight * j) + i] = heightMap[(terrainHeight*j) + i].y * 2;
 		}
 	}
 
@@ -517,9 +538,161 @@ bool Terrain::Initialize(const char * filename)
 	mesh->Initialize(vertices, vertexCount, indices, indexCount);
 	delete vertices;
 	delete indices;
-	shape = new rp3d::HeightFieldShape(terrainWidth, terrainHeight, minHeight, maxHeight, heightValues, rp3d::HeightFieldShape::HEIGHT_FLOAT_TYPE);
-	proxyShape = rigidBody->addCollisionShape(shape, rp3d::Transform::identity(), rp3d::decimal(1.0));
+
 	return true;
+}
+
+void Terrain::_temp_Init()
+{
+	rp3d::Transform transform = rp3d::Transform::identity();
+	rp3d::Vector3 pos = rp3d::Vector3(0, 0, 0);
+	transform.setPosition(pos);
+	rigidBody = dynamicsWorld->createRigidBody(transform);
+
+	terrainHeight = terrainWidth = 101;
+	float *heightValues = new float[terrainHeight * terrainWidth];
+	heightMap = new XMFLOAT3[terrainHeight * terrainWidth];
+	SetPosition(0, -8, 0);
+
+	int k = 0, index = 0;
+	for (int j = 0; j<terrainHeight; j++)
+	{
+		for (int i = 0; i < terrainWidth; i++)
+		{
+			
+			index = (terrainWidth * (terrainHeight - 1 - j)) + i;
+			int height = index % 2 + 1;
+			int index2 = (terrainHeight * (terrainWidth - 1 - j)) + i;
+			heightValues[index] = height;
+			//heightMap[index].x = (float)i;
+			//heightMap[index].y = (float)height;
+			//heightMap[index].z = -(float)j;
+			//heightMap[index].z += (float)(terrainHeight - 1);
+
+			k += 3;
+		}
+	}
+
+	rp3d::Vector3 min, max;
+	shape = new rp3d::HeightFieldShape(100, 100, 1, 2, heightValues, rp3d::HeightFieldShape::HEIGHT_FLOAT_TYPE);
+
+	proxyShape = rigidBody->addCollisionShape(shape, rp3d::Transform::identity(), 1.f);
+	rigidBody->setType(rp3d::BodyType::STATIC);
+	rigidBody->enableGravity(false);
+	shape->getLocalBounds(min, max);
+	printf("%f %f %f %f %f %f", min.x, min.y, min.z, max.x, max.y, max.z);
+
+	for (int j = 0; j<terrainHeight; j++)
+	{
+		for (int i = 0; i < terrainWidth; i++)
+		{
+			int height = index % 2 + 1;
+			index = (terrainWidth * (terrainHeight - 1 - j)) + i;
+			//int index2 = (terrainHeight * (terrainWidth - 1 - j)) + i;
+			//heightValues[index] = height;
+			heightMap[index].x = (float)i + min.x;
+			heightMap[index].y = (float)height + min.y;
+			heightMap[index].z = -(float)j ;
+			heightMap[index].z += (float)(terrainHeight - 1) + min.z;
+
+			k += 3;
+		}
+	}
+
+	int vertexCount = (terrainWidth - 1) * (terrainHeight - 1) * 6;
+	indexCount = vertexCount;
+	vertices = new Vertex[vertexCount];
+	indices = new UINT[indexCount];
+	index = 0;
+	CalculateUVCoordinates();
+	CalculateNormals();
+	for (int j = 0; j<(terrainHeight - 1); j++)
+	{
+		for (int i = 0; i<(terrainWidth - 1); i++)
+		{
+			int index1 = (terrainWidth * j) + i;          // Upper left.
+			int index2 = (terrainWidth * j) + (i + 1);      // Upper right.
+			int index3 = (terrainWidth * (j + 1)) + i;      // Bottom left.
+			int index4 = (terrainWidth * (j + 1)) + (i + 1);  // Bottom right.
+
+
+															  // Upper left.
+			int tv = textureCoords[index3].y;
+
+			// Modify the texture coordinates to cover the top edge.
+			if (tv == 1.0f) { tv = 0.0f; }
+
+			vertices[index].Position = XMFLOAT3(heightMap[index3].x, heightMap[index3].y, heightMap[index3].z);
+			vertices[index].UV = XMFLOAT2(0, 0);
+			//vertices[index].UV = XMFLOAT2(textureCoords[index3].x, tv);
+			vertices[index].Normal = XMFLOAT3(heightNormals[index3].x, heightNormals[index3].y, heightNormals[index3].z);
+			indices[index] = index;
+			index++;
+
+			// Upper right.
+			int tu = textureCoords[index4].x;
+			tv = textureCoords[index4].y;
+
+			// Modify the texture coordinates to cover the top and right edge.
+			if (tu == 0.0f) { tu = 1.0f; }
+			if (tv == 1.0f) { tv = 0.0f; }
+
+			vertices[index].Position = XMFLOAT3(heightMap[index4].x, heightMap[index4].y, heightMap[index4].z);
+			vertices[index].UV = XMFLOAT2(1, 0);
+			//vertices[index].UV = XMFLOAT2(tu, tv);
+			vertices[index].Normal = XMFLOAT3(heightNormals[index4].x, heightNormals[index4].y, heightNormals[index4].z);
+			indices[index] = index;
+			index++;
+
+			// Bottom left.
+			vertices[index].Position = XMFLOAT3(heightMap[index1].x, heightMap[index1].y, heightMap[index1].z);
+			vertices[index].UV = XMFLOAT2(0, 1);
+			//vertices[index].UV = XMFLOAT2(textureCoords[index1].x, textureCoords[index1].y);
+			vertices[index].Normal = XMFLOAT3(heightNormals[index1].x, heightNormals[index1].y, heightNormals[index1].z);
+			indices[index] = index;
+			index++;
+
+			// Bottom left.
+			vertices[index].Position = XMFLOAT3(heightMap[index1].x, heightMap[index1].y, heightMap[index1].z);
+			vertices[index].UV = XMFLOAT2(0, 1);
+			//vertices[index].UV = XMFLOAT2(textureCoords[index1].x, textureCoords[index1].y);
+			vertices[index].Normal = XMFLOAT3(heightNormals[index1].x, heightNormals[index1].y, heightNormals[index1].z);
+			indices[index] = index;
+			index++;
+
+			// Upper right.
+			tu = textureCoords[index4].x;
+			tv = textureCoords[index4].y;
+
+			// Modify the texture coordinates to cover the top and right edge.
+			if (tu == 0.0f) { tu = 1.0f; }
+			if (tv == 1.0f) { tv = 0.0f; }
+
+			vertices[index].Position = XMFLOAT3(heightMap[index4].x, heightMap[index4].y, heightMap[index4].z);
+			vertices[index].UV = XMFLOAT2(1, 0);
+			//vertices[index].UV = XMFLOAT2(tu, tv);
+			vertices[index].Normal = XMFLOAT3(heightNormals[index4].x, heightNormals[index4].y, heightNormals[index4].z);
+			indices[index] = index;
+			index++;
+
+			// Bottom right.
+			tu = textureCoords[index2].x;
+
+			// Modify the texture coordinates to cover the right edge.
+			if (tu == 0.0f) { tu = 1.0f; }
+
+			vertices[index].Position = XMFLOAT3(heightMap[index2].x, heightMap[index2].y, heightMap[index2].z);
+			vertices[index].UV = XMFLOAT2(1, 1);
+			//vertices[index].UV = XMFLOAT2(tu, textureCoords[index2].y);
+			vertices[index].Normal = XMFLOAT3(heightNormals[index2].x, heightNormals[index2].y, heightNormals[index2].z);
+			indices[index] = index;
+			index++;
+		}
+	}
+	mesh = new Mesh(core);
+	mesh->Initialize(vertices, vertexCount, indices, indexCount);
+	delete vertices;
+	delete indices;
 }
 
 Terrain::Terrain(SystemCore* sysCore, rp3d::DynamicsWorld* physicsWorld) :

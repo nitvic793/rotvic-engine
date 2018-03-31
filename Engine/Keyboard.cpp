@@ -178,6 +178,18 @@ Keyboard::Keyboard()
 	inputEnumMap.insert(KeyEnumMap("W", Keys::W));
 	inputEnumMap.insert(KeyEnumMap("X", Keys::X));
 	inputEnumMap.insert(KeyEnumMap("Y", Keys::Y));
+
+	inputEnumMap.insert(KeyEnumMap("Num0", Keys::Num0));
+	inputEnumMap.insert(KeyEnumMap("Num1", Keys::Num1));
+	inputEnumMap.insert(KeyEnumMap("Num2", Keys::Num2));
+	inputEnumMap.insert(KeyEnumMap("Num3", Keys::Num3));
+	inputEnumMap.insert(KeyEnumMap("Num4", Keys::Num4));
+	inputEnumMap.insert(KeyEnumMap("Num5", Keys::Num5));
+	inputEnumMap.insert(KeyEnumMap("Num6", Keys::Num6));
+	inputEnumMap.insert(KeyEnumMap("Num7", Keys::Num7));
+	inputEnumMap.insert(KeyEnumMap("Num8", Keys::Num8));
+	inputEnumMap.insert(KeyEnumMap("Num9", Keys::Num9));
+
 	inputEnumMap.insert(KeyEnumMap("Z", Keys::Z));
 	inputEnumMap.insert(KeyEnumMap("F1", Keys::F1));
 	inputEnumMap.insert(KeyEnumMap("F2", Keys::F2));
