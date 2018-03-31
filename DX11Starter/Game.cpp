@@ -72,11 +72,11 @@ void Game::Init()
 	
 
 	light1.AmbientColor = XMFLOAT4(0.1f, 0.1f, 0.1f, 1.0f);
-	light1.DiffuseColor = XMFLOAT4(0, 0, 1, 1);
+	light1.DiffuseColor = XMFLOAT4(0, 0.5f, 1, 1);
 	light1.Direction = XMFLOAT3(1,-1,0);
 
 	light2.AmbientColor = XMFLOAT4(0.1f, 0.1f, 0.1f, 0.1f);
-	light2.DiffuseColor = XMFLOAT4(0.8f, 1, 0, 1);
+	light2.DiffuseColor = XMFLOAT4(0.8f, 0.5f, 0, 1);
 	light2.Direction = XMFLOAT3(-1, 0, 0);
 	
 	context->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
@@ -177,9 +177,9 @@ void Game::CreateGameObjects()
 
 	//FbxAnimEvaluator* lEvaluator = fbxLoader.scene->GetAnimationEvaluator();
 
-	gobj1->setPosition(0, 0, 0);
-	gobj2->setPosition(15, 0, 0);
-	gobj3->setPosition(-15, 0, 0);
+	gobj1->setPosition(0, 0, 10);
+	gobj2->setPosition(15, 0, 10);
+	gobj3->setPosition(-15, 0, 10);
 	//gobj1->setRotation(-1.57,0,0);
 	//gobj2->setRotation(-1.57, 0, 0);
 	//gobj3->setRotation(-1.57, 0, 0);
