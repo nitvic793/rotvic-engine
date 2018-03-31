@@ -124,7 +124,7 @@ void Game::LoadLevel()
 	auto terrain = new Terrain(core, dynamicsWorld);
 	terrain->Initialize("../../Assets/Terrain/heightmap.bmp");
 	terrain->SetMaterial(resource->GetMaterial("grass"));
-	terrain->SetPosition(-70, -10, -10);
+	terrain->SetPosition(-70, -12, -10);
 	AddEntity(terrain, "Terrain");	
 
 	terrain = new Terrain(core, dynamicsWorld);

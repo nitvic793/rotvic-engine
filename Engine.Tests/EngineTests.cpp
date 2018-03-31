@@ -139,17 +139,6 @@ namespace EngineTests
 			delete game;
 		}
 
-		TEST_METHOD(Entity_SetPosition)
-		{
-			Entity entity;
-			auto expected = Vector3f(1.f, 1.f, 1.f);
-			entity.SetPosition(expected);
-			auto position = entity.GetPosition();
-			Assert::AreEqual(expected.x, position.x);
-			Assert::AreEqual(expected.y, position.y);
-			Assert::AreEqual(expected.z, position.z);
-		}
-
 		TEST_METHOD(Renderer_DrawMesh)
 		{
 			SystemCore &core = *game->GetSystemCore();
@@ -182,7 +171,7 @@ namespace EngineTests
 			SystemCore &core = *game->GetSystemCore();
 			Mock<SystemCore> coreMock(core);
 			Fake(Method(coreMock, Draw));
-			Entity *entity = new Entity();
+			Entity *entity = new Entity(nullptr);
 			Mesh *m = new Mesh(game->GetSystemCore());
 			entity->SetMesh(m);
 			Renderer *renderer = new Renderer(game->GetSystemCore());
@@ -208,7 +197,7 @@ namespace EngineTests
 
 		TEST_METHOD(Entity_SetMesh)
 		{
-			Entity *entity = new Entity();
+			Entity *entity = new Entity(nullptr);
 			Mesh *expected = new Mesh(game->GetSystemCore());
 			entity->SetMesh(expected);
 			auto actual = entity->GetMesh();
