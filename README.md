@@ -6,12 +6,12 @@ For more elaborate documentation, check out the [wiki](https://github.com/nitvic
 
 ## Steps to build
 
-This project requires the Windows 10 SDK installed. 
+This project requires the Windows 10 SDK to be installed. 
 
-- Open project Visual Studio 2017
-- Set project build in x64 platform.
+- Open project in Visual Studio 2017
+- Set project to build in x64 platform.
 - Set "Game" as startup project.
-- Build and run 
+- Build and run.
 
 ## Known issues
 
