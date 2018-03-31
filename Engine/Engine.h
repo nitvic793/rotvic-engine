@@ -19,3 +19,4 @@
 #include "Skybox.h"
 #include "Terrain.h"
 #include "Script.h"
+#include "Camera.h"

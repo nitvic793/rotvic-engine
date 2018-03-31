@@ -57,6 +57,14 @@ Entity::~Entity()
 {
 	if (rigidBody) dynamicsWorld->destroyRigidBody(rigidBody);
 	dynamicsWorld = nullptr;
+
+	if (scripts.size() > 0) // Call the update for each script each cycle
+	{
+		for each (Script* s in scripts)
+		{
+			delete s;
+		}
+	}
 }
 
 /// <summary>
@@ -68,22 +76,42 @@ rp3d::Vector3 Entity::GetPosition()
 	return rigidBody->getTransform().getPosition();
 }
 
+/// <summary>
+/// Get current linear velocity of entity
+/// </summary>
+/// <returns>3 Float Vector of current velocity of entity</returns>
+rp3d::Vector3 Entity::GetLinearVelocity()
+{
+	return rigidBody->getLinearVelocity();
+}
+
+/// <summary>
+/// Get current forward of entity
+/// </summary>
+/// <returns>3 Float Vector of current forward of entity</returns>
+rp3d::Vector3 Entity::GetForward()
+{
+	return rigidBody->getTransform().getOrientation().getVectorV().getUnit();
+}
+
 void Entity::ApplyForce(rp3d::Vector3 force)
 {
 	rigidBody->applyForceToCenterOfMass(rp3d::Vector3(force.x, force.y, force.z));
+	//rigidBody->setLinearVelocity(force);
 }
 
 /// <summary>
 /// Sets the euler rotation angles(in degrees) of given entity.
 /// </summary>
-/// <param name="roll">The roll angle in degrees</param>
-/// <param name="pitch">The pitch in degrees</param>
+/// <param name="pitch">The pitch angle in degrees</param>
 /// <param name="yaw">The yaw in degrees</param>
-void Entity::SetRotation(float roll, float pitch, float yaw)
+/// <param name="roll">The roll in degrees</param>
+void Entity::SetRotation(float pitch, float yaw, float roll)
 {
 	rp3d::Transform t = rigidBody->getTransform();
-	t.setOrientation(rp3d::Quaternion(roll * XM_PI / 180, pitch * XM_PI / 180, yaw * XM_PI / 180));
+	t.setOrientation(rp3d::Quaternion(pitch, yaw, roll ));
 	rigidBody->setTransform(t);
+	
 }
 
 void Entity::SetPosition(float x, float y, float z)

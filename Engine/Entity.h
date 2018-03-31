@@ -35,11 +35,13 @@ public:
 	std::vector<Script*> scripts;
 
 	rp3d::Vector3 GetPosition();
+	rp3d::Vector3 GetLinearVelocity();
+	rp3d::Vector3 GetForward();
 
 	void CreateRigidBody(rp3d::Vector3 position, rp3d::Quaternion orientation);
 	void SetContext(EntityContextWrapper context);
 	void SetPosition(const Vector3f& position);
-	void SetRotation(float roll, float pitch, float yaw);
+	void SetRotation(float pitch, float yaw, float roll);
 	void SetPosition(float x, float y, float z);
 	void SetScale(float x, float y, float z);
 	void Move(const Vector3f& offset);

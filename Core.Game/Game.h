@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Core.h"
+#include "Flocker.h"
 #include <map>
 
 const float DefaultSpeed = 20.0f;
@@ -20,6 +21,8 @@ protected:
 	float delayTime;
 	Mesh *mesh;
 	Material *mat;
+	rp3d::Vector3 centroidForward = rp3d::Vector3(0, 0, 0);
+	rp3d::Vector3 centroidPosition = rp3d::Vector3(0, 0, 0);
 
 	Camera* freeCam;
 	FirstPersonCamera* firstPersonCamera;
