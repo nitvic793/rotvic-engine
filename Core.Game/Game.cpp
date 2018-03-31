@@ -11,6 +11,7 @@ Game::Game(float speed)
 
 Game::~Game()
 {
+	camera = freeCam;
 	delete skybox;
 	delete firstPersonCamera;
 	InstanceCount--;
@@ -114,8 +115,13 @@ void Game::LoadLevel()
 	auto terrain = new Terrain(core, dynamicsWorld);
 	terrain->Initialize("../../Assets/Terrain/heightmap.bmp");
 	terrain->SetMaterial(resource->GetMaterial("grass"));
-	terrain->SetPosition(-100, -5, -40);
+	terrain->SetPosition(-70, -10, -10);
 	AddEntity(terrain, "Terrain");	
+
+	terrain = new Terrain(core, dynamicsWorld);
+	terrain->SetMaterial(resource->GetMaterial("grass"));
+	terrain->_temp_Init();
+	AddEntity(terrain, "Terrain2");
 
 	console->RegisterCommand("SwitchCam", [=](std::vector<std::string> params)
 	{
@@ -191,17 +197,17 @@ void Game::Update(float deltaTime)
 
 	Sphere sphere;
 	sphere.color = XMFLOAT4(1, 1, 1, 1);
-	sphere.bounding.Center = XMFLOAT3(-1, 0, 0);
+	sphere.bounding.Center = XMFLOAT3(-1, 5, 0);
 	sphere.bounding.Radius = 0.5;
 
 	Box box;
 	box.color = XMFLOAT4(1, 1, 1, 1);
-	box.bounding.Center = XMFLOAT3(2, 1, 0);
+	box.bounding.Center = XMFLOAT3(2, 5, 0);
 	box.bounding.Extents = XMFLOAT3(1, 1, 1);
 
 	Frustum fr;
 	fr.color = XMFLOAT4(1, 1, 1, 1);
-	fr.bounding.Origin = XMFLOAT3(-4, 0, 1);
+	fr.bounding.Origin = XMFLOAT3(-4, 5, 1);
 
 	Grid grid = Grid::GetDefaultGrid();
 	XMStoreFloat4(&grid.color, Colors::Green);

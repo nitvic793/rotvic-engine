@@ -40,9 +40,24 @@ void FirstPersonCamera::Update(float deltaTime)
 
 void FirstPersonCamera::OnMouseMove(WPARAM wParam, int x, int y)
 {
-	rotationY += (float)(x - mousePrevX) * 0.6f * XM_PI / 180;
-	rotationX += (float)(y - mousePrevY) * 0.6f * XM_PI / 180;
+	auto deltaX = float(x - mousePrevX);
+	auto deltaY = float(y - mousePrevY);
 
+	if (rotationX + deltaY >= (90 - 10) * XM_PI / 180)
+	{
+		deltaX *= 0.2f;
+	}
+
+	if (rotationX + deltaY <= -(90 - 10) * XM_PI / 180)
+	{
+		deltaX *= 0.2f;
+	}
+
+	rotationY += deltaX * 0.6f * XM_PI / 180;
+	rotationX += deltaY * 0.6f * XM_PI / 180;
+	if (rotationX >= XM_PI / 2) rotationX = XM_PI / 2;
+	if (rotationX <= -XM_PI /2) rotationX = -XM_PI/2;
+	printf("%f %f\n", rotationX * 180/XM_PI, rotationY * 180 / XM_PI);
 	mousePrevX = x;
 	mousePrevY = y;
 }

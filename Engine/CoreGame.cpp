@@ -287,6 +287,20 @@ void CoreGame::RegisterConsoleCommands()
 		}
 		auto entity = new Entity(shapeMesh, resourceManager->GetMaterial("default"), rp3d::Vector3(0,0,0), dynamicsWorld);
 		gameInstance->AddEntity(entity, uniqueName);
+		
+		if (params.size() > 2)
+		{
+			auto collider = params[2];
+			entity->SetRigidBodyParameters(true);
+			if (collider == "Box")
+			{
+				entity->CreateBoxCollider(rp3d::Vector3(0.5f, 0.5f, 0.5f));
+			}
+			else if (collider == "Sphere")
+			{
+				entity->CreateSphereCollider(1);
+			}			
+		}
 	});
 
 	console->RegisterCommand("SetPosition", [&](std::vector<std::string> params)
