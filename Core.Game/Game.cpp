@@ -69,7 +69,7 @@ void Game::Initialize()
 void Game::LoadLevel()
 {
 	console->WriteLine(L"Level loaded");
-	
+
 	/* Add Entitites */
 	{auto entity = new Entity(resource->GetMesh("cylinder"), resource->GetMaterial("metal"), rp3d::Vector3(2, 0, 0), dynamicsWorld, { new Flocker() });
 	entity->CreateCylinderCollider(.5, 1);
@@ -108,13 +108,13 @@ void Game::LoadLevel()
 	//entity->SetRigidBodyParameters(true); 
 
 	entity = new Entity(resource->GetMesh("cube"), resource->GetMaterial("metal"), rp3d::Vector3(7, 5, 0), dynamicsWorld);
-	entity->CreateBoxCollider(rp3d::Vector3(.5,.5,.5));
+	entity->CreateBoxCollider(rp3d::Vector3(.5, .5, .5));
 	AddEntity(entity, "Collider2");  // Collider 2
 
 	entity = new Entity(resource->GetMesh("sphere"), resource->GetMaterial("metal"), rp3d::Vector3(-4, 2, 1), dynamicsWorld);
 	entity->CreateSphereCollider(.5);
 	AddEntity(entity, "Gravity1");  // Gravity-laden body 1
-	entity->SetRigidBodyParameters(true); 
+	entity->SetRigidBodyParameters(true);
 
 	entity = new Entity(resource->GetMesh("cube"), resource->GetMaterial("metal"), rp3d::Vector3(-2.5, 2, 0), dynamicsWorld);
 	entity->CreateBoxCollider(rp3d::Vector3(.5, .5, .5));
@@ -125,12 +125,53 @@ void Game::LoadLevel()
 	terrain->Initialize("../../Assets/Terrain/heightmap.bmp");
 	terrain->SetMaterial(resource->GetMaterial("grass"));
 	terrain->SetPosition(-70, -12, -10);
-	AddEntity(terrain, "Terrain");	
+	AddEntity(terrain, "Terrain");
 
 	terrain = new Terrain(core, dynamicsWorld);
 	terrain->SetMaterial(resource->GetMaterial("grass"));
 	terrain->_temp_Init();
 	AddEntity(terrain, "Terrain2");
+
+	flocking = true;
+	console->RegisterCommand("ClearLevel", [=](std::vector<std::string> params)
+	{
+		flocking = false;
+		for (auto entity : entities)
+		{
+			delete entity.second;
+		}
+		entities.clear();
+		vEntities.clear();
+	});
+
+	console->RegisterCommand("AddTerrain", [=](std::vector<std::string> params)
+	{
+		if (params.size() < 1)
+		{
+			console->WriteLine(L"No params found");
+			return;
+		}
+		auto terrainName = params[0];
+		auto terrain = new Terrain(core, dynamicsWorld);
+		terrain->Initialize("../../Assets/Terrain/heightmap.bmp");
+		terrain->SetMaterial(resource->GetMaterial("grass"));
+		terrain->SetPosition(-70, -12, -10);
+		AddEntity(terrain, terrainName);
+	});
+
+	console->RegisterCommand("AddPhysicsTerrain", [=](std::vector<std::string> params)
+	{
+		if (params.size() < 1)
+		{
+			console->WriteLine(L"No params found");
+			return;
+		}
+		auto terrainName = params[0];
+		auto terrain = new Terrain(core, dynamicsWorld);
+		terrain->SetMaterial(resource->GetMaterial("grass"));
+		terrain->_temp_Init();
+		AddEntity(terrain, terrainName);
+	});
 
 	console->RegisterCommand("SwitchCam", [=](std::vector<std::string> params)
 	{
@@ -188,15 +229,20 @@ int Game::GetInstanceCount()
 void Game::Update(float deltaTime)
 {
 	std::ostringstream flockerindex;
-	for (int i = 1; i < 6; i++) // Update the flocking variables
+	if (flocking)
 	{
-		flockerindex = std::ostringstream();
-		flockerindex << "Flocker" << i;
-		centroidForward += entities[flockerindex.str()]->GetForward(); // Add all the directions and positions
-		centroidPosition += entities[flockerindex.str()]->GetPosition();
+		for (int i = 1; i < 6; i++) // Update the flocking variables
+		{
+			flockerindex = std::ostringstream();
+			flockerindex << "Flocker" << i;
+			centroidForward += entities[flockerindex.str()]->GetForward(); // Add all the directions and positions
+			centroidPosition += entities[flockerindex.str()]->GetPosition();
+		}
+		centroidForward = centroidForward / 5.0f; // Then divide them by the number of Daleks to compute the average
+		centroidPosition = centroidPosition / 5.0f;
+		entities["Collider2"]->ApplyForce(rp3d::Vector3(-.1, 0, 0));
 	}
-	centroidForward = centroidForward / 5.0f; // Then divide them by the number of Daleks to compute the average
-	centroidPosition = centroidPosition / 5.0f;
+
 	//camera = firstPersonCamera;
 	Ray ray;
 	ray.color = XMFLOAT4(1, 1, 1, 1);
@@ -241,7 +287,6 @@ void Game::Update(float deltaTime)
 		//console->WriteLine(L"Up action pressed");
 	}
 
-	entities["Collider2"]->ApplyForce(rp3d::Vector3(-.1, 0, 0));
 	delayTime += deltaTime;
 }
 

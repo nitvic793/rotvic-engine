@@ -23,7 +23,7 @@ protected:
 	Material *mat;
 	rp3d::Vector3 centroidForward = rp3d::Vector3(0, 0, 0);
 	rp3d::Vector3 centroidPosition = rp3d::Vector3(0, 0, 0);
-
+	bool flocking;
 	Camera* freeCam;
 	FirstPersonCamera* firstPersonCamera;
 
