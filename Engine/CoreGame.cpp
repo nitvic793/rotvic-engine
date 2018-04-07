@@ -35,7 +35,7 @@ bool CoreGame::Initialize(HINSTANCE hInstance, int nCmdShow)
 	});
 	mouse = new Mouse(Core->GetWindowHandle());
 	Core->BindMouse(mouse);
-	resourceManager->LoadResources(config, Core); 
+	resourceManager->LoadResources(config, Core);
 	debugDraw = std::unique_ptr<DebugDraw>(new DebugDraw(Core));
 	RegisterConsoleCommands();
 	return true;
@@ -285,9 +285,9 @@ void CoreGame::RegisterConsoleCommands()
 			console->WriteLine(L"Invalid shape");
 			return;
 		}
-		auto entity = new Entity(shapeMesh, resourceManager->GetMaterial("default"), rp3d::Vector3(0,0,0), dynamicsWorld);
+		auto entity = new Entity(shapeMesh, resourceManager->GetMaterial("default"), rp3d::Vector3(0, 0, 0), dynamicsWorld);
 		gameInstance->AddEntity(entity, uniqueName);
-		
+
 		if (params.size() > 2)
 		{
 			auto collider = params[2];
@@ -299,7 +299,7 @@ void CoreGame::RegisterConsoleCommands()
 			else if (collider == "Sphere")
 			{
 				entity->CreateSphereCollider(1);
-			}			
+			}
 		}
 	});
 
@@ -430,12 +430,13 @@ void CoreGame::Draw()
 	for (auto entity : entities)
 	{
 		renderer->Draw(entity);
+		if (debugDraw->IsEnabled())entity->DrawDebugShape();
 	}
 	if (gameInstance->GetSkybox() != nullptr)
 	{
 		renderer->Draw(gameInstance->GetSkybox());
 	}
-	if(debugDraw->IsEnabled())debugDraw->Render(gameInstance->GetCamera()); //Debug Draw
+	if (debugDraw->IsEnabled())debugDraw->Render(gameInstance->GetCamera()); //Debug Draw
 	if (console->enabled)console->Render(); //Render console if required.
 	Core->GetDeviceContext()->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 	renderer->Present();

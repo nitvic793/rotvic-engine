@@ -1,15 +1,18 @@
 #include "Entity.h"
+#include "DebugDraw.h"
 
 /// <summary>
 /// Constructor initializes the world matrix
 /// </summary>
-Entity::Entity(rp3d::DynamicsWorld* physicsWorld, std::vector<Script*> pScripts):
-	Entity(nullptr, nullptr, rp3d::Vector3(0,0,0), rp3d::Quaternion::identity(), physicsWorld, pScripts)
+Entity::Entity(rp3d::DynamicsWorld* physicsWorld, std::vector<Script*> pScripts) :
+	Entity(nullptr, nullptr, rp3d::Vector3(0, 0, 0), rp3d::Quaternion::identity(), physicsWorld, pScripts)
 {
 }
 
 Entity::Entity(Mesh *m, Material* mat, rp3d::Vector3 position, rp3d::Quaternion orientation, rp3d::DynamicsWorld* physicsWorld, std::vector<Script*> pScripts)
 {
+	collisionGroup = "default";
+	shapeType = UNDEFINED;
 	dynamicsWorld = physicsWorld;
 	XMVECTOR sc = XMVectorSet(1.0f, 1.0f, 1.0f, 0.0f);
 	XMStoreFloat3(&scale, sc);
@@ -33,7 +36,7 @@ Entity::Entity(Mesh *m, Material* mat, rp3d::Vector3 position, rp3d::Quaternion 
 	}
 }
 
-Entity::Entity(Mesh *m, Material* mat, rp3d::Vector3 position, rp3d::DynamicsWorld* physicsWorld, std::vector<Script*> pScripts):
+Entity::Entity(Mesh *m, Material* mat, rp3d::Vector3 position, rp3d::DynamicsWorld* physicsWorld, std::vector<Script*> pScripts) :
 	Entity(m, mat, position, rp3d::Quaternion::identity(), physicsWorld, pScripts)
 {
 }
@@ -42,7 +45,7 @@ Entity::Entity(Mesh *m, Material* mat, rp3d::Vector3 position, rp3d::DynamicsWor
 /// Gets the world matrix of entity
 /// </summary>
 /// <returns>Returns 4x4 world matrix for this entity.</returns>
-XMFLOAT4X4 Entity::GetWorldMatrix() 
+XMFLOAT4X4 Entity::GetWorldMatrix()
 {
 	XMMATRIX scle = XMMatrixScaling(scale.x, scale.y, scale.z);
 	rp3d::Transform transform = rigidBody->getTransform();
@@ -55,6 +58,7 @@ XMFLOAT4X4 Entity::GetWorldMatrix()
 
 Entity::~Entity()
 {
+	if (basicShape) delete basicShape;
 	if (rigidBody) dynamicsWorld->destroyRigidBody(rigidBody);
 	dynamicsWorld = nullptr;
 
@@ -74,6 +78,11 @@ Entity::~Entity()
 rp3d::Vector3 Entity::GetPosition()
 {
 	return rigidBody->getTransform().getPosition();
+}
+
+rp3d::Quaternion Entity::GetRotation()
+{
+	return rigidBody->getTransform().getOrientation();
 }
 
 /// <summary>
@@ -109,9 +118,9 @@ void Entity::ApplyForce(rp3d::Vector3 force)
 void Entity::SetRotation(float pitch, float yaw, float roll)
 {
 	rp3d::Transform t = rigidBody->getTransform();
-	t.setOrientation(rp3d::Quaternion(pitch, yaw, roll ));
+	t.setOrientation(rp3d::Quaternion(pitch, yaw, roll));
 	rigidBody->setTransform(t);
-	
+
 }
 
 void Entity::SetPosition(float x, float y, float z)
@@ -144,6 +153,35 @@ void Entity::SetContext(EntityContextWrapper context)
 	this->context = context;
 }
 
+void Entity::DrawDebugShape()
+{
+	switch (shapeType)
+	{
+	case BOX:
+	{
+		auto box = *(Box*)basicShape;
+		auto pos = GetPosition();
+		auto rot = GetRotation();
+		box.bounding.Center.x = pos.x;
+		box.bounding.Center.y = pos.y;
+		box.bounding.Center.z = pos.z;
+		box.bounding.Orientation = XMFLOAT4(rot.x, rot.y, rot.z, rot.w);
+		box.color = XMFLOAT4(1, 1, 1, 1);
+		DebugDraw::Draw<Box>(box, collisionGroup);
+		break;
+	}
+	case SPHERE:
+	{
+		auto sphere = *(Sphere*)basicShape;
+		auto pos = GetPosition();
+		sphere.color = XMFLOAT4(1, 1, 1, 1);
+		sphere.bounding.Center = XMFLOAT3(pos.x, pos.y, pos.z);
+		DebugDraw::Draw<Sphere>(sphere, collisionGroup);
+		break;
+	}
+	}
+}
+
 /// <summary>
 /// Set rigidbody for the entity. This keeps track of the object's position and physics
 /// </summary>
@@ -163,20 +201,32 @@ void Entity::CreateRigidBody(rp3d::Vector3 position, rp3d::Quaternion orientatio
 /// Set a new collider for the entity
 /// </summary>
 /// <param name="radius">The radius of the sphere collider</param>
-void Entity::CreateSphereCollider(rp3d::decimal radius)
+void Entity::CreateSphereCollider(rp3d::decimal radius, std::string collisionGroupName)
 {
+	collisionGroup = collisionGroupName;
 	shape = new rp3d::SphereShape(radius);
 	proxyShape = rigidBody->addCollisionShape(shape, rp3d::Transform::identity(), rp3d::decimal(1.0));
+	shapeType = SPHERE;
+	auto sphere = new Sphere();
+	sphere->bounding.Center = XMFLOAT3(0, 0, 0);
+	sphere->bounding.Radius = radius;
+	basicShape = sphere;
 }
 
 /// <summary>
 /// Set a new collider for the entity
 /// </summary>
 /// <param name="halfwidths">The halfwidth for each axis of the box</param>
-void Entity::CreateBoxCollider(rp3d::Vector3 halfwidths)
+void Entity::CreateBoxCollider(rp3d::Vector3 halfwidths, std::string collisionGroupName)
 {
+	collisionGroup = collisionGroupName;
 	shape = new rp3d::BoxShape(halfwidths);
 	proxyShape = rigidBody->addCollisionShape(shape, rp3d::Transform::identity(), rp3d::decimal(1.0));
+	shapeType = BOX;
+	auto box = new Box();
+	box->bounding.Center = XMFLOAT3(0, 0, 0);
+	box->bounding.Extents = XMFLOAT3(0.5f, 0.5f, 0.5f);
+	basicShape = box;
 }
 
 /// <summary>
@@ -232,7 +282,7 @@ void Entity::SetPosition(const Vector3f& position)
 void Entity::Move(const Vector3f& offset)
 {
 	rp3d::Transform t = rigidBody->getTransform();
-	t.setPosition(rp3d::Vector3(offset.x, offset.y, offset.z)+t.getPosition());
+	t.setPosition(rp3d::Vector3(offset.x, offset.y, offset.z) + t.getPosition());
 	rigidBody->setTransform(t);
 }
 

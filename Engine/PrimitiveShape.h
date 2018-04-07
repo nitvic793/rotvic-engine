@@ -12,18 +12,20 @@ using namespace DirectX;
 
 enum PrimitiveShapesType
 {
+	UNDEFINED = -1,
 	BOX,
 	SPHERE,
 	CONE, 
 	GRID,
 	RAY,
-	FRUSTUM
+	FRUSTUM,
+	CYLINDER
 };
 
 class BasicShape
 {};
 
-struct Ray
+struct Ray : public BasicShape
 {
 	XMFLOAT4 color;
 	XMFLOAT3 origin;
@@ -31,7 +33,7 @@ struct Ray
 	XMFLOAT3 direction;
 };
 
-struct Grid 
+struct Grid  : public BasicShape
 {
 	XMFLOAT4 color;
 	XMFLOAT3 origin;
@@ -43,19 +45,19 @@ struct Grid
 	static Grid GetDefaultGrid();
 };
 
-struct Sphere 
+struct Sphere : public BasicShape
 {
 	XMFLOAT4 color;
 	BoundingSphere bounding;
 };
 
-struct Box 
+struct Box : public BasicShape
 {
 	XMFLOAT4 color;
-	BoundingBox bounding;
+	BoundingOrientedBox bounding;
 };
 
-struct Frustum 
+struct Frustum : public BasicShape
 {
 	XMFLOAT4 color;
 	BoundingFrustum bounding;

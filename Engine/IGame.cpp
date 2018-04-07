@@ -70,6 +70,7 @@ void IGame::SetPhysics(rp3d::Vector3 grav, rp3d::DynamicsWorld* world)
 {
 	this->gravity = grav;
 	this->dynamicsWorld = world;
+	world->setEventListener(&physicsEventListener);
 }
 
 /// <summary>

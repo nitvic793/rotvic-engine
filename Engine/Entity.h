@@ -8,6 +8,7 @@
 #include "EntityContextWrapper.h"
 #include "reactphysics3d.h"
 #include "Script.h"
+#include "PrimitiveShape.h"
 
 using namespace DirectX;
 
@@ -29,15 +30,20 @@ protected:
 	rp3d::ProxyShape* proxyShape;
 	rp3d::CollisionShape* shape;
 	rp3d::DynamicsWorld* dynamicsWorld;
+	BasicShape* basicShape;
+	PrimitiveShapesType shapeType;
+	std::string collisionGroup;
 public:
 	XMFLOAT4X4 GetWorldMatrix();
 	virtual void Update(float deltaTime);
 	std::vector<Script*> scripts;
 
 	rp3d::Vector3 GetPosition();
+	rp3d::Quaternion GetRotation();
 	rp3d::Vector3 GetLinearVelocity();
 	rp3d::Vector3 GetForward();
 
+	void DrawDebugShape();
 	void CreateRigidBody(rp3d::Vector3 position, rp3d::Quaternion orientation);
 	void SetContext(EntityContextWrapper context);
 	void SetPosition(const Vector3f& position);
@@ -49,10 +55,10 @@ public:
 	void SetMesh(Mesh *mesh);
 	void SetMaterial(Material *mat);
 	void SetRigidBodyParameters(bool enableGravity, rp3d::BodyType bodyType = rp3d::DYNAMIC);
-	void CreateSphereCollider(rp3d::decimal radius);
-	void Entity::CreateBoxCollider(rp3d::Vector3 halfwidths);
-	void Entity::CreateCapsuleCollider(rp3d::decimal radius, rp3d::decimal height);
-	void Entity::CreateCylinderCollider(rp3d::decimal radius, rp3d::decimal height);
+	void CreateSphereCollider(rp3d::decimal radius, std::string collisionGroupName = "default");
+	void CreateBoxCollider(rp3d::Vector3 halfwidths, std::string collisionGroupName = "default");
+	void CreateCapsuleCollider(rp3d::decimal radius, rp3d::decimal height);
+	void CreateCylinderCollider(rp3d::decimal radius, rp3d::decimal height);
 
 	XMFLOAT3 GetScale();
 	Mesh* GetMesh();

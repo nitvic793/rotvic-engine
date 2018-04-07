@@ -11,6 +11,7 @@
 #include "Lights.h"
 #include "Console.h"
 #include "reactphysics3d.h"
+#include "PhysicsEventListener.h"
 #include "Skybox.h"
 
 /// <summary>
@@ -19,6 +20,7 @@
 class IGame
 {
 protected:
+	PhysicsEventListener physicsEventListener;
 	std::vector<Entity*> vEntities;
 	std::map<std::string, Entity*> entities;
 	Keyboard *keyboard;
