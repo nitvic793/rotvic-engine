@@ -213,4 +213,9 @@ void Renderer::Draw(Skybox* sky)
 	core->GetDeviceContext()->RSSetState(sky->GetRasterizerState());
 	core->GetDeviceContext()->OMSetDepthStencilState(sky->GetDepthStencilState(), 0);
 	Draw(mesh);
+
+	//Reset pipeline
+	core->GetDeviceContext()->OMSetBlendState(0, 0, 0xFFFFFFFF);
+	core->GetDeviceContext()->OMSetDepthStencilState(0, 0);
+	core->GetDeviceContext()->RSSetState(nullptr);
 }
