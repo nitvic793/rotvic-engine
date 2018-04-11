@@ -36,6 +36,7 @@ void Keyboard::AddAction(std::string action, std::vector<Keys> keys)
 /// <returns>True if key is pressed, else false</returns>
 /// <remarks>Code referenced from SFML project https://github.com/SFML/SFML/. 
 /// Source: https://github.com/SFML/SFML/blob/5d7843c58a850b4941d7d9794d6fede2bbc02833/src/SFML/Window/Win32/InputImpl.cpp 
+/// SFML License: https://github.com/SFML/SFML/blob/master/license.md
 /// </remarks>
 bool Keyboard::IsKeyPressed(Keys key)
 {

@@ -1,4 +1,5 @@
 //Referenced from: https://github.com/Microsoft/DirectXTK/wiki/DebugDraw
+//All content and source code for DirectXTK package are subject to the terms of the MIT License (https://opensource.org/licenses/MIT).
 
 #include "DebugDraw.h"
 #include "Entity.h"
