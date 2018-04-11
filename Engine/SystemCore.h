@@ -1,4 +1,7 @@
 #pragma once
+/*
+Code referenced from Prof. Chris Cascioli DX11 Starter code - provided in class.
+*/
 
 #define NOMINMAX
 #include <Windows.h>
