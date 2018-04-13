@@ -12,6 +12,7 @@
 #include "Console.h"
 #include "reactphysics3d.h"
 #include "PhysicsEventListener.h"
+#include "PhysicsEntityMap.h"
 #include "Skybox.h"
 
 /// <summary>
@@ -20,7 +21,7 @@
 class IGame
 {
 protected:
-	PhysicsEventListener physicsEventListener;
+	PhysicsEventListener* physicsEventListener;
 	std::vector<Entity*> vEntities;
 	std::map<std::string, Entity*> entities;
 	Keyboard *keyboard;
@@ -37,6 +38,7 @@ protected:
 	rp3d::Vector3 gravity;
 	rp3d::DynamicsWorld* dynamicsWorld;
 	Skybox* skybox;
+	PhysicsEntityMap* physicsEntityMap;
 	void ClearEntities();
 	const Vector2f& GetMousePosition2D();
 	const float timeStep = 1.0 / 60.0; // Constant physics time step 
@@ -51,6 +53,7 @@ public:
 	void SetRenderer(Renderer* renderer);
 	void SetResourceManager(ResourceManager *rm);
 	void SetPhysics(rp3d::Vector3 grav, rp3d::DynamicsWorld* world);
+
 	virtual void UpdateEntities(float deltaTime);
 	virtual void Update(float) = 0;
 	virtual void Initialize() = 0;
@@ -58,6 +61,7 @@ public:
 	virtual bool Save();
 	virtual bool Load();
 	virtual std::vector<Entity*> GetEntities();
+
 	Entity* GetEntity(std::string entity);
 	void AddEntity(Entity *entity, std::string entityName);
 	Camera* GetCamera();

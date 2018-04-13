@@ -111,6 +111,12 @@ void Game::LoadLevel()
 	entity->CreateBoxCollider(rp3d::Vector3(.5, .5, .5));
 	AddEntity(entity, "Collider2");  // Collider 2
 
+	auto events = EventSystem::GetInstance();
+	events->RegisterEventCallback("Collision", entity, [&](void* args) 
+	{
+		
+	});
+
 	entity = new Entity(resource->GetMesh("sphere"), resource->GetMaterial("metal"), rp3d::Vector3(-4, 2, 1), dynamicsWorld);
 	entity->CreateSphereCollider(.5);
 	AddEntity(entity, "Gravity1");  // Gravity-laden body 1
@@ -264,6 +270,12 @@ void Game::Update(float deltaTime)
 	fr.color = XMFLOAT4(1, 1, 1, 1);
 	fr.bounding.Origin = XMFLOAT3(-4, 5, 1);
 
+	Cylinder cyl;
+	cyl.color = XMFLOAT4(1, 1, 1, 1);
+	cyl.Center = XMFLOAT4(0, 0, 0, 0);
+	cyl.Height = 1.f;
+	cyl.Radius = 0.5f;
+
 	Grid grid = Grid::GetDefaultGrid();
 	XMStoreFloat4(&grid.color, Colors::Green);
 	DebugDraw::Draw<Frustum>(fr, "Test");
@@ -271,8 +283,7 @@ void Game::Update(float deltaTime)
 	DebugDraw::Draw<Ray>(ray);
 	DebugDraw::Draw<Sphere>(sphere, "Collision");
 	DebugDraw::Draw<Grid>(grid, "Collision");
-
-
+	DebugDraw::Draw<Cylinder>(cyl, "Collision");
 
 	delayTime += deltaTime;
 	if (keyboard->IsKeyPressed(Tilde) && delayTime > 0.2f)

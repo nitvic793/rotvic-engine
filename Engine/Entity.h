@@ -37,7 +37,7 @@ public:
 	XMFLOAT4X4 GetWorldMatrix();
 	virtual void Update(float deltaTime);
 	std::vector<Script*> scripts;
-
+	rp3d::ProxyShape* GetProxyShape() const;
 	rp3d::Vector3 GetPosition();
 	rp3d::Quaternion GetRotation();
 	rp3d::Vector3 GetLinearVelocity();

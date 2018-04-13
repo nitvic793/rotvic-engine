@@ -72,6 +72,15 @@ Entity::~Entity()
 }
 
 /// <summary>
+/// Returns proxy shape associated with entity.
+/// </summary>
+/// <returns></returns>
+rp3d::ProxyShape * Entity::GetProxyShape() const
+{
+	return proxyShape;
+}
+
+/// <summary>
 /// Get current position of entity
 /// </summary>
 /// <returns>3 Float Vector of current position of entity</returns>
@@ -179,6 +188,17 @@ void Entity::DrawDebugShape()
 		DebugDraw::Draw<Sphere>(sphere, collisionGroup);
 		break;
 	}
+	case CYLINDER:
+	{
+		auto cylinder = *(Cylinder*)basicShape;
+		auto pos = GetPosition();
+		auto rot = GetRotation();
+		cylinder.color = XMFLOAT4(1, 1, 1, 1);
+		cylinder.Center = XMFLOAT4(pos.x, pos.y, pos.z, 0);
+		cylinder.Orientation = XMFLOAT4(rot.x, rot.y, rot.z, rot.w);
+		DebugDraw::Draw<Cylinder>(cylinder, collisionGroup);
+		break;
+	}
 	}
 }
 
@@ -250,6 +270,13 @@ void Entity::CreateCylinderCollider(rp3d::decimal radius, rp3d::decimal height)
 	shape = new rp3d::CylinderShape(radius, height, .001);
 	proxyShape = rigidBody->addCollisionShape(shape, rp3d::Transform::identity(), rp3d::decimal(1.0));
 	rigidBody->setAngularDamping(rp3d::decimal(1)); // 1 is maximum
+
+	shapeType = CYLINDER;
+	auto cylinder = new Cylinder();
+	cylinder->Center = XMFLOAT4(0, 0, 0, 0);
+	cylinder->Height = height;
+	cylinder->Radius = radius;
+	basicShape = cylinder;
 }
 
 /// <summary>

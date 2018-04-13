@@ -14,6 +14,7 @@
 #include "Lights.h"
 #include "Console.h"
 #include "DebugDraw.h"
+#include "EventSystem.h"
 #include "reactphysics3d.h"
 
 #pragma comment(lib, "d3d11.lib")
@@ -45,9 +46,9 @@ protected:
 	ResourceManager* resourceManager;
 	std::unique_ptr<Console> console;
 	std::unique_ptr<DebugDraw> debugDraw;
+	EventSystem* eventSystem;
 	rp3d::Vector3 gravity;
 	rp3d::DynamicsWorld* dynamicsWorld;
-
 	void RegisterConsoleCommands();
 public:
 	StateEnum GetState();

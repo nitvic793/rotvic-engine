@@ -137,6 +137,99 @@ void XM_CALLCONV DrawRay(PrimitiveBatch<VertexPositionColor>* batch,
 	batch->Draw(D3D11_PRIMITIVE_TOPOLOGY_LINESTRIP, verts, 2);
 }
 
+void XM_CALLCONV DrawCylinder(PrimitiveBatch<VertexPositionColor>* batch,
+	FXMVECTOR origin,
+	const float height,
+	const float radius,
+	CXMMATRIX matWorld,
+	FXMVECTOR color)
+{
+	XMVECTOR xaxis = g_XMIdentityR0 * radius;
+	XMVECTOR zaxis = g_XMIdentityR2 * radius;
+
+	XMVECTOR top = XMVectorAdd(origin, XMVectorSet(0, height / 2.f, 0, 0));
+	XMVECTOR leftTop = XMVectorAdd(origin, XMVectorSet(-radius, height / 2.f, 0, 0));
+	XMVECTOR rightTop = XMVectorAdd(origin, XMVectorSet(radius, height / 2.f, 0, 0));
+
+	XMVECTOR frontTop = XMVectorAdd(origin, XMVectorSet(0, height / 2.f, radius, 0));
+	XMVECTOR backTop = XMVectorAdd(origin, XMVectorSet(0, height / 2.f, -radius, 0));
+
+	XMVECTOR frontBottom = XMVectorAdd(origin, XMVectorSet(0, -(height / 2.f), radius, 0));
+	XMVECTOR backBottom = XMVectorAdd(origin, XMVectorSet(0, -(height / 2.f), -radius, 0));
+
+	XMVECTOR bottom = XMVectorAdd(origin, XMVectorSet(0, -height / 2.f, 0, 0));
+	XMVECTOR leftBottom = XMVectorAdd(origin, XMVectorSet(-radius, -height / 2.f, 0, 0));
+	XMVECTOR rightBottom = XMVectorAdd(origin, XMVectorSet(radius, -height / 2.f, 0, 0));
+
+	VertexPositionColor vertsLeft[2];
+	VertexPositionColor vertsFront[2];
+	VertexPositionColor vertsBack[2];
+	VertexPositionColor vertsRight[2];
+	VertexPositionColor vertsBottom[2];
+	VertexPositionColor vertsTop[2];
+	std::vector<VertexPositionColor> verts;
+
+	XMStoreFloat3(&vertsLeft[0].position, leftTop);
+	XMStoreFloat3(&vertsLeft[1].position, leftBottom);
+	XMStoreFloat4(&vertsLeft[0].color, color);
+	XMStoreFloat4(&vertsLeft[1].color, color);
+	verts.push_back(vertsLeft[0]);
+	verts.push_back(vertsLeft[1]);
+
+	XMStoreFloat3(&vertsTop[0].position, leftTop);
+	XMStoreFloat3(&vertsTop[1].position, rightTop);
+	XMStoreFloat4(&vertsTop[0].color, color);
+	XMStoreFloat4(&vertsTop[1].color, color);
+	verts.push_back(vertsTop[0]);
+	verts.push_back(vertsTop[1]);
+
+	XMStoreFloat3(&vertsRight[0].position, rightTop);
+	XMStoreFloat3(&vertsRight[1].position, rightBottom);
+	XMStoreFloat4(&vertsRight[0].color, color);
+	XMStoreFloat4(&vertsRight[1].color, color);
+	verts.push_back(vertsRight[0]);
+	verts.push_back(vertsRight[1]);
+
+	XMStoreFloat3(&vertsBottom[0].position, leftBottom);
+	XMStoreFloat3(&vertsBottom[1].position, rightBottom);
+	XMStoreFloat4(&vertsBottom[0].color, color);
+	XMStoreFloat4(&vertsBottom[1].color, color);
+	verts.push_back(vertsBottom[0]);
+	verts.push_back(vertsBottom[1]);
+
+	XMStoreFloat3(&vertsBack[0].position, backTop);
+	XMStoreFloat3(&vertsBack[1].position, backBottom);
+	XMStoreFloat4(&vertsBack[0].color, color);
+	XMStoreFloat4(&vertsBack[1].color, color);
+	verts.push_back(vertsBack[0]);
+	verts.push_back(vertsBack[1]);
+
+	XMStoreFloat3(&vertsFront[0].position, frontTop);
+	XMStoreFloat3(&vertsFront[1].position, frontBottom);
+	XMStoreFloat4(&vertsFront[0].color, color);
+	XMStoreFloat4(&vertsFront[1].color, color);
+	verts.push_back(vertsFront[0]);
+	verts.push_back(vertsFront[1]);
+
+	for (int i = 0; i < verts.size(); ++i)
+	{
+		XMVECTOR v = XMVector3Transform(XMLoadFloat3(&verts[i].position), matWorld);
+		XMStoreFloat3(&verts[i].position, v);
+		XMStoreFloat4(&verts[i].color, color);
+	}
+
+	static const WORD indices[] = { 0,1,2,3,4,5,6,7,8,9,10,11 };
+	//batch->DrawIndexed(D3D11_PRIMITIVE_TOPOLOGY_LINELIST, indices, 12, verts.data(), verts.size());
+	batch->Draw(D3D11_PRIMITIVE_TOPOLOGY_LINELIST, vertsLeft, 2);
+	batch->Draw(D3D11_PRIMITIVE_TOPOLOGY_LINELIST, vertsRight, 2);
+	batch->Draw(D3D11_PRIMITIVE_TOPOLOGY_LINELIST, vertsBack, 2);
+	batch->Draw(D3D11_PRIMITIVE_TOPOLOGY_LINELIST, vertsFront, 2);
+	batch->Draw(D3D11_PRIMITIVE_TOPOLOGY_LINELIST, vertsBottom, 2);
+	batch->Draw(D3D11_PRIMITIVE_TOPOLOGY_LINELIST, vertsTop, 2);
+	DrawRing(batch, top, xaxis, zaxis, color);
+	DrawRing(batch, bottom, xaxis, zaxis, color);
+}
+
 void XM_CALLCONV Draw(PrimitiveBatch<VertexPositionColor>* batch,
 	const BoundingSphere& sphere,
 	FXMVECTOR color)
@@ -205,8 +298,19 @@ void XM_CALLCONV Draw(PrimitiveBatch<VertexPositionColor>* batch,
 	XMMATRIX matWorld = XMMatrixScaling(box.Extents.x, box.Extents.y, box.Extents.z);
 	XMVECTOR position = XMLoadFloat3(&box.Center);
 	matWorld.r[3] = XMVectorSelect(matWorld.r[3], position, g_XMSelect1110);
-
 	DrawCube(batch, matWorld, color);
+}
+
+void XM_CALLCONV Draw(PrimitiveBatch<VertexPositionColor>* batch,
+	const Cylinder& cylinder)
+{
+	XMVECTOR position = XMLoadFloat4(&cylinder.Center);
+	XMMATRIX matWorld = XMMatrixRotationQuaternion(XMLoadFloat4(&cylinder.Orientation));
+	//XMMATRIX transform = XMMatrixTranslationFromVector(position);
+	//matWorld = XMMatrixMultiply(matWorld, transform);
+	
+	//matWorld.r[3] = XMVectorSelect(matWorld.r[3], position, g_XMSelect1110);
+	DrawCylinder(batch, XMLoadFloat4(&cylinder.Center), cylinder.Height, cylinder.Radius, matWorld, XMLoadFloat4(&cylinder.color));
 }
 
 
@@ -349,6 +453,14 @@ void DebugDraw::Draw(Frustum shape, std::string group)
 		frustums.push(shape);
 }
 
+void DebugDraw::Draw(Cylinder shape, std::string group)
+{
+	if (IsGroupEnabled(group))
+	{
+		cylinders.push(shape);
+	}
+}
+
 void DebugDraw::Render(Camera* camera)
 {
 	auto context = core->GetDeviceContext();
@@ -443,6 +555,13 @@ void DebugDraw::Render(Camera* camera)
 		auto shape = frustums.front();
 		frustums.pop();
 		::Draw(batch.get(), shape.bounding, XMLoadFloat4(&shape.color));
+	}
+
+	while (!cylinders.empty())
+	{
+		auto shape = cylinders.front();
+		cylinders.pop();
+		::Draw(batch.get(), shape);
 	}
 
 	//DrawGrid(batch.get(), XMVectorSet(100, 0, 0, 0), XMVectorSet(0, 0, 100, 0), XMVectorSet(0, -3, 0, 0), 100, 100, Colors::Green);

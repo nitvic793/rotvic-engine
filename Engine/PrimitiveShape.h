@@ -63,6 +63,16 @@ struct Frustum : public BasicShape
 	BoundingFrustum bounding;
 };
 
+struct Cylinder : public BasicShape
+{
+	XMFLOAT4 color;
+	float Radius;
+	float Height;
+	XMFLOAT4 Center;
+	//Quaternion rotation 
+	XMFLOAT4 Orientation;
+};
+
 class PrimitiveShape
 {
 	void Initialize(VertexColor *vertices, UINT vertexCount, UINT *indices, UINT indexCount, ID3D11Device* device);

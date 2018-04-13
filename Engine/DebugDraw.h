@@ -40,11 +40,12 @@ class DebugDraw
 	SystemCore *core;
 
 	//Primitive items draw queue
-	std::queue<Ray>		rays;
-	std::queue<Grid>	grids;
-	std::queue<Box>		boxes;
-	std::queue<Sphere>	spheres;
-	std::queue<Frustum> frustums;
+	std::queue<Ray>			rays;
+	std::queue<Grid>		grids;
+	std::queue<Box>			boxes;
+	std::queue<Sphere>		spheres;
+	std::queue<Frustum>		frustums;
+	std::queue<Cylinder>	cylinders;
 
 	std::map<std::string, bool> groups;
 	std::queue<DrawCallPayLoad> drawCalls;
@@ -114,6 +115,13 @@ public:
 	/// <param name="shape"></param>
 	/// <param name="group">Group name to associate this shape with.</param>
 	void Draw(Frustum shape, std::string group = "default");
+
+	/// <summary>
+	/// Draws a cylinder according to given paramters. Will not be drawn if group is disabled
+	/// </summary>
+	/// <param name="shape"></param>
+	/// <param name="group">Group name to associate this shape with.</param>
+	void Draw(Cylinder shape, std::string group = "default");
 
 	/// <summary>
 	/// Renders all queued up draw calls to the screen.

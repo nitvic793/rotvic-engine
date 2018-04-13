@@ -130,6 +130,7 @@
     <ClInclude Include="Engine.h" />
     <ClInclude Include="Entity.h" />
     <ClInclude Include="EntityContextWrapper.h" />
+    <ClInclude Include="EventSystem.h" />
     <ClInclude Include="FileBuffer.h" />
     <ClInclude Include="FirstPersonCamera.h" />
     <ClInclude Include="IFileLoader.h" />
@@ -142,6 +143,7 @@
     <ClInclude Include="Mesh.h" />
     <ClInclude Include="MeshLoader.h" />
     <ClInclude Include="Mouse.h" />
+    <ClInclude Include="PhysicsEntityMap.h" />
     <ClInclude Include="PhysicsEventListener.h" />
     <ClInclude Include="PrimitiveShape.h" />
     <ClInclude Include="Rect.h" />
@@ -168,6 +170,7 @@
     <ClCompile Include="CoreGame.cpp" />
     <ClCompile Include="DebugDraw.cpp" />
     <ClCompile Include="Entity.cpp" />
+    <ClCompile Include="EventSystem.cpp" />
     <ClCompile Include="FileBuffer.cpp" />
     <ClCompile Include="FirstPersonCamera.cpp" />
     <ClCompile Include="IGame.cpp" />
@@ -177,6 +180,7 @@
     <ClCompile Include="Mesh.cpp" />
     <ClCompile Include="MeshLoader.cpp" />
     <ClCompile Include="Mouse.cpp" />
+    <ClCompile Include="PhysicsEntityMap.cpp" />
     <ClCompile Include="PhysicsEventListener.cpp" />
     <ClCompile Include="PrimitiveShape.cpp" />
     <ClCompile Include="Rect.cpp" />

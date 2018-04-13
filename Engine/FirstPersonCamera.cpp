@@ -57,7 +57,7 @@ void FirstPersonCamera::OnMouseMove(WPARAM wParam, int x, int y)
 	rotationX += deltaY * 0.6f * XM_PI / 180;
 	if (rotationX >= XM_PI / 2) rotationX = XM_PI / 2;
 	if (rotationX <= -XM_PI /2) rotationX = -XM_PI/2;
-	printf("%f %f\n", rotationX * 180/XM_PI, rotationY * 180 / XM_PI);
+
 	mousePrevX = x;
 	mousePrevY = y;
 }

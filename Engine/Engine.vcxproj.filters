@@ -58,6 +58,12 @@
     <Filter Include="Source Files\Debug">
       <UniqueIdentifier>{47848865-25fc-4cc5-babf-3763c7e03b38}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Physics">
+      <UniqueIdentifier>{43917f2e-e435-4458-8486-b641a420b804}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Physics">
+      <UniqueIdentifier>{353c597c-4beb-422d-ab15-9a0024793754}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine.h">
@@ -175,7 +181,13 @@
       <Filter>Header Files\CoreTypes</Filter>
     </ClInclude>
     <ClInclude Include="PhysicsEventListener.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="PhysicsEntityMap.h">
+      <Filter>Header Files\Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="EventSystem.h">
+      <Filter>Header Files\Management</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -267,7 +279,13 @@
       <Filter>Source Files\CoreTypes</Filter>
     </ClCompile>
     <ClCompile Include="PhysicsEventListener.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="PhysicsEntityMap.cpp">
+      <Filter>Source Files\Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="EventSystem.cpp">
+      <Filter>Source Files\Management</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -70,7 +70,10 @@ void IGame::SetPhysics(rp3d::Vector3 grav, rp3d::DynamicsWorld* world)
 {
 	this->gravity = grav;
 	this->dynamicsWorld = world;
-	world->setEventListener(&physicsEventListener);
+	physicsEventListener = new PhysicsEventListener();
+	physicsEntityMap = new PhysicsEntityMap();
+	physicsEventListener->SetEntityMap(physicsEntityMap);
+	world->setEventListener(physicsEventListener);
 }
 
 /// <summary>
@@ -157,6 +160,8 @@ void IGame::AddEntity(Entity *entity, std::string entityName)
 {
 	entities.insert(std::pair<std::string, Entity*>(entityName, entity));
 	vEntities.push_back(entity);
+	auto shape = entity->GetProxyShape();
+	physicsEntityMap->Insert(shape, entity);
 }
 
 Camera* IGame::GetCamera()

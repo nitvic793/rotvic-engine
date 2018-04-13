@@ -37,6 +37,7 @@ bool CoreGame::Initialize(HINSTANCE hInstance, int nCmdShow)
 	Core->BindMouse(mouse);
 	resourceManager->LoadResources(config, Core);
 	debugDraw = std::unique_ptr<DebugDraw>(new DebugDraw(Core));
+	eventSystem = new EventSystem();
 	RegisterConsoleCommands();
 	return true;
 }
@@ -129,6 +130,7 @@ CoreGame::~CoreGame()
 	if (mouse) delete mouse;
 	if (resourceManager) delete resourceManager;
 	if (dynamicsWorld) delete dynamicsWorld;
+	if (eventSystem) delete eventSystem;
 }
 
 /// <summary>
