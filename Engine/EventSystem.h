@@ -3,7 +3,21 @@
 #include <functional>
 #include <string>
 #include <map>
+#include <queue>
 #include "Entity.h"
+
+enum EventUpdateType
+{
+	GENERIC,
+	PHYSICS
+};
+
+struct EventArgs
+{
+	std::string eventType;
+	void* instance;
+	void* args;
+};
 
 /// <summary>
 /// The event system
@@ -11,7 +25,9 @@
 class EventSystem
 {
 	static EventSystem* instance;
-	std::map <std::string, std::map<void*, std::function<void(void*)>>> eventMap;
+	std::unordered_map<std::string, std::map<void*, std::function<void(void*)>>> eventMap;
+	std::unordered_map<EventUpdateType, std::queue<EventArgs>> eventQueue;
+	void EmitEvent(std::string eventType, void* args = nullptr, void* instance = nullptr);
 public:
 	/// <summary>
 	/// Get instance of event system.
@@ -34,7 +50,12 @@ public:
 	/// <param name="args">Arguments to pass to callback</param>
 	/// <param name="instance">Instance to refer for callback function.</param>
 	/// <remarks>Instances are used to map event type with given callback function.</remarks>
-	void EmitEvent(std::string eventType, void* args = nullptr, void* instance = nullptr);
+	void EmitEventImmediate(std::string eventType, void* args = nullptr, void* instance = nullptr);
+
+	void EmitEventQueued(std::string eventType, EventUpdateType update, void* args = nullptr, void* instance = nullptr);
+
+	void ProcessQueuedEvents(EventUpdateType updateType);
+
 	EventSystem();
 	~EventSystem();
 };

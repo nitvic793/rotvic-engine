@@ -199,6 +199,7 @@ void CoreGame::Run()
 	startTime = now;
 	currentTime = now;
 	previousTime = now;
+	auto events = EventSystem::GetInstance();
 	try
 	{
 		Core->Run([&]()
@@ -209,11 +210,12 @@ void CoreGame::Run()
 			case Running:
 			{
 				ClearScreen();
-				if (console->enabled)console->Update(deltaTime);
-				gameInstance->GetCamera()->Update(deltaTime);
-				gameInstance->Update(deltaTime);
-				gameInstance->UpdateEntities(deltaTime);
-				Draw();
+				if (console->enabled)console->Update(deltaTime); //Update console if console is enabled.
+				events->ProcessQueuedEvents(GENERIC); // Process all generic events
+				gameInstance->GetCamera()->Update(deltaTime); //Update game's current active camera
+				gameInstance->Update(deltaTime); //Call update of game instance itself
+				gameInstance->UpdateEntities(deltaTime); //Update all entities of game instance
+				Draw(); //Render scene
 				break;
 			}
 			case Quit:

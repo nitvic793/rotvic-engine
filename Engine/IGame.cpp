@@ -1,6 +1,5 @@
 #include "IGame.h"
-
-
+#include "EventSystem.h"
 
 IGame::IGame()
 {
@@ -137,18 +136,22 @@ void IGame::SetResourceManager(ResourceManager* rm)
 /// <param name="deltaTime">The delta time between frames</param>
 void IGame::UpdateEntities(float deltaTime)
 {
-	for (auto entity : entities) {
-		entity.second->Update(deltaTime);
-	}
-
-	physicsTimer += deltaTime; // Track time
-
 	while (physicsTimer >= timeStep) { // Catch phyics up to time elapsed between frames
 
 		dynamicsWorld->update(timeStep); // Update the Dynamics world using the constant time step (1/60)
 
 		physicsTimer -= timeStep; // Reset time difference
+
+		auto events = EventSystem::GetInstance();
+		events->ProcessQueuedEvents(PHYSICS);
 	}
+
+	for (auto entity : entities) {
+		entity.second->Update(deltaTime);
+	}
+
+	physicsTimer += deltaTime; // Track time
+	
 }
 
 /// <summary>
