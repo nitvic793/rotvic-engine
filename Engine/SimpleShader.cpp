@@ -1,3 +1,7 @@
+/// <summary>
+/// By Chris Cascioli, Professor@RIT. cdccis@rit.edu
+/// </summary>
+/// 
 #include "SimpleShader.h"
 
 ///////////////////////////////////////////////////////////////////////////////

@@ -1,3 +1,7 @@
+/// <summary>
+/// By Chris Cascioli, Professor@RIT. cdccis@rit.edu
+/// </summary>
+
 #pragma once
 #pragma comment(lib, "dxguid.lib")
 #pragma comment(lib, "d3dcompiler.lib")

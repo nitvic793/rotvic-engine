@@ -114,7 +114,7 @@ void Game::LoadLevel()
 	auto events = EventSystem::GetInstance();
 	events->RegisterEventCallback("Collision", entity, [&](void* args) 
 	{
-		
+
 	});
 
 	entity = new Entity(resource->GetMesh("sphere"), resource->GetMaterial("metal"), rp3d::Vector3(-4, 2, 1), dynamicsWorld);
