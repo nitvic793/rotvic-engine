@@ -1,4 +1,3 @@
-
 #include "FBXLoader.h"
 
 #ifdef IOS_REF
