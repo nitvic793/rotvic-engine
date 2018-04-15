@@ -189,6 +189,9 @@
     <ClInclude Include="EventSystem.h">
       <Filter>Header Files\Management</Filter>
     </ClInclude>
+    <ClInclude Include="FBXLoader.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CoreGame.cpp">
@@ -286,6 +289,9 @@
     </ClCompile>
     <ClCompile Include="EventSystem.cpp">
       <Filter>Source Files\Management</Filter>
+    </ClCompile>
+    <ClCompile Include="FBXLoader.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
