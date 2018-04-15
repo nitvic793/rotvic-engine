@@ -290,9 +290,6 @@
     <ClCompile Include="EventSystem.cpp">
       <Filter>Source Files\Management</Filter>
     </ClCompile>
-    <ClCompile Include="FBXLoader.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="VertexShader.hlsl">
