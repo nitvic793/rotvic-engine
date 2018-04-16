@@ -126,14 +126,14 @@ void Game::LoadLevel()
 	entity->CreateBoxCollider(rp3d::Vector3(.5, .5, .5));
 	AddEntity(entity, "Gravity2");  // Gavrity-laden body 2
 	entity->SetRigidBodyParameters(true);
-
+/*
 	auto terrain = new Terrain(core, dynamicsWorld);
 	terrain->Initialize("../../Assets/Terrain/heightmap.bmp");
 	terrain->SetMaterial(resource->GetMaterial("grass"));
 	terrain->SetPosition(-70, -12, -10);
-	AddEntity(terrain, "Terrain");
+	AddEntity(terrain, "Terrain");*/
 
-	terrain = new Terrain(core, dynamicsWorld);
+	auto terrain = new Terrain(core, dynamicsWorld);
 	terrain->SetMaterial(resource->GetMaterial("grass"));
 	terrain->_temp_Init();
 	AddEntity(terrain, "Terrain2");
