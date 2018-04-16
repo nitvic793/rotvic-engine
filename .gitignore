@@ -265,3 +265,5 @@ __pycache__/
 !Assets/Models/*.obj
 !Physics/reactphysics3d.pdb
 !Physics/reactphysics3d.lib
+!FBXSDK/lib/libfbxsdk.lib
+!FBXSDK/lib/libfbxsdk.pdb
