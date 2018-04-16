@@ -55,6 +55,16 @@ void SystemRenderer::SetShaders(Entity *entity, Camera *camera, LightsMap lights
 	pixelShader->SetShader();
 }
 
+void SystemRenderer::SetShadersAndDrawAnimated(Entity * entity, Camera * camera, LightsMap lights, ID3D11DeviceContext * context)
+{
+	UINT stride = sizeof(VertexAnimated);
+	UINT offset = 0;
+	auto vertexBuffer = entity->GetMesh()->GetVertexBuffer();
+	context->IASetVertexBuffers(0, 1, &vertexBuffer, &stride, &offset);
+	context->IASetIndexBuffer(entity->GetMesh()->GetIndexBuffer(), DXGI_FORMAT_R32_UINT, 0);
+	context->DrawIndexed(entity->GetMesh()->GetIndexCount(), 0, 0);
+}
+
 /// <summary>
 /// Renderer class constructor.
 /// </summary>

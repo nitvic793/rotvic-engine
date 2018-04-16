@@ -29,5 +29,6 @@ public:
 	void CalculateTangents(Vertex *vertices, UINT vertexCount, UINT *indices, UINT indexCount);
 	UINT GetIndexCount();
 	void Mesh::Initialize(Vertex *vertices, UINT vertexCount, UINT *indices, UINT indexCount);
+	Mesh::Mesh(VertexAnimated *vertices, UINT vertexCount, UINT *indices, UINT indexCount, ID3D11Device *Device); // For animation only
 };
 

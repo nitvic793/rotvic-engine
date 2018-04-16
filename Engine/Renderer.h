@@ -15,6 +15,7 @@ class SystemRenderer {
 public:
 	virtual void Draw(Mesh *mesh, ID3D11DeviceContext *context);
 	virtual void SetShaders(Entity *entity, Camera* camera, LightsMap lights);
+	void SetShadersAndDrawAnimated(Entity *entity, Camera* camera, LightsMap lights, ID3D11DeviceContext *context);
 };
 
 /// <summary>

@@ -212,7 +212,7 @@ void FBXLoader::LoadNodes(FbxNode* node, ID3D11Device* device)
 }
 
 
-std::shared_ptr<Mesh> FBXLoader::GetMesh(FbxNode * node , ID3D11Device* device)
+Mesh* FBXLoader::GetMesh(FbxNode * node , ID3D11Device* device)
 {
 	FbxString name1 = node->GetName();
 	
@@ -221,14 +221,14 @@ std::shared_ptr<Mesh> FBXLoader::GetMesh(FbxNode * node , ID3D11Device* device)
 
 	if(node->GetNodeAttribute()->GetAttributeType() == FbxNodeAttribute::eMesh)
 	{ 
-		std::vector<Vertex> vertices;        
+		std::vector<VertexAnimated> vertices;        
 		std::vector<unsigned int> indices;
 
 		FbxMesh* fbxMesh = (FbxMesh*)node->GetNodeAttribute();
 		FbxVector4* controlPoints = fbxMesh->GetControlPoints();
 		//int vertCounter = 0;
-		int vertexCount = fbxMesh->GetControlPointsCount();
-		Vertex v;
+		unsigned int vertexCount = fbxMesh->GetControlPointsCount();
+		VertexAnimated v;
 
 		for (int i = 0; i < vertexCount; i++)
 		{
@@ -236,7 +236,7 @@ std::shared_ptr<Mesh> FBXLoader::GetMesh(FbxNode * node , ID3D11Device* device)
 			v.Position.x = (float)controlPoints[i].mData[0];
 			v.Position.y = (float)controlPoints[i].mData[1];
 			v.Position.z = (float)controlPoints[i].mData[2];
-			v.Position.w = 1;
+			//v.Position.w = 1;
 			v.Normal = XMFLOAT3(0, 0, 0);
 
 
@@ -254,7 +254,7 @@ std::shared_ptr<Mesh> FBXLoader::GetMesh(FbxNode * node , ID3D11Device* device)
 
 		int polygonCount = fbxMesh->GetPolygonCount();
 		int polygonSize = fbxMesh->GetPolygonSize(0);
-		int indexCount = polygonCount * polygonSize;
+		unsigned int indexCount = polygonCount * polygonSize;
 
 
 		for (int i = 0; i < fbxMesh->GetPolygonCount(); i++)
@@ -473,9 +473,10 @@ std::shared_ptr<Mesh> FBXLoader::GetMesh(FbxNode * node , ID3D11Device* device)
 		}
 	
 		
-		std::shared_ptr<Mesh> M(new Mesh(&vertices[0], vertexCount, &indices[0], indexCount, device));
+		//std::shared_ptr<Mesh> M(new Mesh(&vertices[0], vertexCount, &indices[0], indexCount, device));
 
-		return(M);
+
+		return(new Mesh(&vertices[0], vertexCount, &indices[0], indexCount,device));
 	}
 	else
 		return(NULL);

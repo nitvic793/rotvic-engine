@@ -15,3 +15,11 @@ struct VertexColor
 	DirectX::XMFLOAT3 Position;	    // The position of the vertex
 	DirectX::XMFLOAT4 Color;
 };
+
+struct VertexAnimated
+{
+	DirectX::XMFLOAT3 Position;	    // The position of the vertex
+	DirectX::XMFLOAT3 Normal;
+	DirectX::XMFLOAT4 Boneids;
+	DirectX::XMFLOAT4 Weights;
+};
