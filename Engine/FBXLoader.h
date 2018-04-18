@@ -35,12 +35,7 @@ public:
 
 	~Joint()
 	{
-		while (mAnimation)
-		{
-			Keyframe* temp = mAnimation->mNext;
-			delete mAnimation;
-			mAnimation = temp;
-		}
+
 	}
 };
 

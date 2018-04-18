@@ -1,5 +1,5 @@
 #include "Renderer.h"
-#include "ResourceManager.h"
+
 
 /// <summary>
 /// Draw given mesh object. 
@@ -55,8 +55,53 @@ void SystemRenderer::SetShaders(Entity *entity, Camera *camera, LightsMap lights
 	pixelShader->SetShader();
 }
 
-void SystemRenderer::SetShadersAndDrawAnimated(Entity * entity, Camera * camera, LightsMap lights, ID3D11DeviceContext * context)
+void Renderer::SetShadersAndDrawAnimated(Entity * entity, Camera * camera, LightsMap lights ,ID3D11DeviceContext * context)
 {
+	auto material = entity->GetMaterial();
+	auto pixelShader = material->GetPixelShader();
+	auto vertexShader = material->GetVertexShader();
+	vertexShader->SetMatrix4x4("world", entity->GetWorldMatrix());
+	vertexShader->SetMatrix4x4("view", camera->GetViewMatrix());
+	vertexShader->SetMatrix4x4("projection", camera->GetProjectionMatrix());
+
+	int bonesSize = 0;
+	bonesSize = (sizeof(XMFLOAT4X4) * 20 * 2);
+	Bones bones[20];
+	int numBones = resourceManager->fbxLoader.skeleton.mJoints.size();
+
+	resourceManager->fbxLoader.GetAnimatedMatrixExtra();
+
+	for (int i = 0; i < numBones; i++)
+	{
+
+		XMMATRIX jointTransformMatrix = XMLoadFloat4x4(&resourceManager->fbxLoader.skeleton.mJoints[i].mTransform);
+		XMMATRIX invJointTransformMatrix = XMLoadFloat4x4(&resourceManager->fbxLoader.skeleton.mJoints[i].mGlobalBindposeInverse);
+
+		XMFLOAT4X4 trans = {};
+		XMStoreFloat4x4(&trans, XMMatrixTranspose(jointTransformMatrix));
+		bones[i].BoneTransform = trans;
+		XMFLOAT4X4 trans2 = {};
+		XMStoreFloat4x4(&trans2, XMMatrixTranspose(invJointTransformMatrix));
+		bones[i].InvBoneTransform = trans2;
+	}
+	vertexShader->SetData("bones", &bones, bonesSize);
+
+
+	for (auto lightPair : lights)
+	{
+		auto light = lightPair.second;
+		switch (light->Type)
+		{
+		case Directional:
+			pixelShader->SetData("light1", light->GetLight<DirectionalLight>(), sizeof(DirectionalLight));
+			break;
+		}
+	}
+	vertexShader->CopyAllBufferData();
+	pixelShader->CopyAllBufferData();
+	vertexShader->SetShader();
+	pixelShader->SetShader();
+
 	UINT stride = sizeof(VertexAnimated);
 	UINT offset = 0;
 	auto vertexBuffer = entity->GetMesh()->GetVertexBuffer();
@@ -97,6 +142,11 @@ Renderer::Renderer(SystemCore* core, int width, int height)
 Renderer::~Renderer()
 {
 	delete internalRenderer;
+}
+
+void Renderer::GetResourceManager(ResourceManager * rm)
+{
+	resourceManager = rm;
 }
 
 /// <summary>
@@ -200,8 +250,14 @@ void Renderer::Draw(Entity *entity)
 	if (entity == nullptr) {
 		throw std::exception("Null Mesh");
 	}
-	internalRenderer->SetShaders(entity, camera, lights);
-	Draw(entity->GetMesh());
+	if (!entity->isAnimated)
+	{
+		internalRenderer->SetShaders(entity, camera, lights);
+		Draw(entity->GetMesh());
+	}
+	else
+		SetShadersAndDrawAnimated(entity, camera, lights, core->GetDeviceContext());
+	
 	core->Draw();
 }
 

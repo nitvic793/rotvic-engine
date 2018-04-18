@@ -18,8 +18,8 @@ struct VertexColor
 
 struct VertexAnimated
 {
-	DirectX::XMFLOAT3 Position;	    // The position of the vertex
+	DirectX::XMFLOAT4 Position;	    // The position of the vertex
 	DirectX::XMFLOAT3 Normal;
-	DirectX::XMFLOAT4 Boneids;
-	DirectX::XMFLOAT4 Weights;
+	DirectX::XMFLOAT4 Boneids{0,0,0,0};
+	DirectX::XMFLOAT4 Weights{0,0,0,0};
 };

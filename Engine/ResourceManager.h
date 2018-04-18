@@ -4,6 +4,7 @@
 #include "ConfigLoader.h"
 #include "WICTextureLoader.h"
 #include <map>
+#include "FBXLoader.h"
 
 typedef std::map<std::string, SimpleVertexShader*> VertexShaderMap;
 typedef std::map<std::string, SimplePixelShader*> PixelShaderMap;
@@ -27,6 +28,9 @@ public:
 	ID3D11SamplerState *sampler;
 	VertexShaderMap vertexShaders;
 	PixelShaderMap pixelShaders;
+	FBXLoader fbxLoader;
+	SimpleVertexShader *vertexShaderAnimated;
+	SimplePixelShader *pixelShaderAnimated;
 
 	/// <summary>
 	/// Loads resources based on given config data.

@@ -41,6 +41,14 @@ Entity::Entity(Mesh *m, Material* mat, rp3d::Vector3 position, rp3d::DynamicsWor
 {
 }
 
+Entity::Entity(Mesh * m, Material * mat)
+{
+	mesh = m;
+	material = mat;
+}
+
+
+
 /// <summary>
 /// Gets the world matrix of entity
 /// </summary>

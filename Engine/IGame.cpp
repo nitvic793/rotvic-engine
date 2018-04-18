@@ -128,6 +128,7 @@ void IGame::SetRenderer(Renderer * renderer)
 void IGame::SetResourceManager(ResourceManager* rm)
 {
 	this->resource = rm;
+	this->renderer->GetResourceManager(rm);
 }
 
 /// <summary>

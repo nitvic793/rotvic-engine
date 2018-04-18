@@ -66,6 +66,9 @@ public:
 	Entity(rp3d::DynamicsWorld* physicsWorld, std::vector<Script*> pScripts = std::vector<Script*>());
 	Entity(Mesh *m, Material* mat, rp3d::Vector3 position, rp3d::Quaternion orientation, rp3d::DynamicsWorld* physicsWorld, std::vector<Script*> pScripts = std::vector<Script*>());
 	Entity(Mesh *m, Material* mat, rp3d::Vector3 position, rp3d::DynamicsWorld* physicsWorld, std::vector<Script*> pScripts = std::vector<Script*>());
+	Entity(Mesh *m, Material* mat);
 	virtual ~Entity();
+
+	bool isAnimated = false;
 };
 

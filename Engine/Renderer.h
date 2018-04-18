@@ -6,6 +6,8 @@
 #include "Camera.h"
 #include "Lights.h"
 #include "Skybox.h"
+#include "ResourceManager.h"
+#include "FBXLoader.h"
 
 /// <summary>
 /// Internal render class to abstract the draw calls. 
@@ -15,7 +17,7 @@ class SystemRenderer {
 public:
 	virtual void Draw(Mesh *mesh, ID3D11DeviceContext *context);
 	virtual void SetShaders(Entity *entity, Camera* camera, LightsMap lights);
-	void SetShadersAndDrawAnimated(Entity *entity, Camera* camera, LightsMap lights, ID3D11DeviceContext *context);
+	
 };
 
 /// <summary>
@@ -29,6 +31,7 @@ class Renderer
 	XMFLOAT4X4		projectionMatrix;
 	Camera*			camera;
 	LightsMap		lights;
+	ResourceManager *resourceManager;
 public:
 	virtual SystemRenderer* GetInternalRenderer();
 	virtual void			Draw(Mesh *mesh);
@@ -49,5 +52,8 @@ public:
 	int	screenWidth;
 	Renderer(SystemCore* core, int width = DEFAULT_WIDTH, int height = DEFAULT_HEIGHT);
 	~Renderer();
+
+	void					GetResourceManager(ResourceManager *);
+	void					SetShadersAndDrawAnimated(Entity *entity, Camera* camera, LightsMap lights, ID3D11DeviceContext *context);
 };
 

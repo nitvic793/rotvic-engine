@@ -55,6 +55,14 @@ void ResourceManager::LoadResources(ConfigMap config, SystemCore* core)
 	skyPS->LoadShaderFile(L"SkyPS.cso");
 	pixelShaders.insert(PixelShaderMapType("sky", skyPS));
 
+	vertexShaderAnimated = new SimpleVertexShader(device, context);
+	vertexShaderAnimated->LoadShaderFile(L"AnimationVS.cso");
+	vertexShaders.insert(VertexShaderMapType("man", vertexShaderAnimated));
+
+	pixelShaderAnimated = new SimplePixelShader(device, context);
+	pixelShaderAnimated->LoadShaderFile(L"AnimationPS.cso");
+	pixelShaders.insert(PixelShaderMapType("man", pixelShaderAnimated));
+
 	Material *material = nullptr;
 	ID3D11ShaderResourceView *srv = nullptr;
 	ID3D11ShaderResourceView *normalSrv = nullptr;
@@ -104,6 +112,19 @@ void ResourceManager::LoadResources(ConfigMap config, SystemCore* core)
 	meshes.insert(std::pair<std::string, Mesh*>("cube", new Mesh("../../Assets/Models/cube.obj", core)));
 	meshes.insert(std::pair<std::string, Mesh*>("helix", new Mesh("../../Assets/Models/helix.obj", core)));
 	meshes.insert(std::pair<std::string, Mesh*>("torus", new Mesh("../../Assets/Models/torus.obj", core)));
+	
+
+	// Animated data
+	fbxLoader.LoadNodes(fbxLoader.scene->GetRootNode(), device);
+	int numChildren = fbxLoader.scene->GetRootNode()->GetChildCount();
+	FbxNode* childNode = fbxLoader.scene->GetRootNode()->GetChild(0);
+	FbxString name1 = childNode->GetName();
+
+	
+
+	meshes.insert(std::pair<std::string, Mesh*>("man", fbxLoader.GetMesh(childNode, device)));
+	material = new Material(core, vertexShaderAnimated, pixelShaderAnimated, nullptr, nullptr, nullptr);
+	materials.insert(std::pair<std::string, Material*>("man", material));
 }
 
 Mesh * ResourceManager::GetMesh(std::string meshName)

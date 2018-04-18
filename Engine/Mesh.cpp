@@ -175,8 +175,10 @@ Mesh::Mesh(const char *objFile, SystemCore *core)
 }
 
 
-Mesh::Mesh(VertexAnimated * vertices, UINT vertexCount, UINT * indices, UINT indexCount, ID3D11Device * Device)
+Mesh::Mesh(VertexAnimated * verticesAnim, UINT vertexCount, UINT * indices, UINT indexCountAnim, ID3D11Device * Device)
 {
+	indexCount = indexCountAnim;
+	
 	//Vertex Buffer Creation
 
 	D3D11_BUFFER_DESC vbd;
@@ -188,7 +190,7 @@ Mesh::Mesh(VertexAnimated * vertices, UINT vertexCount, UINT * indices, UINT ind
 	vbd.StructureByteStride = 0;
 
 	D3D11_SUBRESOURCE_DATA initialVertexData;
-	initialVertexData.pSysMem = &vertices[0];
+	initialVertexData.pSysMem = verticesAnim;
 
 	Device->CreateBuffer(&vbd, &initialVertexData, &vertexBuffer);
 
@@ -205,7 +207,7 @@ Mesh::Mesh(VertexAnimated * vertices, UINT vertexCount, UINT * indices, UINT ind
 
 
 	D3D11_SUBRESOURCE_DATA initialIndexData;
-	initialIndexData.pSysMem = &indices[0];
+	initialIndexData.pSysMem = indices;
 
 	Device->CreateBuffer(&ibd, &initialIndexData, &indexBuffer);
 }

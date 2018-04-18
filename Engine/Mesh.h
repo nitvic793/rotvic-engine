@@ -20,6 +20,7 @@ protected:
 	int indexCount;
 	ID3D11Buffer *vertexBuffer = nullptr;
 	ID3D11Buffer *indexBuffer = nullptr;
+	VertexAnimated *verticesAnim;
 public:
 	Mesh(SystemCore* core);
 	Mesh::Mesh(const char *objFile, SystemCore* core);
@@ -29,6 +30,6 @@ public:
 	void CalculateTangents(Vertex *vertices, UINT vertexCount, UINT *indices, UINT indexCount);
 	UINT GetIndexCount();
 	void Mesh::Initialize(Vertex *vertices, UINT vertexCount, UINT *indices, UINT indexCount);
-	Mesh::Mesh(VertexAnimated *vertices, UINT vertexCount, UINT *indices, UINT indexCount, ID3D11Device *Device); // For animation only
+	Mesh::Mesh(VertexAnimated *vertices, UINT vertexCount, UINT *indices, UINT indexCountAnim, ID3D11Device *Device); // For animation only
 };
 

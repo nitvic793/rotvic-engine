@@ -71,6 +71,12 @@ void Game::LoadLevel()
 	console->WriteLine(L"Level loaded");
 
 	/* Add Entitites */
+	auto entity = new Entity(resource->GetMesh("man"), resource->GetMaterial("man"), rp3d::Vector3(0, 0, 5), dynamicsWorld);
+	entity->isAnimated = true;
+	entity->SetScale(0.03,0.03,0.03);
+	entity->SetRotation(0, 3.14, 0);
+	AddEntity(entity, "man");
+
 	{auto entity = new Entity(resource->GetMesh("cylinder"), resource->GetMaterial("metal"), rp3d::Vector3(2, 0, 0), dynamicsWorld, { new Flocker() });
 	entity->CreateCylinderCollider(.5, 1);
 	AddEntity(entity, "Flocker1");  // Flocker 1
@@ -102,7 +108,7 @@ void Game::LoadLevel()
 	dynamic_cast<Flocker*>(entities["Flocker5"]->scripts[0])->Init(entities["Flocker5"], camera, &centroidForward, &centroidPosition, &entities);
 	}
 
-	auto entity = new Entity(resource->GetMesh("sphere"), resource->GetMaterial("metal"), rp3d::Vector3(5, 5, 0), dynamicsWorld);
+	entity = new Entity(resource->GetMesh("sphere"), resource->GetMaterial("metal"), rp3d::Vector3(5, 5, 0), dynamicsWorld);
 	entity->CreateSphereCollider(.5);
 	AddEntity(entity, "Collider1");  // Collider 1
 	//entity->SetRigidBodyParameters(true); 
@@ -110,6 +116,8 @@ void Game::LoadLevel()
 	entity = new Entity(resource->GetMesh("cube"), resource->GetMaterial("metal"), rp3d::Vector3(7, 5, 0), dynamicsWorld);
 	entity->CreateBoxCollider(rp3d::Vector3(.5, .5, .5));
 	AddEntity(entity, "Collider2");  // Collider 2
+
+	
 
 	auto events = EventSystem::GetInstance();
 	events->RegisterEventCallback("Collision", entity, [&](void* args) 
@@ -126,6 +134,8 @@ void Game::LoadLevel()
 	entity->CreateBoxCollider(rp3d::Vector3(.5, .5, .5));
 	AddEntity(entity, "Gravity2");  // Gavrity-laden body 2
 	entity->SetRigidBodyParameters(true);
+
+	
 
 	auto terrain = new Terrain(core, dynamicsWorld);
 	terrain->Initialize("../../Assets/Terrain/heightmap.bmp");
