@@ -121,6 +121,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="AsyncLoader.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="ConfigLoader.h" />
     <ClInclude Include="Console.h" />
@@ -164,6 +165,7 @@
     <ClInclude Include="Vertex.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="AsyncLoader.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="ConfigLoader.cpp" />
     <ClCompile Include="Console.cpp" />
