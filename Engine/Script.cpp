@@ -1,5 +1,5 @@
 #include "Script.h"
-
+// Writeen by Trevor Walden
 
 
 Script::Script()

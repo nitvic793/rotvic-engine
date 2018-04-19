@@ -1,5 +1,6 @@
 #include "Entity.h"
 #include "DebugDraw.h"
+// Code in this file originally written by Nitish Victor, rp3d integration written by Trevor Walden with help from http://www.reactphysics3d.com/usermanual.html and the rp3d class list
 
 /// <summary>
 /// Constructor initializes the world matrix

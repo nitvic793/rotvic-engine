@@ -1,4 +1,4 @@
-#pragma once
+// Most code written by Nitish Victor, rp3d integration by Trevor Walden with help from http://www.reactphysics3d.com/usermanual.html and the rp3d class list#pragma once
 #include "Keyboard.h"
 #include <vector>
 #include "Entity.h"

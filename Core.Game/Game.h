@@ -1,5 +1,5 @@
 #pragma once
-
+// Code written by Nitish Victor and Trevor Walden, rp3d integration and scripting written by Trevor Walden
 #include "Core.h"
 #include "Flocker.h"
 #include <map>

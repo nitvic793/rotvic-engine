@@ -1,5 +1,6 @@
 #include "Flocker.h"
-
+// Code in this file inspired by previous personal (Trevor Walden) projects, and those were in turn utilizations of Reynolds' steering algorithms
+// All code in this file written by Trevor Walden
 
 
 Flocker::Flocker()
