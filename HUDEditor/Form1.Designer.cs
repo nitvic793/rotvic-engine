@@ -28,12 +28,34 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
+            this.HUD_View = new System.Windows.Forms.GroupBox();
+            this.SuspendLayout();
+            // 
+            // HUD_View
+            // 
+            this.HUD_View.Location = new System.Drawing.Point(4, 4);
+            this.HUD_View.Name = "HUD_View";
+            this.HUD_View.Size = new System.Drawing.Size(1280, 720);
+            this.HUD_View.TabIndex = 0;
+            this.HUD_View.TabStop = false;
+            this.HUD_View.Text = "HUD View";
+            this.HUD_View.Enter += new System.EventHandler(this.groupBox1_Enter);
+            // 
+            // Form1
+            // 
+            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.ClientSize = new System.Drawing.Size(1289, 730);
+            this.Controls.Add(this.HUD_View);
+            this.Name = "Form1";
             this.Text = "Form1";
+            this.ResumeLayout(false);
+
         }
 
         #endregion
+
+        private System.Windows.Forms.GroupBox HUD_View;
     }
 }
 
