@@ -2,8 +2,7 @@
 #include "CppUnitTest.h"
 #include "../Engine/Engine.h"
 #include "../Engine/SystemCore.h"
-#include "../Engine/IGame.h"
-#include "../Engine/Material.h"
+
 #include "../FakeIt/single_header/mstest/fakeit.hpp"
 
 using namespace fakeit;
@@ -13,12 +12,18 @@ namespace EngineTests
 {
 	class IGameMock : public IGame
 	{
-	public:
-		virtual void Update(float) {}
-		std::vector<Entity*> GetEntities() {
+		// Inherited via IGame
+		virtual void Update(float) override
+		{
+		}
+		virtual void Initialize() override
+		{
+		}
+
+		std::vector<Entity*> GetEntities() override
+		{
 			return std::vector<Entity*>();
 		}
-		void Initialize() {}
 	};
 
 	TEST_CLASS(CoreGameTests)
