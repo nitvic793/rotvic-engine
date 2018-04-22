@@ -334,7 +334,7 @@ void Game::Update(float deltaTime)
 				resource->blendWeight = 1.0f;
 				isAnimationTransitioning = false;
 			}
-			resource->blendWeight += 0.02f;
+			resource->blendWeight += 0.04f;
 		}
 		else
 		{
@@ -343,7 +343,7 @@ void Game::Update(float deltaTime)
 				resource->blendWeight = 0.0f;
 				isAnimationTransitioning = false;
 			}
-			resource->blendWeight -= 0.02f;
+			resource->blendWeight -= 0.04f;
 		}
 	}
 
