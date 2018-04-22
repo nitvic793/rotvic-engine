@@ -65,12 +65,14 @@ void Renderer::SetShadersAndDrawAnimated(Entity * entity, Camera * camera, Light
 	vertexShader->SetMatrix4x4("projection", camera->GetProjectionMatrix());
 
 	int bonesSize = 0;
-	bonesSize = (sizeof(XMFLOAT4X4) * 20 * 2);
-	Bones bones[20];
-	int numBones = resourceManager->fbxLoader.skeleton.mJoints.size();
+	bonesSize = (sizeof(XMFLOAT4X4) * 72 * 2);
+	Bones bones[72];
+	Bones bones2[72];
 
 	resourceManager->fbxLoader.GetAnimatedMatrixExtra();
 
+	//Setting bones
+	int numBones = resourceManager->fbxLoader.skeleton.mJoints.size();
 	for (int i = 0; i < numBones; i++)
 	{
 
@@ -86,7 +88,26 @@ void Renderer::SetShadersAndDrawAnimated(Entity * entity, Camera * camera, Light
 	}
 	vertexShader->SetData("bones", &bones, bonesSize);
 
+	numBones = resourceManager->fbxLoader.skeleton.mJoints2.size();
+	for (int i = 0; i < numBones; i++)
+	{
 
+		XMMATRIX jointTransformMatrix = XMLoadFloat4x4(&resourceManager->fbxLoader.skeleton.mJoints2[i].mTransform);
+		XMMATRIX invJointTransformMatrix = XMLoadFloat4x4(&resourceManager->fbxLoader.skeleton.mJoints2[i].mGlobalBindposeInverse);
+
+		XMFLOAT4X4 trans = {};
+		XMStoreFloat4x4(&trans, XMMatrixTranspose(jointTransformMatrix));
+		bones2[i].BoneTransform = trans;
+		XMFLOAT4X4 trans2 = {};
+		XMStoreFloat4x4(&trans2, XMMatrixTranspose(invJointTransformMatrix));
+		bones2[i].InvBoneTransform = trans2;
+	}
+	vertexShader->SetData("bones2", &bones2, bonesSize);
+
+	//int blendWeight = 1;
+	vertexShader->SetData("blendWeight", &resourceManager->blendWeight, sizeof(float));
+
+	// Setting light
 	for (auto lightPair : lights)
 	{
 		auto light = lightPair.second;
@@ -97,6 +118,11 @@ void Renderer::SetShadersAndDrawAnimated(Entity * entity, Camera * camera, Light
 			break;
 		}
 	}
+
+	//pixelShader->SetSamplerState("basicSampler", material->GetSampler());
+	//pixelShader->SetShaderResourceView("diffuseTexture", material->GetSRV());
+	//pixelShader->SetShaderResourceView("normalTexture", material->GetNormalSRV());
+
 	vertexShader->CopyAllBufferData();
 	pixelShader->CopyAllBufferData();
 	vertexShader->SetShader();

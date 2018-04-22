@@ -70,5 +70,8 @@ public:
 
 	IGame();
 	virtual ~IGame();
+
+	bool isAnimationTransitioning = false;
+	bool animTransitionDirection = true;
 };
 

@@ -1,7 +1,6 @@
 #pragma once
 
 #include "Mesh.h"
-
 #include <fbxsdk.h>
 
 struct Keyframe {
@@ -41,6 +40,7 @@ public:
 
 struct Skeleton {
 	std::vector<Joint> mJoints;
+	std::vector<Joint> mJoints2;
 };
 
 struct Bones
@@ -55,10 +55,16 @@ class FBXLoader
 public:
 
 	FbxManager* fbxManager = NULL;
+
 	FbxScene* scene = NULL;
+	FbxScene* scene2 = NULL;
+
+	//FbxAnimEvaluator* evaluator;
+	//FbxAnimEvaluator* evaluator2;
+
 	FbxNode* childNode;
 	bool lResult;
-	FbxAnimEvaluator* evaluator;
+	
 	FbxTime time;
 	double T = 0.0;
 
@@ -72,13 +78,14 @@ public:
 
 	void InitializeSdkObjects();
 	void DestroySdkObjects(bool);
-	bool LoadScene(const char*);
-	void LoadNodes(FbxNode*, ID3D11Device*);
+	bool LoadScene(const char*, FbxScene*);
+	void LoadNodes(FbxNode*, std::vector<Joint>&);
 	Mesh* GetMesh(FbxNode*, ID3D11Device*);
-	unsigned int FindJointIndex(const std::string &);
+	void GetMatricesFromMesh(FbxNode*, ID3D11Device*, std::vector<Joint>&);
+	unsigned int FindJointIndex(const std::string &, std::vector<Joint>& Joints);
 	void GetAnimatedMatrix();
 	void GetAnimatedMatrixExtra();
-	XMFLOAT4X4 GetJointGlobalTransform(int);
+	XMFLOAT4X4 GetJointGlobalTransform(int , std::vector<Joint>&);
 	XMFLOAT4X4 FbxAMatrixToXMFloat4x4(FbxAMatrix);
 };
 

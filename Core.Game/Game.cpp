@@ -308,6 +308,45 @@ void Game::Update(float deltaTime)
 		//console->WriteLine(L"Up action pressed");
 	}
 
+	if (keyboard->IsKeyPressed(Z) && delayTime > 0.4f)
+	{
+		delayTime = 0.f;
+		//resource->blendWeight = 1.0f;
+		isAnimationTransitioning = true;
+		animTransitionDirection = !animTransitionDirection;
+	}
+	/*
+	if (keyboard->IsKeyPressed(C) && delayTime > 0.2f)
+	{
+		delayTime = 0.f;
+		//resource->blendWeight = 0.0f;
+		isAnimationTransitioning = true;
+		animTransitionDirection = false;
+	}
+	*/
+
+	if (isAnimationTransitioning)
+	{
+		if(animTransitionDirection)
+		{ 
+			if (resource->blendWeight > 1.0f)
+			{
+				resource->blendWeight = 1.0f;
+				isAnimationTransitioning = false;
+			}
+			resource->blendWeight += 0.02f;
+		}
+		else
+		{
+			if (resource->blendWeight < 0.0f)
+			{
+				resource->blendWeight = 0.0f;
+				isAnimationTransitioning = false;
+			}
+			resource->blendWeight -= 0.02f;
+		}
+	}
+
 	delayTime += deltaTime;
 }
 

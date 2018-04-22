@@ -20,6 +20,7 @@ struct VertexAnimated
 {
 	DirectX::XMFLOAT4 Position;	    // The position of the vertex
 	DirectX::XMFLOAT3 Normal;
+	//DirectX::XMFLOAT2 UV;
 	DirectX::XMFLOAT4 Boneids{0,0,0,0};
 	DirectX::XMFLOAT4 Weights{0,0,0,0};
 };

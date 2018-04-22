@@ -115,14 +115,17 @@ void ResourceManager::LoadResources(ConfigMap config, SystemCore* core)
 	
 
 	// Animated data
-	fbxLoader.LoadNodes(fbxLoader.scene->GetRootNode(), device);
+	fbxLoader.LoadNodes(fbxLoader.scene->GetRootNode(), fbxLoader.skeleton.mJoints);
+	fbxLoader.LoadNodes(fbxLoader.scene2->GetRootNode(), fbxLoader.skeleton.mJoints2);
 	int numChildren = fbxLoader.scene->GetRootNode()->GetChildCount();
-	FbxNode* childNode = fbxLoader.scene->GetRootNode()->GetChild(0);
-	FbxString name1 = childNode->GetName();
-
 	
-
+	
+	FbxNode* childNode = fbxLoader.scene->GetRootNode()->GetChild(1);
+	FbxString name1 = childNode->GetName();
 	meshes.insert(std::pair<std::string, Mesh*>("man", fbxLoader.GetMesh(childNode, device)));
+
+	childNode = fbxLoader.scene2->GetRootNode()->GetChild(1);
+	fbxLoader.GetMatricesFromMesh(childNode, device, fbxLoader.skeleton.mJoints2);
 	material = new Material(core, vertexShaderAnimated, pixelShaderAnimated, nullptr, nullptr, nullptr);
 	materials.insert(std::pair<std::string, Material*>("man", material));
 }

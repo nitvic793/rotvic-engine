@@ -14,7 +14,9 @@ struct Bones
 
 cbuffer bones : register(b1)
 {
-	Bones bones[20];
+	Bones bones[72];
+	Bones bones2[72];
+	float blendWeight;
 }
 
 
@@ -23,6 +25,7 @@ struct VertexShaderInput
 
 	float4 position		: POSITION;     
 	float3 normal       : NORMAL;
+	//float2 uv			: TEXCOORD;
 	float4 boneid		: BONEID;
 	float4 weight		: WEIGHT;
 };
@@ -33,6 +36,7 @@ struct VertexToPixel
 
 	float4 position		: SV_POSITION;	
 	float3 normal       : NORMAL;
+	//float2 uv			: TEXCOORD;
 };
 
 
@@ -48,25 +52,51 @@ VertexToPixel main(VertexShaderInput input)
 
 	if (input.boneid.x != -1)
 	{
-		bonetransform = mul(mul(bones[input.boneid.x].BoneTransform, input.weight.x), bones[input.boneid.x].InvBoneTransform);
+		bonetransform = mul(mul(bones[input.boneid.x].BoneTransform, input.weight.x), bones[input.boneid.x].InvBoneTransform) * blendWeight;
+		bonetransform += mul(mul(bones2[input.boneid.x].BoneTransform, input.weight.x), bones2[input.boneid.x].InvBoneTransform) * (1.0f-blendWeight);
 	}
 	if (input.boneid.y != -1)
 	{
-		bonetransform += mul(mul(bones[input.boneid.y].BoneTransform, input.weight.y), bones[input.boneid.y].InvBoneTransform);
+		bonetransform += mul(mul(bones[input.boneid.y].BoneTransform, input.weight.y), bones[input.boneid.y].InvBoneTransform)* blendWeight;
+		bonetransform += mul(mul(bones2[input.boneid.y].BoneTransform, input.weight.y), bones2[input.boneid.y].InvBoneTransform)* (1.0f - blendWeight);
 	}
 	if (input.boneid.z != -1)
 	{
-		bonetransform += mul(mul(bones[input.boneid.z].BoneTransform, input.weight.z), bones[input.boneid.z].InvBoneTransform);
+		bonetransform += mul(mul(bones[input.boneid.z].BoneTransform, input.weight.z), bones[input.boneid.z].InvBoneTransform)* blendWeight;
+		bonetransform += mul(mul(bones2[input.boneid.z].BoneTransform, input.weight.z), bones2[input.boneid.z].InvBoneTransform)* (1.0f - blendWeight);
 	}
 	if (input.boneid.w != -1)
 	{
-		bonetransform += mul(mul(bones[input.boneid.w].BoneTransform, input.weight.w), bones[input.boneid.w].InvBoneTransform);
+		bonetransform += mul(mul(bones[input.boneid.w].BoneTransform, input.weight.w), bones[input.boneid.w].InvBoneTransform)* blendWeight;
+		bonetransform += mul(mul(bones2[input.boneid.w].BoneTransform, input.weight.w), bones2[input.boneid.w].InvBoneTransform)* (1.0f - blendWeight);
 	}
-
-
+	
+	/*
+	else
+	{
+		if (input.boneid.x != -1)
+		{
+			bonetransform = mul(mul(bones2[input.boneid.x].BoneTransform, input.weight.x), bones2[input.boneid.x].InvBoneTransform);
+		}
+		if (input.boneid.y != -1)
+		{
+			bonetransform += mul(mul(bones2[input.boneid.y].BoneTransform, input.weight.y), bones2[input.boneid.y].InvBoneTransform);
+		}
+		if (input.boneid.z != -1)
+		{
+			bonetransform += mul(mul(bones2[input.boneid.z].BoneTransform, input.weight.z), bones2[input.boneid.z].InvBoneTransform);
+		}
+		if (input.boneid.w != -1)
+		{
+			bonetransform += mul(mul(bones2[input.boneid.w].BoneTransform, input.weight.w), bones2[input.boneid.w].InvBoneTransform);
+		}
+	}
+	*/
 	output.position = mul(mul(bonetransform, input.position), worldViewProj);
 
 	output.normal = mul(mul(bonetransform, input.normal), (float3x3)world);
+
+	//output.uv = input.uv;
 
 
 	return output;

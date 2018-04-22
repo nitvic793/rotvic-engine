@@ -19,12 +19,14 @@ struct VertexToPixel
 
 	float4 position		: SV_POSITION;
 	float3 normal       : NORMAL;
-
+	//float2 uv			: TEXCOORD;
 };
 
 
 
-
+//Texture2D diffuseTexture : register(t0);
+//Texture2D normalTexture : register(t1);
+//SamplerState basicSampler : register(s0);
 
 
 float4 main(VertexToPixel input) : SV_TARGET

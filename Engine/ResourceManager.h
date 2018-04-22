@@ -28,9 +28,12 @@ public:
 	ID3D11SamplerState *sampler;
 	VertexShaderMap vertexShaders;
 	PixelShaderMap pixelShaders;
-	FBXLoader fbxLoader;
 	SimpleVertexShader *vertexShaderAnimated;
 	SimplePixelShader *pixelShaderAnimated;
+	
+	// Animation Data
+	FBXLoader fbxLoader;
+	float blendWeight = 0;
 
 	/// <summary>
 	/// Loads resources based on given config data.
