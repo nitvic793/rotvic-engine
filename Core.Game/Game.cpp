@@ -20,6 +20,7 @@ Game::~Game()
 	{
 		delete l.second;
 	}
+	worker.Stop();
 }
 
 void Game::SetSpeed(float speed)
@@ -48,6 +49,11 @@ Game* Game::CreateInstance()
 /// </summary>
 void Game::Initialize()
 {
+	worker.Start();
+	Job j;
+	j.job = [&](void*) {printf("Test Job\n"); };
+	j.args = (void*)"Test";
+	worker.EnqueueJob(j);
 	firstPersonCamera = new FirstPersonCamera((float)renderer->screenWidth / renderer->screenHeight);
 	freeCam = camera;
 	light.AmbientColor = XMFLOAT4(0.1f, 0.1f, 0.1f, 0);
@@ -117,7 +123,7 @@ void Game::LoadLevel()
 	AddEntity(entity, "Collider2");  // Collider 2
 
 	auto events = EventSystem::GetInstance();
-	events->RegisterEventCallback("Collision", entity, [&](void* args) 
+	events->RegisterEventCallback("Collision", entity, [&](void* args)
 	{
 
 	});

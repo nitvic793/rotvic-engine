@@ -41,7 +41,7 @@ protected:
 	PhysicsEntityMap* physicsEntityMap;
 	void ClearEntities();
 	const Vector2f& GetMousePosition2D();
-	const float timeStep = 1.0 / 60.0; // Constant physics time step 
+	const float timeStep = 1.0f / 60.0; // Constant physics time step 
 	float physicsTimer = 0;
 public:
 	void BindConsole(Console* console);

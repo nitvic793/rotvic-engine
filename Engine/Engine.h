@@ -21,3 +21,5 @@
 #include "Script.h"
 #include "Camera.h"
 #include "EventSystem.h"
+#include "ConcurrentQueue.h"
+#include "WorkerThread.h"

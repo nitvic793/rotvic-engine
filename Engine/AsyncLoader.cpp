@@ -4,7 +4,7 @@
 
 void AsyncLoader::AsyncLoadFile(std::string filename, std::function<void(void*)> callback)
 {
-	auto fut = std::async(std::launch::async, [callback]() {
+	auto asyncJob = [callback](void*) {
 		std::ifstream file("input.txt", std::ios::binary);
 		file.seekg(0, std::ios::end);
 		int size = file.tellg();
@@ -13,19 +13,18 @@ void AsyncLoader::AsyncLoadFile(std::string filename, std::function<void(void*)>
 		file.read(data, size);
 		file.close();
 		callback(data);
+	};
+
+	asyncWorker->EnqueueJob(
+	{
+		asyncJob,
+		nullptr
 	});
-	futures.push(move(fut));
 }
 
 void AsyncLoader::CleanUp()
 {
-	int i = 0;
-	while (!futures.empty())
-	{
-		auto f = futures.front();
-		if (f._Is_ready())futures.pop();
-		else break;
-	}
+
 }
 
 AsyncLoader::AsyncLoader()

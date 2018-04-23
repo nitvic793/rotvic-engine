@@ -2,10 +2,11 @@
 #include <queue>
 #include <thread>
 #include <future>
+#include "WorkerThread.h"
 
 class AsyncLoader
 {
-	std::queue<std::shared_future<void>> futures;
+	WorkerThread *asyncWorker;
 public:
 	void AsyncLoadFile(std::string filename, std::function<void(void*)> callback);
 	void CleanUp();

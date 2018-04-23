@@ -201,6 +201,9 @@
     <ClInclude Include="ConcurrentQueue.h">
       <Filter>Header Files\System</Filter>
     </ClInclude>
+    <ClInclude Include="WorkerThread.h">
+      <Filter>Header Files\System</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CoreGame.cpp">
@@ -303,6 +306,9 @@
       <Filter>Source Files\Management</Filter>
     </ClCompile>
     <ClCompile Include="ConcurrentQueue.cpp">
+      <Filter>Source Files\System</Filter>
+    </ClCompile>
+    <ClCompile Include="WorkerThread.cpp">
       <Filter>Source Files\System</Filter>
     </ClCompile>
   </ItemGroup>
