@@ -16,6 +16,10 @@ Game::~Game()
 	delete skybox;
 	delete firstPersonCamera;
 	InstanceCount--;
+	for (auto l : lightsMap)
+	{
+		delete l.second;
+	}
 }
 
 void Game::SetSpeed(float speed)

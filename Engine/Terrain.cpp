@@ -550,7 +550,7 @@ void Terrain::_temp_Init()
 	rigidBody = dynamicsWorld->createRigidBody(transform);
 
 	terrainHeight = terrainWidth = 101;
-	float *heightValues = new float[terrainHeight * terrainWidth];
+	heightValues = new float[terrainHeight * terrainWidth];
 	heightMap = new XMFLOAT3[terrainHeight * terrainWidth];
 	SetPosition(0, -8, 0);
 

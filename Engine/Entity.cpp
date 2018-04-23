@@ -62,7 +62,8 @@ Entity::~Entity()
 	if (basicShape) delete basicShape;
 	if (rigidBody) dynamicsWorld->destroyRigidBody(rigidBody);
 	dynamicsWorld = nullptr;
-
+	delete shape;
+	shape = nullptr;
 	if (scripts.size() > 0) // Call the update for each script each cycle
 	{
 		for each (Script* s in scripts)

@@ -11,6 +11,8 @@ IGame::IGame()
 IGame::~IGame()
 {
 	ClearEntities();
+	delete physicsEventListener;
+	delete physicsEntityMap;
 }
 
 void IGame::OnResize(int width, int height)

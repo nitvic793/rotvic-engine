@@ -123,6 +123,7 @@
   <ItemGroup>
     <ClInclude Include="AsyncLoader.h" />
     <ClInclude Include="Camera.h" />
+    <ClInclude Include="ConcurrentQueue.h" />
     <ClInclude Include="ConfigLoader.h" />
     <ClInclude Include="Console.h" />
     <ClInclude Include="Constants.h" />
@@ -167,6 +168,7 @@
   <ItemGroup>
     <ClCompile Include="AsyncLoader.cpp" />
     <ClCompile Include="Camera.cpp" />
+    <ClCompile Include="ConcurrentQueue.cpp" />
     <ClCompile Include="ConfigLoader.cpp" />
     <ClCompile Include="Console.cpp" />
     <ClCompile Include="CoreGame.cpp" />
