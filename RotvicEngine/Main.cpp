@@ -2,7 +2,7 @@
 
 #include <Windows.h>
 #include "../Core.Game/Game.h"
-#include "vld.h" // - Include if Visual Leak Detector is installed.
+//#include "vld.h" // - Include if Visual Leak Detector is installed.
 
 int WINAPI WinMain(
 	HINSTANCE hInstance,
