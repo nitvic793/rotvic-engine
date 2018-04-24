@@ -5,7 +5,8 @@
 /// Animations: Rahul SV
 /// </summary>
 /// <remarks>
-/// Code written by Nitish Victor and Trevor Walden, rp3d integration and scripting written by Trevor Walden
+/// Code written by Nitish Victor and Trevor Walden, rp3d integration and scripting written by Trevor Walden.
+/// Animation integration by Rahul SV
 /// </remarks>
 
 #include "Game.h"
