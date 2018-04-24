@@ -4,16 +4,20 @@
 
 #include "WorkerThread.h"
 
-void WorkerThread::Start()
+void WorkerThread::Start(int workerCount)
 {
+	mWorkerCount = workerCount;
 	//Do not let running condition or thread to be set when it is already running
 	{
 		std::lock_guard<std::mutex> lock(mutex);
 		if (isRunning) return;
 		isRunning = true;
 	}
-	//Start thread
-	thread = std::thread(threadWorker);
+	//Start worker threads
+	for (int i = 0; i < workerCount; ++i)
+	{
+		workers.push_back(std::thread(threadWorker));
+	}
 }
 
 void WorkerThread::Stop()
@@ -37,19 +41,27 @@ bool WorkerThread::IsRunning() const
 
 WorkerThread::WorkerThread()
 {
+	mWorkerCount = DEFAULT_WORKERS;
 	isRunning = false;
 	threadWorker = [&]
 	{
-		while (isRunning)
+		while (true)
 		{
-			std::unique_lock<std::mutex> lock(mutex);
-			conditionVar.wait(lock, [&] {return !isRunning + !mJobQueue.IsEmpty(); });
+			{
+				std::unique_lock<std::mutex> lock(mutex);
+				if (!isRunning)
+				{
+					break;
+				}
+				conditionVar.wait(lock, [&] {return !isRunning + !mJobQueue.IsEmpty(); });
+			}
+
 			while (!mJobQueue.IsEmpty())
 			{
-				auto jobPack = mJobQueue.Pop();
-				if (jobPack.job)
+				auto task = mJobQueue.Pop();
+				if (task.job) //Check if job is valid
 				{
-					jobPack.job(jobPack.args); //Invoke job
+					task.job(task.args); //Invoke job
 				}
 			}
 		}
@@ -60,5 +72,9 @@ WorkerThread::WorkerThread()
 WorkerThread::~WorkerThread()
 {
 	Stop();
-	thread.join();
+	for (auto &worker : workers)
+	{
+		worker.join();
+	}
+	//thread.join();
 }

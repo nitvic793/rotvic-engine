@@ -20,7 +20,7 @@ Game::~Game()
 	{
 		delete l.second;
 	}
-	worker.Stop();
+	asyncWorker.Stop();
 }
 
 void Game::SetSpeed(float speed)
@@ -49,11 +49,8 @@ Game* Game::CreateInstance()
 /// </summary>
 void Game::Initialize()
 {
-	worker.Start();
-	Job j;
-	j.job = [&](void*) {printf("Test Job\n"); };
-	j.args = (void*)"Test";
-	worker.EnqueueJob(j);
+	asyncWorker.Start();
+
 	firstPersonCamera = new FirstPersonCamera((float)renderer->screenWidth / renderer->screenHeight);
 	freeCam = camera;
 	light.AmbientColor = XMFLOAT4(0.1f, 0.1f, 0.1f, 0);
@@ -135,19 +132,19 @@ void Game::LoadLevel()
 
 	entity = new Entity(resource->GetMesh("cube"), resource->GetMaterial("metal"), rp3d::Vector3(-2.5, 2, 0), dynamicsWorld);
 	entity->CreateBoxCollider(rp3d::Vector3(.5, .5, .5));
-	AddEntity(entity, "Gravity2");  // Gavrity-laden body 2
+	AddEntity(entity, "Gravity2");  // Gravity-laden body 2
 	entity->SetRigidBodyParameters(true);
 
-	//auto terrain = new Terrain(core, dynamicsWorld);
-	//terrain->Initialize("../../Assets/Terrain/heightmap.bmp");
-	//terrain->SetMaterial(resource->GetMaterial("grass"));
-	//terrain->SetPosition(0, -12, 0);
-	//AddEntity(terrain, "Terrain");
-
 	auto terrain = new Terrain(core, dynamicsWorld);
+	terrain->Initialize("../../Assets/Terrain/heightmap.bmp");
 	terrain->SetMaterial(resource->GetMaterial("grass"));
-	terrain->_temp_Init();
-	AddEntity(terrain, "Terrain2");
+	terrain->SetPosition(0, -12, 0);
+	AddEntity(terrain, "Terrain");
+
+	//auto terrain = new Terrain(core, dynamicsWorld);
+	//terrain->SetMaterial(resource->GetMaterial("grass"));
+	//terrain->_temp_Init();
+	//AddEntity(terrain, "Terrain2");
 
 	flocking = true;
 	console->RegisterCommand("ClearLevel", [=](std::vector<std::string> params)

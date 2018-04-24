@@ -33,7 +33,11 @@ public:
 	/// <param name="item">Item to enqueue</param>
 	void Push(const T& item);
 
-	bool IsEmpty() const;
+	/// <summary>
+	/// Returns true if queue is empty
+	/// </summary>
+	/// <returns>If queue is empty or not</returns>
+	bool IsEmpty();
 
 	ConcurrentQueue();
 	~ConcurrentQueue();
@@ -74,8 +78,9 @@ void ConcurrentQueue<T>::Push(const T & item)
 }
 
 template<typename T>
-bool ConcurrentQueue<T>::IsEmpty() const
+bool ConcurrentQueue<T>::IsEmpty() 
 {
+	std::unique_lock<std::mutex> mlock(mutex);
 	return mQueue.empty();
 }
 

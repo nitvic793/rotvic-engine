@@ -26,7 +26,7 @@ protected:
 	bool flocking;
 	Camera* freeCam;
 	FirstPersonCamera* firstPersonCamera;
-	WorkerThread worker;
+	WorkerThread asyncWorker;
 public:
 	static Game* CreateInstance();
 	static int GetInstanceCount();

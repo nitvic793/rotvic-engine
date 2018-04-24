@@ -8,9 +8,9 @@ class AsyncLoader
 {
 	WorkerThread *asyncWorker;
 public:
+	void Loader(void* args);
 	void AsyncLoadFile(std::string filename, std::function<void(void*)> callback);
-	void CleanUp();
-	AsyncLoader();
+	AsyncLoader(WorkerThread* worker);
 	~AsyncLoader();
 };
 

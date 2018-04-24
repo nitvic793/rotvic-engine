@@ -1,12 +1,17 @@
 /// <summary>
 /// Author: Nitish Victor
 /// </summary>
+/// <remarks>
+/// Code inspired by this StackOverflow answer https://stackoverflow.com/a/35829560/4209569 by user Jts(https://stackoverflow.com/users/5866175/jts)
+/// </remarks>
 
 #pragma once
 
 #include <thread>
 #include <functional>
 #include "ConcurrentQueue.h"
+
+const unsigned int DEFAULT_WORKERS = 1;
 
 //Job function type
 typedef std::function<void(void*)> JobType;
@@ -35,7 +40,9 @@ struct Job
 /// </summary>
 class WorkerThread
 {
+	int mWorkerCount;
 	ConcurrentQueue<Job> mJobQueue;
+	std::vector<std::thread> workers;
 	std::thread thread;
 	std::mutex mutex;
 	std::condition_variable conditionVar;
@@ -43,12 +50,13 @@ class WorkerThread
 	std::function<void()> threadWorker; //Thread function
 public:
 	/// <summary>
-	/// Starts the worker thread.
+	/// Starts given number of worker thread(s).
 	/// </summary>
-	void Start();
+	/// <param name="workerCount">Number of worker threads to spawn.</param>
+	void Start(int workerCount = DEFAULT_WORKERS);
 
 	/// <summary>
-	/// Stops the worker thread.
+	/// Stops all worker thread(s).
 	/// </summary>
 	void Stop();
 
