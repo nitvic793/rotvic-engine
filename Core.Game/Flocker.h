@@ -1,3 +1,4 @@
+// Code written by Trevor Walden, inspired by previous projects and Reynolds' steering algorithms
 #pragma once
 #define NOMINMAX
 #include "Core.h"

@@ -398,12 +398,12 @@ bool Terrain::Initialize(const char * filename)
 			float actualHeight = (float)height / 15;
 			if (actualHeight < minHeight) minHeight = actualHeight;
 			if (actualHeight > maxHeight) maxHeight = actualHeight;
-			heightValues[(terrainHeight * j) + i] = actualHeight;
+			heightValues[(terrainHeight * j) + i] = actualHeight+1;
 			k += 3;
 		}
 	}
 
-	shape = new rp3d::HeightFieldShape(terrainHeight, terrainWidth, minHeight, maxHeight, heightValues, rp3d::HeightFieldShape::HEIGHT_FLOAT_TYPE);
+	shape = new rp3d::HeightFieldShape(terrainHeight, terrainWidth, 1, maxHeight, heightValues, rp3d::HeightFieldShape::HEIGHT_FLOAT_TYPE);
 	proxyShape = rigidBody->addCollisionShape(shape, rp3d::Transform::identity(), rp3d::decimal(1.0));
 	rigidBody->setType(rp3d::BodyType::STATIC);
 	rigidBody->enableGravity(false);
@@ -420,9 +420,9 @@ bool Terrain::Initialize(const char * filename)
 			if (height > maxHeight) maxHeight = height;
 			index = (terrainWidth * (terrainHeight - 1 - j)) + i;
 
-			heightMap[index].x = (float)i + min.x;
-			heightMap[index].y = (float)height;
-			heightMap[index].z = -(float)j;
+			heightMap[index].x = (float)i + min.x-1;
+			heightMap[index].y = (float)height-1.5;
+			heightMap[index].z = -(float)j-1;
 			heightMap[index].z += (float)(terrainHeight - 1) + min.z;
 
 			k += 3;
@@ -550,7 +550,7 @@ void Terrain::_temp_Init()
 	rigidBody = dynamicsWorld->createRigidBody(transform);
 
 	terrainHeight = terrainWidth = 101;
-	float *heightValues = new float[terrainHeight * terrainWidth];
+	heightValues = new float[terrainHeight * terrainWidth];
 	heightMap = new XMFLOAT3[terrainHeight * terrainWidth];
 	SetPosition(0, -8, 0);
 
@@ -563,7 +563,8 @@ void Terrain::_temp_Init()
 			index = (terrainWidth * (terrainHeight - 1 - j)) + i;
 			int height = index % 2 + 1;
 			int index2 = (terrainHeight * (terrainWidth - 1 - j)) + i;
-			heightValues[index] = height;
+			//heightValues[index] = height;
+			heightValues[index] = 1;
 			//heightMap[index].x = (float)i;
 			//heightMap[index].y = (float)height;
 			//heightMap[index].z = -(float)j;
@@ -590,9 +591,10 @@ void Terrain::_temp_Init()
 			index = (terrainWidth * (terrainHeight - 1 - j)) + i;
 			//int index2 = (terrainHeight * (terrainWidth - 1 - j)) + i;
 			//heightValues[index] = height;
-			heightMap[index].x = (float)i + min.x;
-			heightMap[index].y = (float)height + min.y;
-			heightMap[index].z = -(float)j ;
+			heightMap[index].x = (float)i + min.x-1;
+			//heightMap[index].y = (float)height + min.y-1.5;
+			heightMap[index].y = (float)-0.5;
+			heightMap[index].z = -(float)j-1;
 			heightMap[index].z += (float)(terrainHeight - 1) + min.z;
 
 			k += 3;

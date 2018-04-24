@@ -1,4 +1,4 @@
-#pragma once
+// Most code written by Nitish Victor, rp3d integration by Trevor Walden with help from http://www.reactphysics3d.com/usermanual.html and the rp3d class list#pragma once
 #define NOMINMAX
 #include <Windows.h>
 #include <d3d11.h>
@@ -15,6 +15,7 @@
 #include "Console.h"
 #include "DebugDraw.h"
 #include "EventSystem.h"
+#include "AsyncLoader.h"
 #include "reactphysics3d.h"
 
 #pragma comment(lib, "d3d11.lib")
@@ -46,9 +47,11 @@ protected:
 	ResourceManager* resourceManager;
 	std::unique_ptr<Console> console;
 	std::unique_ptr<DebugDraw> debugDraw;
+	std::unique_ptr<AsyncLoader> asyncLoader;
 	EventSystem* eventSystem;
 	rp3d::Vector3 gravity;
 	rp3d::DynamicsWorld* dynamicsWorld;
+	WorkerThread worker;
 	void RegisterConsoleCommands();
 public:
 	StateEnum GetState();
