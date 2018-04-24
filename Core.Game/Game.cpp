@@ -1,4 +1,13 @@
-// Code written by Nitish Victor and Trevor Walden, rp3d integration and scripting written by Trevor Walden
+/// <summary>
+/// Authors
+/// Base Code: Nitish Victor
+/// RP3D integration, Scripting: Trevor Walden
+/// Animations: Rahul SV
+/// </summary>
+/// <remarks>
+/// Code written by Nitish Victor and Trevor Walden, rp3d integration and scripting written by Trevor Walden
+/// </remarks>
+
 #include "Game.h"
 
 int Game::InstanceCount = 0;
@@ -144,16 +153,16 @@ void Game::LoadLevel()
 
 	
 
-	auto terrain = new Terrain(core, dynamicsWorld);
-	terrain->Initialize("../../Assets/Terrain/heightmap.bmp");
-	terrain->SetMaterial(resource->GetMaterial("grass"));
-	terrain->SetPosition(0, -12, 0);
-	AddEntity(terrain, "Terrain");
-
 	//auto terrain = new Terrain(core, dynamicsWorld);
+	//terrain->Initialize("../../Assets/Terrain/heightmap.bmp");
 	//terrain->SetMaterial(resource->GetMaterial("grass"));
-	//terrain->_temp_Init();
-	//AddEntity(terrain, "Terrain2");
+	//terrain->SetPosition(0, -12, 0);
+	//AddEntity(terrain, "Terrain");
+
+	auto terrain = new Terrain(core, dynamicsWorld);
+	terrain->SetMaterial(resource->GetMaterial("grass"));
+	terrain->_temp_Init();
+	AddEntity(terrain, "Terrain2");
 
 	flocking = true;
 	console->RegisterCommand("ClearLevel", [=](std::vector<std::string> params)
