@@ -278,8 +278,8 @@ Mesh* FBXLoader::GetMesh(FbxNode * node , ID3D11Device* device)
 
 				fbxMesh->GetPolygonVertexUV(i, j, uvSet, uvCoord, uvFlag);
 
-				//verticesAnim[ind].UV.x = uvCoord.mData[0];
-				//verticesAnim[ind].UV.y = uvCoord.mData[1];
+				verticesAnim[ind].UV.x = uvCoord.mData[0];
+				verticesAnim[ind].UV.y = uvCoord.mData[1];
 				
 			}
 
@@ -419,7 +419,11 @@ Mesh* FBXLoader::GetMesh(FbxNode * node , ID3D11Device* device)
 		//std::shared_ptr<Mesh> M(new Mesh(&vertices[0], vertexCount, &indices[0], indexCount, device));
 
 
-		return(new Mesh(&verticesAnim[0], vertexCount, &indices[0], indexCount,device));
+		Mesh* M = new Mesh(&verticesAnim[0], vertexCount, &indices[0], indexCount, device);
+	
+		M->CalculateTangents(&verticesAnim[0], vertexCount, &indices[0], indexCount); // Caluculate Tangents
+
+		return(M);
 	}
 	else
 		return(NULL);

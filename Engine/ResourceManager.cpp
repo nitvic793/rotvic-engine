@@ -114,7 +114,7 @@ void ResourceManager::LoadResources(ConfigMap config, SystemCore* core)
 	meshes.insert(std::pair<std::string, Mesh*>("torus", new Mesh("../../Assets/Models/torus.obj", core)));
 	
 
-	// Animated data
+	// Animation data
 	fbxLoader.LoadNodes(fbxLoader.scene->GetRootNode(), fbxLoader.skeleton.mJoints);
 	fbxLoader.LoadNodes(fbxLoader.scene2->GetRootNode(), fbxLoader.skeleton.mJoints2);
 	int numChildren = fbxLoader.scene->GetRootNode()->GetChildCount();
@@ -126,7 +126,12 @@ void ResourceManager::LoadResources(ConfigMap config, SystemCore* core)
 
 	childNode = fbxLoader.scene2->GetRootNode()->GetChild(1);
 	fbxLoader.GetMatricesFromMesh(childNode, device, fbxLoader.skeleton.mJoints2);
-	material = new Material(core, vertexShaderAnimated, pixelShaderAnimated, nullptr, nullptr, nullptr);
+
+	CreateWICTextureFromFile(device, context, L"../../Assets/Textures/axe_base_color2.png", nullptr, &srv);
+	CreateWICTextureFromFile(device, context, L"../../Assets/Textures/axe_base_normal2.png", nullptr, &normalSrv);
+	textures.insert(std::pair<std::string, ID3D11ShaderResourceView*>("man", srv));
+	textures.insert(std::pair<std::string, ID3D11ShaderResourceView*>("manNormal", normalSrv));
+	material = new Material(core, vertexShaderAnimated, pixelShaderAnimated, srv, normalSrv, sampler);
 	materials.insert(std::pair<std::string, Material*>("man", material));
 }
 

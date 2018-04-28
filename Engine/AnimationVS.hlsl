@@ -25,9 +25,12 @@ struct VertexShaderInput
 
 	float4 position		: POSITION;     
 	float3 normal       : NORMAL;
-	//float2 uv			: TEXCOORD;
+	
 	float4 boneid		: BONEID;
 	float4 weight		: WEIGHT;
+
+	float2 uv			: TEXCOORD;
+	float3 tangent		: TANGENT;
 };
 
 
@@ -36,7 +39,9 @@ struct VertexToPixel
 
 	float4 position		: SV_POSITION;	
 	float3 normal       : NORMAL;
-	//float2 uv			: TEXCOORD;
+	float2 uv			: TEXCOORD;
+	float3 worldPos		: POSITION;
+	float3 tangent		: TANGENT;
 };
 
 
@@ -96,7 +101,11 @@ VertexToPixel main(VertexShaderInput input)
 
 	output.normal = mul(mul(bonetransform, input.normal), (float3x3)world);
 
-	//output.uv = input.uv;
+	output.worldPos = mul(input.position, world).xyz;
+
+	output.uv = input.uv;
+
+	output.tangent = normalize(mul(mul(bonetransform, input.tangent), (float3x3)world));
 
 
 	return output;

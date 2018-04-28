@@ -107,6 +107,7 @@ void Renderer::SetShadersAndDrawAnimated(Entity * entity, Camera * camera, Light
 	//int blendWeight = 1;
 	vertexShader->SetData("blendWeight", &resourceManager->blendWeight, sizeof(float));
 
+	/*
 	// Setting light
 	for (auto lightPair : lights)
 	{
@@ -118,15 +119,32 @@ void Renderer::SetShadersAndDrawAnimated(Entity * entity, Camera * camera, Light
 			break;
 		}
 	}
+	*/
 
-	//pixelShader->SetSamplerState("basicSampler", material->GetSampler());
-	//pixelShader->SetShaderResourceView("diffuseTexture", material->GetSRV());
-	//pixelShader->SetShaderResourceView("normalTexture", material->GetNormalSRV());
+	for (auto lightPair : lights)
+	{
+		auto light = lightPair.second;
+		switch (light->Type)
+		{
+		case Directional:
+			pixelShader->SetData(lightPair.first, light->GetLight<DirectionalLight>(), sizeof(DirectionalLight));
+			break;
+		case Point:
+			pixelShader->SetData(lightPair.first, light->GetLight<PointLight>(), sizeof(PointLight));
+			break;
+		}
+	}
+
+	pixelShader->SetSamplerState("basicSampler", material->GetSampler());
+	pixelShader->SetShaderResourceView("diffuseTexture", material->GetSRV());
+	pixelShader->SetShaderResourceView("normalTexture", material->GetNormalSRV());
 
 	vertexShader->CopyAllBufferData();
 	pixelShader->CopyAllBufferData();
 	vertexShader->SetShader();
 	pixelShader->SetShader();
+
+	int a = 0;
 
 	UINT stride = sizeof(VertexAnimated);
 	UINT offset = 0;

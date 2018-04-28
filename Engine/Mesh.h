@@ -28,6 +28,7 @@ public:
 	ID3D11Buffer *GetVertexBuffer();
 	ID3D11Buffer *GetIndexBuffer();
 	void CalculateTangents(Vertex *vertices, UINT vertexCount, UINT *indices, UINT indexCount);
+	void CalculateTangents(VertexAnimated *vertices, UINT vertexCount, UINT *indices, UINT indexCount);
 	UINT GetIndexCount();
 	void Mesh::Initialize(Vertex *vertices, UINT vertexCount, UINT *indices, UINT indexCount);
 	Mesh::Mesh(VertexAnimated *vertices, UINT vertexCount, UINT *indices, UINT indexCountAnim, ID3D11Device *Device); // For animation only
