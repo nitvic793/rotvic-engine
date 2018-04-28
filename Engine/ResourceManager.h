@@ -5,6 +5,7 @@
 #include "WICTextureLoader.h"
 #include <map>
 #include "FBXLoader.h"
+#include "AsyncLoader.h"
 
 typedef std::map<std::string, SimpleVertexShader*> VertexShaderMap;
 typedef std::map<std::string, SimplePixelShader*> PixelShaderMap;
@@ -20,6 +21,8 @@ class ResourceManager
 	std::map<std::string, Material*> materials;
 	std::map<std::string, ID3D11ShaderResourceView*> textures;
 	static ResourceManager* instance;
+	AsyncLoader* asyncLoader;
+	SystemCore* core;
 public:
 	SimpleVertexShader *vertexShader;
 	SimplePixelShader *pixelShader;
@@ -34,6 +37,10 @@ public:
 	// Animation Data
 	FBXLoader fbxLoader;
 	float blendWeight = 0;
+
+	void SetAsyncLoader(AsyncLoader* loader);
+
+	void LoadTextureAsync(std::string filename, std::string texName, std::function<void()> onLoad);
 
 	/// <summary>
 	/// Loads resources based on given config data.

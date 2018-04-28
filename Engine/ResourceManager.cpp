@@ -4,6 +4,27 @@
 
 ResourceManager* ResourceManager::instance = nullptr;
 
+void ResourceManager::SetAsyncLoader(AsyncLoader* loader)
+{
+	asyncLoader = loader;
+}
+
+void ResourceManager::LoadTextureAsync(std::string filename, std::string texName, std::function<void()> onLoad)
+{
+	auto device = core->GetDevice();
+	textures.insert(std::pair<std::string, ID3D11ShaderResourceView*>(texName, nullptr));
+	asyncLoader->AsyncLoadFile(filename, [=](void* texData, UINT size)
+	{
+		ID3D11ShaderResourceView* srv;
+		CreateWICTextureFromMemory(device, (uint8_t*)texData, (size_t)size, nullptr, &srv);
+		textures[texName] = srv;
+		if (onLoad)
+		{
+			onLoad();
+		}
+	});
+}
+
 void ResourceManager::LoadResources(ConfigMap config, SystemCore* core)
 {
 	std::vector<Vertex> planeVertices = {
@@ -17,7 +38,7 @@ void ResourceManager::LoadResources(ConfigMap config, SystemCore* core)
 	auto plane = new Mesh(core);
 	plane->Initialize(planeVertices.data(), 4, indices, 6);
 	meshes.insert(std::pair<std::string, Mesh*>("plane", plane));
-
+	this->core = core;
 	auto device = core->GetDevice();
 	auto context = core->GetDeviceContext();
 
@@ -85,13 +106,6 @@ void ResourceManager::LoadResources(ConfigMap config, SystemCore* core)
 
 	materials.insert(std::pair<std::string, Material*>("fabric", material));
 
-	CreateWICTextureFromFile(device, context, L"../../Assets/Textures/wood.jpg", nullptr, &srv);
-	CreateWICTextureFromFile(device, context, L"../../Assets/Textures/woodNormal.png", nullptr, &normalSrv);
-	textures.insert(std::pair<std::string, ID3D11ShaderResourceView*>("wood", srv));
-	textures.insert(std::pair<std::string, ID3D11ShaderResourceView*>("woodNormal", normalSrv));
-	material = new Material(core, vertexShader, pixelShader, srv, normalSrv, sampler);
-	materials.insert(std::pair<std::string, Material*>("wood", material));
-
 	CreateWICTextureFromFile(device, context, L"../../Assets/Textures/default.png", nullptr, &srv);
 	CreateWICTextureFromFile(device, context, L"../../Assets/Textures/defaultNormal.png", nullptr, &normalSrv);
 	textures.insert(std::pair<std::string, ID3D11ShaderResourceView*>("default", srv));
@@ -106,20 +120,31 @@ void ResourceManager::LoadResources(ConfigMap config, SystemCore* core)
 	material = new Material(core, vertexShader, pixelShader, srv, normalSrv, sampler);
 	materials.insert(std::pair<std::string, Material*>("grass", material));
 
+	//CreateWICTextureFromFile(device, context, L"../../Assets/Textures/wood.jpg", nullptr, &srv);
+	CreateWICTextureFromFile(device, context, L"../../Assets/Textures/woodNormal.png", nullptr, &normalSrv);
+	LoadTextureAsync("../../Assets/Textures/wood.jpg", "wood", [&] {
+		auto material = new Material(core, vertexShader, pixelShader, textures["wood"], normalSrv, sampler);
+		materials.insert(std::pair<std::string, Material*>("wood", material));
+	});
+	//textures.insert(std::pair<std::string, ID3D11ShaderResourceView*>("wood", srv));
+	textures.insert(std::pair<std::string, ID3D11ShaderResourceView*>("woodNormal", normalSrv));
+	/*material = new Material(core, vertexShader, pixelShader, srv, normalSrv, sampler);
+	materials.insert(std::pair<std::string, Material*>("wood", material));*/
+
 	meshes.insert(std::pair<std::string, Mesh*>("sphere", new Mesh("../../Assets/Models/sphere.obj", core)));
 	meshes.insert(std::pair<std::string, Mesh*>("cone", new Mesh("../../Assets/Models/cone.obj", core)));
 	meshes.insert(std::pair<std::string, Mesh*>("cylinder", new Mesh("../../Assets/Models/cylinder.obj", core)));
 	meshes.insert(std::pair<std::string, Mesh*>("cube", new Mesh("../../Assets/Models/cube.obj", core)));
 	meshes.insert(std::pair<std::string, Mesh*>("helix", new Mesh("../../Assets/Models/helix.obj", core)));
 	meshes.insert(std::pair<std::string, Mesh*>("torus", new Mesh("../../Assets/Models/torus.obj", core)));
-	
+
 
 	// Animated data
 	fbxLoader.LoadNodes(fbxLoader.scene->GetRootNode(), fbxLoader.skeleton.mJoints);
 	fbxLoader.LoadNodes(fbxLoader.scene2->GetRootNode(), fbxLoader.skeleton.mJoints2);
 	int numChildren = fbxLoader.scene->GetRootNode()->GetChildCount();
-	
-	
+
+
 	FbxNode* childNode = fbxLoader.scene->GetRootNode()->GetChild(1);
 	FbxString name1 = childNode->GetName();
 	meshes.insert(std::pair<std::string, Mesh*>("man", fbxLoader.GetMesh(childNode, device)));

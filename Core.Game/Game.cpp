@@ -273,9 +273,9 @@ void Game::Update(float deltaTime)
 	//	}
 	//	centroidForward = centroidForward / 5.0f; // Then divide them by the number of Daleks to compute the average
 	//	centroidPosition = centroidPosition / 5.0f;
-	//	entities["Collider2"]->ApplyForce(rp3d::Vector3(-.1, 0, 0));
+	//	
 	//}
-
+	entities["Collider2"]->ApplyForce(rp3d::Vector3(-.1, 0, 0));
 	//camera = firstPersonCamera;
 	Ray ray;
 	ray.color = XMFLOAT4(1, 1, 1, 1);
