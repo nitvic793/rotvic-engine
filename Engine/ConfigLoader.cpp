@@ -27,5 +27,6 @@ ConfigMap ConfigLoader::Load(std::string file)
 	{
 		configMap.insert(ConfigMap::value_type(member, root.get(member,"").asString()));
 	}
+	config_doc.close();
 	return configMap;
 }

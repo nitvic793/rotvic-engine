@@ -72,6 +72,7 @@ CoreGame::CoreGame(std::string configFileName)
 	saveSystem = new SaveSystem();
 	asyncLoader = std::unique_ptr<AsyncLoader>(new AsyncLoader(&worker));
 	resourceManager = new ResourceManager();
+	resourceManager->SetAsyncLoader(asyncLoader.get());
 	gravity = rp3d::Vector3(0, -9.81, 0);
 	dynamicsWorld = new rp3d::DynamicsWorld(gravity);
 }

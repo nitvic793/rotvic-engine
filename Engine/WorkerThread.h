@@ -36,7 +36,7 @@ struct Job
 };
 
 /// <summary>
-/// Encapulates one worker thread. This will enqueue jobs and run it on a separate thread.
+/// Encapulates worker threads. This will enqueue jobs and run it on a separate thread.
 /// </summary>
 class WorkerThread
 {
@@ -63,7 +63,7 @@ public:
 	/// <summary>
 	/// Enqueue a task/job to the worker thread.
 	/// </summary>
-	/// <param name="job"></param>
+	/// <param name="job">Struct with job function and arguments</param>
 	void EnqueueJob(Job job);
 
 	/// <summary>

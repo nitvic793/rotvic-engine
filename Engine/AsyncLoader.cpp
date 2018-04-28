@@ -10,21 +10,21 @@ void AsyncLoader::Loader(void * args)
 {
 }
 
-void AsyncLoader::AsyncLoadFile(std::string filename, std::function<void(void*)> callback)
+void AsyncLoader::AsyncLoadFile(std::string filename, std::function<void(void*, unsigned int)> callback)
 {
-	auto asyncJob = [&](void* args) {
+	auto asyncJob = [filename, callback](void* args) {
 		std::ifstream file(filename.c_str() , std::ios::binary);
 		file.seekg(0, std::ios::end);
-		int size = file.tellg();
+		unsigned int size = (unsigned int)file.tellg();
 		file.seekg(0, std::ios::beg);
 		char *data = new char[size];
 		file.read(data, size);
 		file.close();
-		callback(data);
+		callback(data, size);
 	};
 
 	asyncWorker->EnqueueJob(
-	{
+	Job{
 		asyncJob,
 		nullptr
 	});
