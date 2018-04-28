@@ -64,6 +64,12 @@
     <Filter Include="Source Files\Physics">
       <UniqueIdentifier>{353c597c-4beb-422d-ab15-9a0024793754}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\System">
+      <UniqueIdentifier>{67d43115-413d-43f8-81e9-53099de25879}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\System">
+      <UniqueIdentifier>{b8160711-1bf5-4fd4-91ec-389c79480a19}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine.h">
@@ -189,6 +195,15 @@
     <ClInclude Include="EventSystem.h">
       <Filter>Header Files\Management</Filter>
     </ClInclude>
+    <ClInclude Include="AsyncLoader.h">
+      <Filter>Header Files\Management</Filter>
+    </ClInclude>
+    <ClInclude Include="ConcurrentQueue.h">
+      <Filter>Header Files\System</Filter>
+    </ClInclude>
+    <ClInclude Include="WorkerThread.h">
+      <Filter>Header Files\System</Filter>
+    </ClInclude>
     <ClInclude Include="FBXLoader.h">
       <Filter>Header Files\CoreTypes</Filter>
     </ClInclude>
@@ -289,6 +304,15 @@
     </ClCompile>
     <ClCompile Include="EventSystem.cpp">
       <Filter>Source Files\Management</Filter>
+    </ClCompile>
+    <ClCompile Include="AsyncLoader.cpp">
+      <Filter>Source Files\Management</Filter>
+    </ClCompile>
+    <ClCompile Include="ConcurrentQueue.cpp">
+      <Filter>Source Files\System</Filter>
+    </ClCompile>
+    <ClCompile Include="WorkerThread.cpp">
+      <Filter>Source Files\System</Filter>
     </ClCompile>
     <ClCompile Include="FBXLoader.cpp">
       <Filter>Source Files\CoreTypes</Filter>

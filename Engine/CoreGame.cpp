@@ -1,3 +1,4 @@
+// Most code written by Nitish Victor, rp3d integration written by Trevor Walden with help from http://www.reactphysics3d.com/usermanual.html and the rp3d classlist
 #include "CoreGame.h"
 #include "ConfigLoader.h"
 #include <typeinfo>
@@ -35,6 +36,7 @@ bool CoreGame::Initialize(HINSTANCE hInstance, int nCmdShow)
 	});
 	mouse = new Mouse(Core->GetWindowHandle());
 	Core->BindMouse(mouse);
+	worker.Start(); //Should be called before resource manager as it depends on worker threads.
 	resourceManager->LoadResources(config, Core);
 	debugDraw = std::unique_ptr<DebugDraw>(new DebugDraw(Core));
 	eventSystem = new EventSystem();
@@ -68,6 +70,7 @@ CoreGame::CoreGame(std::string configFileName)
 	gameInstance = nullptr;
 	renderer = new Renderer(Core, screenWidth, screenHeight);
 	saveSystem = new SaveSystem();
+	asyncLoader = std::unique_ptr<AsyncLoader>(new AsyncLoader(&worker));
 	resourceManager = new ResourceManager();
 	gravity = rp3d::Vector3(0, -9.81, 0);
 	dynamicsWorld = new rp3d::DynamicsWorld(gravity);
@@ -122,6 +125,7 @@ CoreGame::CoreGame(int height, int width, std::string title)
 /// </summary>
 CoreGame::~CoreGame()
 {
+	worker.Stop();
 	if (Core) delete Core;
 	if (gameInstance) delete gameInstance;
 	if (renderer) delete renderer;

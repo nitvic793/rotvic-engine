@@ -1,5 +1,6 @@
 #include "Entity.h"
 #include "DebugDraw.h"
+// Code in this file originally written by Nitish Victor, rp3d integration written by Trevor Walden with help from http://www.reactphysics3d.com/usermanual.html and the rp3d class list
 
 /// <summary>
 /// Constructor initializes the world matrix
@@ -69,7 +70,8 @@ Entity::~Entity()
 	if (basicShape) delete basicShape;
 	if (rigidBody) dynamicsWorld->destroyRigidBody(rigidBody);
 	dynamicsWorld = nullptr;
-
+	delete shape;
+	shape = nullptr;
 	if (scripts.size() > 0) // Call the update for each script each cycle
 	{
 		for each (Script* s in scripts)
