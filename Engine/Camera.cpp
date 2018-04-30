@@ -157,10 +157,10 @@ Camera::Camera(float aspectRatio)
 		OnMouseDown(wParam, x, y);
 	});
 	keyboard = Keyboard::GetInstance();
-	keyboard->AddAction("up", { Up,W });
-	keyboard->AddAction("left", { Left,A });
-	keyboard->AddAction("right", { Right,D });
-	keyboard->AddAction("down", { Down,S });
+	keyboard->AddAction("up", { Up});
+	keyboard->AddAction("left", { Left });
+	keyboard->AddAction("right", { Right });
+	keyboard->AddAction("down", { Down });
 }
 
 

@@ -93,7 +93,9 @@ void Game::LoadLevel()
 	entity->isAnimated = true;
 	entity->SetScale(0.03, 0.03, 0.03);
 	entity->SetRotation(0, 3.14, 0);
+	entity->CreateBoxCollider(rp3d::Vector3(2, 2, 2));
 	AddEntity(entity, "man");
+	entity->SetRigidBodyParameters(true);
 	//{auto entity = new Entity(resource->GetMesh("cylinder"), resource->GetMaterial("metal"), rp3d::Vector3(2, 0, 0), dynamicsWorld, { new Flocker() });
 	//entity->CreateCylinderCollider(.5, 1);
 	//AddEntity(entity, "Flocker1");  // Flocker 1
@@ -325,44 +327,57 @@ void Game::Update(float deltaTime)
 		//console->WriteLine(L"Up action pressed");
 	}
 
-	if (keyboard->IsKeyPressed(Z) && delayTime > 0.4f)
+	/*
+	if (keyboard->IsKeyPressed(Z) && delayTime > 0.2f)
 	{
 		delayTime = 0.f;
 		//resource->blendWeight = 1.0f;
 		isAnimationTransitioning = true;
 		animTransitionDirection = !animTransitionDirection;
 	}
-	/*
-	if (keyboard->IsKeyPressed(C) && delayTime > 0.2f)
+	*/
+
+
+	if (keyboard->IsKeyPressed(W))
 	{
-		delayTime = 0.f;
-		//resource->blendWeight = 0.0f;
 		isAnimationTransitioning = true;
 		animTransitionDirection = false;
 	}
-	*/
+	else
+	{
+		isAnimationTransitioning = true;
+		animTransitionDirection = true;
+	}
 
+
+
+
+	// Animation Transition
 	if (isAnimationTransitioning)
 	{
 		if(animTransitionDirection)
 		{ 
+			resource->blendWeight += 0.04f;
 			if (resource->blendWeight > 1.0f)
 			{
 				resource->blendWeight = 1.0f;
 				isAnimationTransitioning = false;
 			}
-			resource->blendWeight += 0.04f;
 		}
 		else
 		{
+			resource->blendWeight -= 0.04f;
 			if (resource->blendWeight < 0.0f)
 			{
 				resource->blendWeight = 0.0f;
 				isAnimationTransitioning = false;
 			}
-			resource->blendWeight -= 0.04f;
 		}
 	}
+
+
+	// Character Movement
+
 
 	delayTime += deltaTime;
 }

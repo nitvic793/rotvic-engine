@@ -133,6 +133,8 @@ void ResourceManager::LoadResources(ConfigMap config, SystemCore* core)
 	textures.insert(std::pair<std::string, ID3D11ShaderResourceView*>("manNormal", normalSrv));
 	material = new Material(core, vertexShaderAnimated, pixelShaderAnimated, srv, normalSrv, sampler);
 	materials.insert(std::pair<std::string, Material*>("man", material));
+
+	blendWeight = 1.0f;
 }
 
 Mesh * ResourceManager::GetMesh(std::string meshName)
