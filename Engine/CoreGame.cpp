@@ -399,6 +399,17 @@ void CoreGame::RegisterConsoleCommands()
 		entity->SetMaterial(material);
 	});
 
+	console->RegisterCommand("SetWireframe", [&](std::vector<std::string> params)
+	{
+		if (params.size() != 1)
+		{
+			console->WriteLine(L"Invalid params supplied");
+			return;
+		}
+		auto enable = std::stoi(params[0].c_str());
+		debugDraw->SetWireframeDrawEnabled(enable);
+	});
+
 }
 
 /// <summary>
@@ -436,6 +447,7 @@ void CoreGame::Draw()
 	renderer->UseCamera(gameInstance->GetCamera());
 	renderer->SetLights(gameInstance->GetLights());
 	auto entities = gameInstance->GetEntities();
+	debugDraw->DrawAsWireframeIfEnabled();
 	for (auto entity : entities)
 	{
 		renderer->Draw(entity);

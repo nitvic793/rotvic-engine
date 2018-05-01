@@ -390,6 +390,19 @@ void DebugDraw::Draw(ID3D11DeviceContext *context, ID3D11Buffer* vertexBuffer, I
 	context->DrawIndexed(indexCount, 0, 0);
 }
 
+void DebugDraw::SetWireframeDrawEnabled(bool enabled)
+{
+	isWireframeEnabled = enabled;
+}
+
+void DebugDraw::DrawAsWireframeIfEnabled()
+{
+	if (isWireframeEnabled)
+	{
+		core->GetDeviceContext()->RSSetState(wireframeRasterizer);
+	}
+}
+
 bool DebugDraw::IsEnabled()
 {
 	return enabled;
@@ -576,13 +589,23 @@ void DebugDraw::Render(Camera* camera)
 DebugDraw::DebugDraw(SystemCore* core)
 {
 	this->core = core;
+	auto device = core->GetDevice();
 	batch = std::make_unique<PrimitiveBatch<VertexPositionColor>>(core->GetDeviceContext());
 	states = std::make_unique<CommonStates>(core->GetDevice());
 	instance = this;
 	enabled = true;
+	isWireframeEnabled = false;
+	D3D11_RASTERIZER_DESC wfRasDesc = {};
+	wfRasDesc.CullMode = D3D11_CULL_NONE;
+	wfRasDesc.FillMode = D3D11_FILL_WIREFRAME;
+	device->CreateRasterizerState(&wfRasDesc, &wireframeRasterizer);
 }
 
 
 DebugDraw::~DebugDraw()
 {
+	if (wireframeRasterizer)
+	{
+		wireframeRasterizer->Release();
+	}
 }

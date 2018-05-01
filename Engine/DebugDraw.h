@@ -32,6 +32,7 @@ class DebugDraw
 	//DirectX Related 
 	std::unique_ptr<CommonStates> states;
 	std::unique_ptr<DirectX::PrimitiveBatch<DirectX::VertexPositionColor>> batch;
+	ID3D11RasterizerState* wireframeRasterizer;
 
 	//Debug Draw Instance
 	static DebugDraw* instance;
@@ -50,6 +51,7 @@ class DebugDraw
 	std::map<std::string, bool> groups;
 	std::queue<DrawCallPayLoad> drawCalls;
 	bool enabled;
+	bool isWireframeEnabled;
 
 	/// <summary>
 	/// Returns true if drawing of given group is enabled. Also adds group name to group map if group name is not found in map. 
@@ -57,10 +59,25 @@ class DebugDraw
 	/// <param name="groupName">Name of group to check if it is enabled</param>
 	/// <returns>Boolean value indicating if group is enabled or not</returns>
 	bool IsGroupEnabled(std::string groupName);
+
 	void Draw(ID3D11DeviceContext *context, ID3D11Buffer* vertexBuffer, ID3D11Buffer* indexBuffer, UINT indexCount);
 public:
+	void SetWireframeDrawEnabled(bool enabled);
+
+	void DrawAsWireframeIfEnabled();
+
+	/// <summary>
+	/// Returns true if debug draw is enabled as a whole.
+	/// </summary>
+	/// <returns>Boolean representing if Debug Draw is enabled</returns>
 	bool IsEnabled();
+
+	/// <summary>
+	/// Enable or disable debug draw system.
+	/// </summary>
+	/// <param name="enable">Boolean which enables or disables debug draw system.</param>
 	void SetEnabled(bool enable);
+
 	/// <summary>
 	/// Get instance of debug draw
 	/// </summary>
