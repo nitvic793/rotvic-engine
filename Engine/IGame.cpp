@@ -2,6 +2,7 @@
 #include "IGame.h"
 #include "EventSystem.h"
 
+
 IGame::IGame()
 {
 	camera = nullptr;
