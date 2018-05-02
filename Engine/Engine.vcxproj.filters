@@ -207,6 +207,9 @@
     <ClInclude Include="FBXLoader.h">
       <Filter>Header Files\CoreTypes</Filter>
     </ClInclude>
+    <ClInclude Include="ObjLoader.h">
+      <Filter>Header Files\Helpers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CoreGame.cpp">

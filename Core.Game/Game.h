@@ -27,6 +27,7 @@ protected:
 	Camera* freeCam;
 	FirstPersonCamera* firstPersonCamera;
 	WorkerThread asyncWorker;
+	bool hasLoaded = false;
 public:
 	static Game* CreateInstance();
 	static int GetInstanceCount();

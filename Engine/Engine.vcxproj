@@ -157,6 +157,7 @@
     <ClInclude Include="Mesh.h" />
     <ClInclude Include="MeshLoader.h" />
     <ClInclude Include="Mouse.h" />
+    <ClInclude Include="ObjLoader.h" />
     <ClInclude Include="PhysicsEntityMap.h" />
     <ClInclude Include="PhysicsEventListener.h" />
     <ClInclude Include="PrimitiveShape.h" />

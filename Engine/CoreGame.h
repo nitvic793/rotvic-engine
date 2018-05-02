@@ -66,6 +66,8 @@ public:
 	virtual void Draw();
 	virtual void Run();
 	virtual void Bind(IGame* gInstance);
+
+	void InitializeInstance();
 	bool Initialize(HINSTANCE hInstance, int nCmdShow);
 	void UpdateTimer();
 	CoreGame(int height, int width, std::string title);

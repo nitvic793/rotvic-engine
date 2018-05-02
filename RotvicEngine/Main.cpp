@@ -29,7 +29,7 @@ int WINAPI WinMain(
 		game->Initialize(hInstance, nCmdShow);
 		auto gInstance = Game::CreateInstance();
 		game->Bind(gInstance);
-		gInstance->Initialize();
+		game->InitializeInstance();
 		game->Run();
 	}
 	catch (std::exception e)

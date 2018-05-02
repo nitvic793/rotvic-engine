@@ -5,6 +5,24 @@
 #include <stdexcept>
 
 /// <summary>
+/// Initializes bound game instance.
+/// </summary>
+void CoreGame::InitializeInstance()
+{
+	eventSystem->RegisterEventCallback("ResourceLoadComplete", gameInstance, [&](void*)
+	{
+		gameInstance->SetResourceInitialized(true);
+		gameInstance->Initialize();
+		gameInstance->SetPhysicsActive(true);
+	});
+
+	resourceManager->LoadResourcesAsync(config, Core, [&]() 
+	{
+		eventSystem->EmitEventQueued("ResourceLoadComplete", GENERIC, nullptr, gameInstance);
+	});
+}
+
+/// <summary>
 /// Initializes window and bind DirectX to window. Also initializes other required resources. 
 /// </summary>
 /// <param name="hInstance">The HINSTANCE struct required to initialize the window</param>
@@ -37,7 +55,9 @@ bool CoreGame::Initialize(HINSTANCE hInstance, int nCmdShow)
 	mouse = new Mouse(Core->GetWindowHandle());
 	Core->BindMouse(mouse);
 	worker.Start(); //Should be called before resource manager as it depends on worker threads.
-	resourceManager->LoadResources(config, Core);
+	resourceManager->SetAsyncWorker(&worker);
+	//resourceManager->LoadResources(config, Core);
+
 	debugDraw = std::unique_ptr<DebugDraw>(new DebugDraw(Core));
 	eventSystem = new EventSystem();
 	RegisterConsoleCommands();
@@ -453,7 +473,7 @@ void CoreGame::Draw()
 		renderer->Draw(entity);
 		if (debugDraw->IsEnabled())entity->DrawDebugShape();
 	}
-	if (gameInstance->GetSkybox() != nullptr)
+	if (gameInstance->IsResourcesInitialized() && gameInstance->GetSkybox() != nullptr)
 	{
 		renderer->Draw(gameInstance->GetSkybox());
 	}

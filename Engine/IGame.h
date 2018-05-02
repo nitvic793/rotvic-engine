@@ -43,6 +43,8 @@ protected:
 	const Vector2f& GetMousePosition2D();
 	const float timeStep = 1.0f / 60.0; // Constant physics time step 
 	float physicsTimer = 0;
+	bool AreResourcesInitialized = false;
+	bool isPhysicsEnabled = false;
 public:
 	void BindConsole(Console* console);
 	void BindKeyboard(Keyboard* keyboard);
@@ -53,6 +55,8 @@ public:
 	void SetRenderer(Renderer* renderer);
 	void SetResourceManager(ResourceManager *rm);
 	void SetPhysics(rp3d::Vector3 grav, rp3d::DynamicsWorld* world);
+	void SetResourceInitialized(bool init);
+	void SetPhysicsActive(bool active);
 
 	virtual void UpdateEntities(float deltaTime);
 	virtual void Update(float) = 0;
@@ -62,6 +66,7 @@ public:
 	virtual bool Load();
 	virtual std::vector<Entity*> GetEntities();
 
+	bool IsResourcesInitialized() const;
 	Entity* GetEntity(std::string entity);
 	void AddEntity(Entity *entity, std::string entityName);
 	Camera* GetCamera();
