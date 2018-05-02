@@ -1,3 +1,8 @@
+/// <summary>
+/// Author: Nitish Victor
+/// FBX Animation Rendering: Rahul SV
+/// </summary>
+
 #include "Renderer.h"
 
 

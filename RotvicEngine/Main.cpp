@@ -1,3 +1,7 @@
+/// <summary>
+/// Author: Nitish Victor
+/// </summary>
+
 #define NOMINMAX
 
 #include <Windows.h>

@@ -1,3 +1,7 @@
+/// <summary>
+/// Author: Nitish Victor
+/// </summary>
+
 #include "AsyncLoader.h"
 #include <fstream>
 

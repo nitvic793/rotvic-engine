@@ -1,4 +1,5 @@
 /*
+Author: Nitish Victor
 Contains reference code from source https://github.com/SFML/SFML/blob/5d7843c58a850b4941d7d9794d6fede2bbc02833/include/SFML/Window/Keyboard.hpp
 from the SFML project on https://github.com/SFML/SFML/
 */

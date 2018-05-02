@@ -1,3 +1,8 @@
+/// <summary>
+/// Author: Nitish Victor
+/// Part credits: Trevor Walden
+/// </summary>
+
 #pragma once
 #define NOMINMAX
 #include <d3d11.h>

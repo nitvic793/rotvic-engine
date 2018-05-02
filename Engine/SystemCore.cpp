@@ -1,5 +1,6 @@
 /*
-Code referenced from Prof. Chris Cascioli DX11 Starter code - provided in class. 
+Author: Nitish Victor
+Credits: DirectX11 initialization code referenced from Prof. Chris Cascioli DX11 Starter code provided in class. 
 */
 
 #include "SystemCore.h"

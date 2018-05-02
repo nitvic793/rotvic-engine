@@ -1,3 +1,8 @@
+/// <summary>
+/// Author: Nitish Victor
+/// FBX Animation Author: Rahul SV
+/// </summary>
+
 #include "ResourceManager.h"
 #include "MeshLoader.h"
 #include "DDSTextureLoader.h"

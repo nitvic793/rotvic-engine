@@ -1,3 +1,7 @@
+/// <summary>
+/// Author: Nitish Victor
+/// </summary>
+
 #include "FileBuffer.h"
 #define NOMINMAX
 #include <Windows.h>

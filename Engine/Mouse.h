@@ -1,3 +1,7 @@
+/// <summary>
+/// Author: Nitish Victor
+/// </summary>
+
 #pragma once
 #define NOMINMAX
 #include "Vector2f.h"
