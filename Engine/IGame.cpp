@@ -180,6 +180,11 @@ void IGame::UpdateEntities(float deltaTime)
 	
 }
 
+void IGame::PreInitialize()
+{
+	uiCanvas = std::unique_ptr<UICanvas>(new UICanvas(core));
+}
+
 /// <summary>
 /// Add game entity to game instance. All entities in game instance will be updated and passed on to the renderer for drawing. 
 /// </summary>
@@ -206,6 +211,11 @@ LightsMap IGame::GetLights()
 Skybox* IGame::GetSkybox()
 {
 	return skybox;
+}
+
+UICanvas * IGame::GetCanvas()
+{
+	return uiCanvas.get();
 }
 
 /// <summary>

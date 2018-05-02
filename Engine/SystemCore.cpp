@@ -442,6 +442,16 @@ ID3D11DeviceContext* SystemCore::GetDeviceContext()
 	return context;
 }
 
+int SystemCore::GetScreenHeight() const
+{
+	return height;
+}
+
+int SystemCore::GetScreenWidth() const
+{
+	return width;
+}
+
 /// <summary>
 /// Returns the DirectX feature level. 
 /// </summary>

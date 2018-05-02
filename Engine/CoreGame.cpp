@@ -9,6 +9,7 @@
 /// </summary>
 void CoreGame::InitializeInstance()
 {
+	gameInstance->PreInitialize();
 	eventSystem->RegisterEventCallback("ResourceLoadComplete", gameInstance, [&](void*)
 	{
 		gameInstance->SetResourceInitialized(true);
@@ -478,6 +479,10 @@ void CoreGame::Draw()
 		renderer->Draw(gameInstance->GetSkybox());
 	}
 	if (debugDraw->IsEnabled())debugDraw->Render(gameInstance->GetCamera()); //Debug Draw
+	if (gameInstance->GetCanvas() != nullptr)
+	{
+		gameInstance->GetCanvas()->Render();
+	}
 	if (console->enabled)console->Render(); //Render console if required.
 	Core->GetDeviceContext()->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 	renderer->Present();

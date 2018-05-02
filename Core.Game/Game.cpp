@@ -55,6 +55,18 @@ Game* Game::CreateInstance()
 }
 
 /// <summary>
+/// Runs any pre-initialization logic required by the game. 
+/// </summary>
+void Game::PreInitialize()
+{
+	IGame::PreInitialize();
+	loadingText = std::unique_ptr<UIText>(new UIText());
+	loadingText->SetText(L"Loading...");
+	loadingText->SetPosition(XMFLOAT3(core->GetScreenWidth() - 250, core->GetScreenHeight() - 100, 0));
+	uiCanvas->AddComponent(loadingText.get(), "LoadingText");
+}
+
+/// <summary>
 /// Initialize game
 /// </summary>
 void Game::Initialize()
@@ -80,6 +92,7 @@ void Game::Initialize()
 	skybox = new Skybox(resource->GetMesh("cube"), resource->vertexShaders["sky"], resource->pixelShaders["sky"], resource->GetTexture("skybox"), core->GetDevice());
 	LoadLevel();
 	hasLoaded = true;
+	uiCanvas->RemoveComponent("LoadingText");
 }
 
 /// <summary>
@@ -135,7 +148,7 @@ void Game::LoadLevel()
 	entity->CreateBoxCollider(rp3d::Vector3(.5, .5, .5));
 	AddEntity(entity, "Collider2");  // Collider 2
 
-	
+
 
 	auto events = EventSystem::GetInstance();
 	events->RegisterEventCallback("Collision", entity, [&](void* args)
@@ -152,8 +165,6 @@ void Game::LoadLevel()
 	entity->CreateBoxCollider(rp3d::Vector3(.5, .5, .5));
 	AddEntity(entity, "Gravity2");  // Gravity-laden body 2
 	entity->SetRigidBodyParameters(true);
-
-	
 
 	//auto terrain = new Terrain(core, dynamicsWorld);
 	//terrain->Initialize("../../Assets/Terrain/heightmap.bmp");
@@ -262,26 +273,6 @@ int Game::GetInstanceCount()
 /// <param name="deltaTime"></param>
 void Game::Update(float deltaTime)
 {
-	if (hasLoaded)
-	{
-		//std::ostringstream flockerindex;
-		//if (flocking)
-		//{
-		//	for (int i = 1; i < 6; i++) // Update the flocking variables
-		//	{
-		//		flockerindex = std::ostringstream();
-		//		flockerindex << "Flocker" << i;
-		//		centroidForward += entities[flockerindex.str()]->GetForward(); // Add all the directions and positions
-		//		centroidPosition += entities[flockerindex.str()]->GetPosition();
-		//	}
-		//	centroidForward = centroidForward / 5.0f; // Then divide them by the number of Daleks to compute the average
-		//	centroidPosition = centroidPosition / 5.0f;
-		//	
-		//}
-		entities["Collider2"]->ApplyForce(rp3d::Vector3(-.1, 0, 0));
-		//camera = firstPersonCamera;
-	}
-	
 	Ray ray;
 	ray.color = XMFLOAT4(1, 1, 1, 1);
 	ray.origin = XMFLOAT3(0, 0, 0);
@@ -310,12 +301,33 @@ void Game::Update(float deltaTime)
 
 	Grid grid = Grid::GetDefaultGrid();
 	XMStoreFloat4(&grid.color, Colors::Green);
-	DebugDraw::Draw<Frustum>(fr, "Test");
-	DebugDraw::Draw<Box>(box, "Collision");
-	DebugDraw::Draw<Ray>(ray);
-	DebugDraw::Draw<Sphere>(sphere, "Collision");
+
+	if (hasLoaded)
+	{
+		std::ostringstream flockerindex;
+		if (flocking)
+		{
+			for (int i = 1; i < 6; i++) // Update the flocking variables
+			{
+				flockerindex = std::ostringstream();
+				flockerindex << "Flocker" << i;
+				centroidForward += entities[flockerindex.str()]->GetForward(); // Add all the directions and positions
+				centroidPosition += entities[flockerindex.str()]->GetPosition();
+			}
+			centroidForward = centroidForward / 5.0f; // Then divide them by the number of Daleks to compute the average
+			centroidPosition = centroidPosition / 5.0f;
+
+		}
+		entities["Collider2"]->ApplyForce(rp3d::Vector3(-.1, 0, 0));
+		DebugDraw::Draw<Frustum>(fr, "Test");
+		DebugDraw::Draw<Box>(box, "Collision");
+		DebugDraw::Draw<Ray>(ray);
+		DebugDraw::Draw<Sphere>(sphere, "Collision");
+		DebugDraw::Draw<Cylinder>(cyl, "Collision");
+	}
+
 	DebugDraw::Draw<Grid>(grid, "Collision");
-	DebugDraw::Draw<Cylinder>(cyl, "Collision");
+
 
 	delayTime += deltaTime;
 	if (keyboard->IsKeyPressed(Tilde) && delayTime > 0.2f)
@@ -349,8 +361,8 @@ void Game::Update(float deltaTime)
 
 	if (isAnimationTransitioning)
 	{
-		if(animTransitionDirection)
-		{ 
+		if (animTransitionDirection)
+		{
 			if (resource->blendWeight > 1.0f)
 			{
 				resource->blendWeight = 1.0f;

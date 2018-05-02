@@ -48,6 +48,8 @@ public:
 
 	virtual ID3D11DeviceContext*	GetDeviceContext();
 
+	int						GetScreenHeight() const;
+	int						GetScreenWidth() const;
 	void					BindMouse(Mouse* m);
 	void					SetOnResizeCallback(std::function<void(int, int)> callback);
 	void					SetOnKeyPressCallback(std::function<void(char)> callback);
