@@ -42,6 +42,7 @@ public:
 	rp3d::Quaternion GetRotation();
 	rp3d::Vector3 GetLinearVelocity();
 	rp3d::Vector3 GetForward();
+	rp3d::RigidBody *GetRigidBody();
 
 	void DrawDebugShape();
 	void CreateRigidBody(rp3d::Vector3 position, rp3d::Quaternion orientation);
