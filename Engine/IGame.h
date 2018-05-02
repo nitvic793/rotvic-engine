@@ -73,5 +73,6 @@ public:
 
 	bool isAnimationTransitioning = false;
 	bool animTransitionDirection = false;
+	//rp3d::Vector3 forwardDir;
 };
 

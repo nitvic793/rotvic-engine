@@ -647,7 +647,7 @@ void FBXLoader::GetAnimatedMatrix()
 void FBXLoader::GetAnimatedMatrixExtra()
 {
 	FbxTime repeat = 0;
-	repeat.SetSecondDouble(5.0);
+	repeat.SetSecondDouble(3.6);
 	time.SetSecondDouble(T);
 	T += 0.05;
 	

@@ -122,6 +122,11 @@ rp3d::Vector3 Entity::GetForward()
 	return rigidBody->getTransform().getOrientation().getVectorV().getUnit();
 }
 
+rp3d::RigidBody* Entity::GetRigidBody()
+{
+	return rigidBody;
+}
+
 void Entity::ApplyForce(rp3d::Vector3 force)
 {
 	rigidBody->applyForceToCenterOfMass(rp3d::Vector3(force.x, force.y, force.z));
