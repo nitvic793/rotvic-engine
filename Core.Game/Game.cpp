@@ -328,6 +328,61 @@ void Game::Update(float deltaTime)
 		DebugDraw::Draw<Ray>(ray);
 		DebugDraw::Draw<Sphere>(sphere, "Collision");
 		DebugDraw::Draw<Cylinder>(cyl, "Collision");
+		forwardDir = rp3d::Vector3(5 * sin(rotationAngle), 0, 5 * cos(rotationAngle));
+		if (keyboard->IsKeyPressed(W))
+		{
+			isAnimationTransitioning = true;
+			animTransitionDirection = false;
+			
+			//entites["man"]
+			//entities["man"]->GetRigidBody()->setLinearVelocity(entities["man"]->GetForward()*10);
+			entities["man"]->GetRigidBody()->setLinearVelocity(forwardDir);
+		}
+		else
+		{
+			isAnimationTransitioning = true;
+			animTransitionDirection = true;
+			//entities["man"]->GetRigidBody()->setLinearVelocity(rp3d::Vector3(0, 0, 0));
+			//entities["man"]->GetRigidBody()->setLinearVelocity(forwardDir);
+		}
+
+
+		if (keyboard->IsKeyPressed(D))
+		{
+			rotationAngle += 2 * deltaTime;
+
+		}
+
+		if (keyboard->IsKeyPressed(A))
+		{
+			rotationAngle -= 2 * deltaTime;
+		}
+		entities["man"]->SetRotation(0, rotationAngle, 0);
+		// Forward Movement 
+	
+
+		// Animation State Transitions
+		if (isAnimationTransitioning)
+		{
+			if (animTransitionDirection)
+			{
+				resource->blendWeight += 0.04f;
+				if (resource->blendWeight > 1.0f)
+				{
+					resource->blendWeight = 1.0f;
+					isAnimationTransitioning = false;
+				}
+			}
+			else
+			{
+				resource->blendWeight -= 0.04f;
+				if (resource->blendWeight < 0.0f)
+				{
+					resource->blendWeight = 0.0f;
+					isAnimationTransitioning = false;
+				}
+			}
+		}
 	}
 
 	DebugDraw::Draw<Grid>(grid, "Collision");
@@ -346,60 +401,7 @@ void Game::Update(float deltaTime)
 		//console->WriteLine(L"Up action pressed");
 	}
 
-	// Forward Movement 
-	forwardDir = rp3d::Vector3(5 * sin(rotationAngle), 0, 5 * cos(rotationAngle));
 
-	if (keyboard->IsKeyPressed(W))
-	{
-		isAnimationTransitioning = true;
-		animTransitionDirection = false;
-
-		//entities["man"]->GetRigidBody()->setLinearVelocity(entities["man"]->GetForward()*10);
-		entities["man"]->GetRigidBody()->setLinearVelocity(forwardDir);
-	}
-	else
-	{
-		isAnimationTransitioning = true;
-		animTransitionDirection = true;
-		//entities["man"]->GetRigidBody()->setLinearVelocity(rp3d::Vector3(0, 0, 0));
-		//entities["man"]->GetRigidBody()->setLinearVelocity(forwardDir);
-	}
-
-
-	if (keyboard->IsKeyPressed(D))
-	{
-		rotationAngle += 2 * deltaTime;
-
-	}
-
-	if (keyboard->IsKeyPressed(A))
-	{
-		rotationAngle -= 2 * deltaTime;
-	}
-	entities["man"]->SetRotation(0, rotationAngle, 0);
-
-	// Animation State Transitions
-	if (isAnimationTransitioning)
-	{
-		if (animTransitionDirection)
-		{
-			resource->blendWeight += 0.04f;
-			if (resource->blendWeight > 1.0f)
-			{
-				resource->blendWeight = 1.0f;
-				isAnimationTransitioning = false;
-			}
-		}
-		else
-		{
-			resource->blendWeight -= 0.04f;
-			if (resource->blendWeight < 0.0f)
-			{
-				resource->blendWeight = 0.0f;
-				isAnimationTransitioning = false;
-			}
-		}
-	}
 
 	delayTime += deltaTime;
 }
