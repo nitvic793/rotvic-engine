@@ -1,3 +1,7 @@
+/// <summary>
+/// Author: Rahul SV
+/// </summary>
+
 #include "FBXLoader.h"
 
 #ifdef IOS_REF

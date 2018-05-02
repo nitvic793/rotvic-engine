@@ -1,4 +1,5 @@
 // Most code written by Nitish Victor, rp3d integration written by Trevor Walden with help from http://www.reactphysics3d.com/usermanual.html and the rp3d class list
+
 #include "IGame.h"
 #include "EventSystem.h"
 
@@ -40,6 +41,11 @@ std::vector<Entity*> IGame::GetEntities()
 	return vEntities;
 }
 
+bool IGame::IsResourcesInitialized() const
+{
+	return AreResourcesInitialized;
+}
+
 Entity* IGame::GetEntity(std::string entity)
 {
 	if (entities.find(entity) != entities.end())
@@ -77,6 +83,20 @@ void IGame::SetPhysics(rp3d::Vector3 grav, rp3d::DynamicsWorld* world)
 	physicsEntityMap = new PhysicsEntityMap();
 	physicsEventListener->SetEntityMap(physicsEntityMap);
 	world->setEventListener(physicsEventListener);
+}
+
+void IGame::SetResourceInitialized(bool init)
+{
+	AreResourcesInitialized = init;
+}
+
+void IGame::SetPhysicsActive(bool active)
+{
+	isPhysicsEnabled = active;
+	if (active)
+	{
+		physicsTimer = 0.f;
+	}
 }
 
 /// <summary>
@@ -141,14 +161,17 @@ void IGame::SetResourceManager(ResourceManager* rm)
 /// <param name="deltaTime">The delta time between frames</param>
 void IGame::UpdateEntities(float deltaTime)
 {
-	while (physicsTimer >= timeStep) { // Catch phyics up to time elapsed between frames
+	if (isPhysicsEnabled)
+	{
+		while (physicsTimer >= timeStep) { // Catch phyics up to time elapsed between frames
 
-		dynamicsWorld->update(timeStep); // Update the Dynamics world using the constant time step (1/60)
+			dynamicsWorld->update(timeStep); // Update the Dynamics world using the constant time step (1/60)
 
-		physicsTimer -= timeStep; // Reset time difference
+			physicsTimer -= timeStep; // Reset time difference
 
-		auto events = EventSystem::GetInstance();
-		events->ProcessQueuedEvents(PHYSICS);
+			auto events = EventSystem::GetInstance();
+			events->ProcessQueuedEvents(PHYSICS);
+		}
 	}
 
 	for (auto entity : entities) {
@@ -157,6 +180,11 @@ void IGame::UpdateEntities(float deltaTime)
 
 	physicsTimer += deltaTime; // Track time
 	
+}
+
+void IGame::PreInitialize()
+{
+	uiCanvas = std::unique_ptr<UICanvas>(new UICanvas(core));
 }
 
 /// <summary>
@@ -185,6 +213,11 @@ LightsMap IGame::GetLights()
 Skybox* IGame::GetSkybox()
 {
 	return skybox;
+}
+
+UICanvas * IGame::GetCanvas()
+{
+	return uiCanvas.get();
 }
 
 /// <summary>

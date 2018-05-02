@@ -1,3 +1,7 @@
+/// <summary>
+/// Author: Nitish Victor
+/// </summary>
+
 #include "Console.h"
 
 Console* Console::instance = nullptr;

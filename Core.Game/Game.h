@@ -14,6 +14,8 @@ class Game : public IGame
 protected:
 	static int InstanceCount;
 	float speed;
+
+	std::unique_ptr<UIText> loadingText;
 	DirectionalLight light;
 	DirectionalLight secondaryLight;
 	PointLight pointLight;
@@ -27,18 +29,20 @@ protected:
 	Camera* freeCam;
 	FirstPersonCamera* firstPersonCamera;
 	WorkerThread asyncWorker;
+	bool hasLoaded = false;
 public:
 	static Game* CreateInstance();
 	static int GetInstanceCount();
 	void SetSpeed(float);
 	const float& GetSpeed();
 
-	void Initialize();
+	void PreInitialize() override;
+	void Initialize() override;
 
 	virtual void LoadLevel();
 	virtual bool Save();
 	virtual bool Load();
-	virtual void Update(float);
+	virtual void Update(float) override;
 	Game(float speed = DefaultSpeed);
 	~Game();
 };

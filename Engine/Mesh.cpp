@@ -1,3 +1,7 @@
+/// <summary>
+/// Author: Nitish Victor
+/// </summary>
+
 #include "Mesh.h"
 
 Mesh::Mesh(SystemCore* core)

@@ -1,3 +1,7 @@
+/// <summary>
+/// Author: Nitish Victor
+/// </summary>
+
 #pragma once
 #include "ISerializable.h"
 #include "FileBuffer.h"

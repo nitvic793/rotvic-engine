@@ -1,3 +1,7 @@
+/// <summary>
+/// Author: Nitish Victor
+/// </summary>
+
 #include "Camera.h"
 #define NOMINMAX
 #include "Mouse.h"

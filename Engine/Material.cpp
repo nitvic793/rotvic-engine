@@ -1,3 +1,7 @@
+/// <summary>
+/// Author: Nitish Victor
+/// </summary>
+
 #include "Material.h"
 
 Material::Material(SystemCore* core)

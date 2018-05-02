@@ -14,6 +14,7 @@
 #include "PhysicsEventListener.h"
 #include "PhysicsEntityMap.h"
 #include "Skybox.h"
+#include "UICanvas.h"
 
 /// <summary>
 /// The game instance interface. The actual game should inherit and implement this abstract class and bind it to the core game instance. 
@@ -39,10 +40,13 @@ protected:
 	rp3d::DynamicsWorld* dynamicsWorld;
 	Skybox* skybox;
 	PhysicsEntityMap* physicsEntityMap;
+	std::unique_ptr<UICanvas> uiCanvas;
 	void ClearEntities();
 	const Vector2f& GetMousePosition2D();
 	const float timeStep = 1.0f / 60.0; // Constant physics time step 
 	float physicsTimer = 0;
+	bool AreResourcesInitialized = false;
+	bool isPhysicsEnabled = false;
 public:
 	void BindConsole(Console* console);
 	void BindKeyboard(Keyboard* keyboard);
@@ -53,20 +57,25 @@ public:
 	void SetRenderer(Renderer* renderer);
 	void SetResourceManager(ResourceManager *rm);
 	void SetPhysics(rp3d::Vector3 grav, rp3d::DynamicsWorld* world);
+	void SetResourceInitialized(bool init);
+	void SetPhysicsActive(bool active);
 
 	virtual void UpdateEntities(float deltaTime);
 	virtual void Update(float) = 0;
+	virtual void PreInitialize();
 	virtual void Initialize() = 0;
 	virtual void OnResize(int width, int height);
 	virtual bool Save();
 	virtual bool Load();
 	virtual std::vector<Entity*> GetEntities();
 
+	bool IsResourcesInitialized() const;
 	Entity* GetEntity(std::string entity);
 	void AddEntity(Entity *entity, std::string entityName);
 	Camera* GetCamera();
 	LightsMap GetLights();
 	Skybox* GetSkybox();
+	UICanvas* GetCanvas();
 
 	IGame();
 	virtual ~IGame();

@@ -1,3 +1,8 @@
+/// <summary>
+/// Author: Nitish Victor
+/// Part Credits: Trevor Walden
+/// </summary>
+
 #include "Terrain.h"
 
 XMFLOAT3 * Terrain::GetHeightMap()

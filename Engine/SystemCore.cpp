@@ -1,5 +1,6 @@
 /*
-Code referenced from Prof. Chris Cascioli DX11 Starter code - provided in class. 
+Author: Nitish Victor
+Credits: DirectX11 initialization code referenced from Prof. Chris Cascioli DX11 Starter code provided in class. 
 */
 
 #include "SystemCore.h"
@@ -440,6 +441,16 @@ ID3D11Device* SystemCore::GetDevice()
 ID3D11DeviceContext* SystemCore::GetDeviceContext()
 {
 	return context;
+}
+
+int SystemCore::GetScreenHeight() const
+{
+	return height;
+}
+
+int SystemCore::GetScreenWidth() const
+{
+	return width;
 }
 
 /// <summary>

@@ -33,6 +33,7 @@ protected:
 	BasicShape* basicShape;
 	PrimitiveShapesType shapeType;
 	std::string collisionGroup;
+	rp3d::Vector3 centerOffset;
 public:
 	XMFLOAT4X4 GetWorldMatrix();
 	virtual void Update(float deltaTime);
@@ -57,7 +58,7 @@ public:
 	void SetMaterial(Material *mat);
 	void SetRigidBodyParameters(bool enableGravity, rp3d::BodyType bodyType = rp3d::DYNAMIC);
 	void CreateSphereCollider(rp3d::decimal radius, std::string collisionGroupName = "default");
-	void CreateBoxCollider(rp3d::Vector3 halfwidths, std::string collisionGroupName = "default");
+	void CreateBoxCollider(rp3d::Vector3 halfwidths, rp3d::Vector3 offset = rp3d::Vector3(0, 0, 0), std::string collisionGroupName = "default");
 	void CreateCapsuleCollider(rp3d::decimal radius, rp3d::decimal height);
 	void CreateCylinderCollider(rp3d::decimal radius, rp3d::decimal height);
 

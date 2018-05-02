@@ -23,3 +23,5 @@
 #include "EventSystem.h"
 #include "ConcurrentQueue.h"
 #include "WorkerThread.h"
+#include "UICanvas.h"
+#include "UIText.h"

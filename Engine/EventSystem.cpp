@@ -1,3 +1,7 @@
+/// <summary>
+/// Author: Nitish Victor
+/// </summary>
+
 #include "EventSystem.h"
 
 EventSystem* EventSystem::instance = nullptr;
@@ -49,7 +53,7 @@ void EventSystem::EmitEventImmediate(std::string eventType, void* args, void* in
 
 void EventSystem::EmitEventQueued(std::string eventType, EventUpdateType update, void* args, void* instance)
 {
-	eventQueue[update].push({eventType, args, instance });
+	eventQueue[update].push(EventArgs{ eventType, instance, args });
 }
 
 void EventSystem::ProcessQueuedEvents(EventUpdateType updateType)

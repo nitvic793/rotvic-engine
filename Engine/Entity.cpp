@@ -186,9 +186,9 @@ void Entity::DrawDebugShape()
 		auto box = *(Box*)basicShape;
 		auto pos = GetPosition();
 		auto rot = GetRotation();
-		box.bounding.Center.x = pos.x;
-		box.bounding.Center.y = pos.y;
-		box.bounding.Center.z = pos.z;
+		box.bounding.Center.x = pos.x + centerOffset.x;
+		box.bounding.Center.y = pos.y + centerOffset.y;
+		box.bounding.Center.z = pos.z + centerOffset.z;
 		box.bounding.Orientation = XMFLOAT4(rot.x, rot.y, rot.z, rot.w);
 		box.color = XMFLOAT4(1, 1, 1, 1);
 		DebugDraw::Draw<Box>(box, collisionGroup);
@@ -252,15 +252,17 @@ void Entity::CreateSphereCollider(rp3d::decimal radius, std::string collisionGro
 /// Set a new collider for the entity
 /// </summary>
 /// <param name="halfwidths">The halfwidth for each axis of the box</param>
-void Entity::CreateBoxCollider(rp3d::Vector3 halfwidths, std::string collisionGroupName)
+void Entity::CreateBoxCollider(rp3d::Vector3 halfwidths, rp3d::Vector3 offset, std::string collisionGroupName)
 {
+	centerOffset = offset;
 	collisionGroup = collisionGroupName;
 	shape = new rp3d::BoxShape(halfwidths);
+	rigidBody->setCenterOfMassLocal(centerOffset);
 	proxyShape = rigidBody->addCollisionShape(shape, rp3d::Transform::identity(), rp3d::decimal(1.0));
 	shapeType = BOX;
 	auto box = new Box();
 	box->bounding.Center = XMFLOAT3(0, 0, 0);
-	box->bounding.Extents = XMFLOAT3(0.5f, 0.5f, 0.5f);
+	box->bounding.Extents = XMFLOAT3(halfwidths.x, halfwidths.y, halfwidths.z);
 	basicShape = box;
 }
 

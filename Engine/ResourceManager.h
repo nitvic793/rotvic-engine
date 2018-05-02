@@ -1,3 +1,7 @@
+/// <summary>
+/// Author: Nitish Victor
+/// </summary>
+
 #pragma once
 #include "Mesh.h"
 #include "Material.h"
@@ -22,6 +26,7 @@ class ResourceManager
 	std::map<std::string, ID3D11ShaderResourceView*> textures;
 	static ResourceManager* instance;
 	AsyncLoader* asyncLoader;
+	WorkerThread *asyncWorker;
 	SystemCore* core;
 public:
 	SimpleVertexShader *vertexShader;
@@ -40,7 +45,11 @@ public:
 
 	void SetAsyncLoader(AsyncLoader* loader);
 
+	void SetAsyncWorker(WorkerThread* worker);
+
 	void LoadTextureAsync(std::string filename, std::string texName, std::function<void()> onLoad);
+
+	virtual void LoadResourcesAsync(ConfigMap config, SystemCore *core, std::function<void()> callback);
 
 	/// <summary>
 	/// Loads resources based on given config data.
