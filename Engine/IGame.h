@@ -73,6 +73,7 @@ public:
 
 	bool isAnimationTransitioning = false;
 	bool animTransitionDirection = false;
-	//rp3d::Vector3 forwardDir;
+	rp3d::Vector3 forwardDir = rp3d::Vector3(0,0,0);
+	float rotationAngle = 0;
 };
 

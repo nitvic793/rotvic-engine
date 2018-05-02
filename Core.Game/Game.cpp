@@ -336,25 +336,38 @@ void Game::Update(float deltaTime)
 		animTransitionDirection = !animTransitionDirection;
 	}
 	*/
-	
+	int a = cos(0);
 	// Forward Movement 
+	forwardDir = rp3d::Vector3(5 * sin(rotationAngle), 0, 5 * cos(rotationAngle));
+
 	if (keyboard->IsKeyPressed(W))
 	{
 		isAnimationTransitioning = true;
 		animTransitionDirection = false;
 
 		//entities["man"]->GetRigidBody()->setLinearVelocity(entities["man"]->GetForward()*10);
-		entities["man"]->GetRigidBody()->setLinearVelocity(rp3d::Vector3(0, 0, -10));
+		entities["man"]->GetRigidBody()->setLinearVelocity(forwardDir);
 	}
 	else
 	{
 		isAnimationTransitioning = true;
 		animTransitionDirection = true;
 		//entities["man"]->GetRigidBody()->setLinearVelocity(rp3d::Vector3(0, 0, 0));
+		//entities["man"]->GetRigidBody()->setLinearVelocity(forwardDir);
 	}
 
 
+	if (keyboard->IsKeyPressed(D))
+	{
+		rotationAngle +=2* deltaTime;
+		
+	}
 
+	if (keyboard->IsKeyPressed(A))
+	{
+		rotationAngle -=2* deltaTime;
+	}
+	entities["man"]->SetRotation(0, rotationAngle, 0);
 
 	// Animation State Transitions
 	if (isAnimationTransitioning)
