@@ -109,8 +109,10 @@ void Game::LoadLevel()
 	entity->isAnimated = true;
 	entity->SetScale(0.03, 0.03, 0.03);
 	entity->SetRigidBodyParameters(true);
+	entity->GetRigidBody()->setMass(0.1f);
+	entity->GetRigidBody()->getMaterial().setFrictionCoefficient(1.1f);
 	//entity->SetRotation(0, 3.14, 0);
-	entity->CreateBoxCollider(rp3d::Vector3(1, 1, 1));
+	entity->CreateBoxCollider(rp3d::Vector3(1, 1, 1), rp3d::Vector3(0, 1, 0));
 	//entity->CreateCapsuleCollider(rp3d::decimal(1), rp3d::decimal(2));
 	AddEntity(entity, "man");
 	//{auto entity = new Entity(resource->GetMesh("cylinder"), resource->GetMaterial("metal"), rp3d::Vector3(2, 0, 0), dynamicsWorld, { new Flocker() });
@@ -335,7 +337,7 @@ void Game::Update(float deltaTime)
 			isAnimationTransitioning = true;
 			animTransitionDirection = false;
 			
-			entities["man"]->ApplyForce(forwardDir);
+			entities["man"]->ApplyForce(forwardDir * 2);
 			//entities["man"]->GetRigidBody()->setLinearVelocity(entities["man"]->GetForward()*10);
 			//entities["man"]->GetRigidBody()->setLinearVelocity(forwardDir);
 		}
