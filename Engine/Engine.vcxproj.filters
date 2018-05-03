@@ -235,7 +235,7 @@
       <Filter>Header Files\Gameplay</Filter>
     </ClInclude>
     <ClInclude Include="ThirdPersonCamera.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\Gameplay</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

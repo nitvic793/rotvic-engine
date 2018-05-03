@@ -49,6 +49,16 @@ public:
 
 	void LoadTextureAsync(std::string filename, std::string texName, std::function<void()> onLoad);
 
+	/// <summary>
+	/// Loads all resources asynchronously.
+	/// </summary>
+	/// <param name="config">Config map</param>
+	/// <param name="core">System Core</param>
+	/// <param name="callback">Callback to be invoked after resources are loaded.</param>
+	/// <remarks>
+	/// Uses deferred context to create textures. Once the textures are loaded in memory an 
+	/// event is emitted which copies the buffer data to the GPU in the main thread.
+	/// </remarks>
 	virtual void LoadResourcesAsync(ConfigMap config, SystemCore *core, std::function<void()> callback);
 
 	/// <summary>
@@ -79,6 +89,10 @@ public:
 	/// <returns>Texuture/Shader Resource View</returns>
 	ID3D11ShaderResourceView* GetTexture(std::string textureName);
 
+	/// <summary>
+	/// Gets instance of Resource Manager.
+	/// </summary>
+	/// <returns></returns>
 	static ResourceManager* GetInstance();
 	ResourceManager();
 	~ResourceManager();

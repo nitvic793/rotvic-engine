@@ -177,6 +177,9 @@ void Entity::SetContext(EntityContextWrapper context)
 	this->context = context;
 }
 
+/// <summary>
+/// Renders the debug shape associated with this entity. 
+/// </summary>
 void Entity::DrawDebugShape()
 {
 	switch (shapeType)

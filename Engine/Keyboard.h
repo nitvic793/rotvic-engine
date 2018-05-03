@@ -130,11 +130,52 @@ protected:
 public:
 	Keyboard();
 	~Keyboard();
+
+	/// <summary>
+	/// Get instance of keyboard.
+	/// </summary>
+	/// <returns></returns>
 	static Keyboard* GetInstance();
+
+	/// <summary>
+	/// Get enum of given key string
+	/// </summary>
+	/// <param name="key">A string representing one key value</param>
+	/// <returns></returns>
 	const Keys GetKeyEnumValue(std::string key);
+
+	/// <summary>
+	/// Get enum list of given keys.
+	/// </summary>
+	/// <param name="keys">Vector of keys</param>
+	/// <returns></returns>
 	std::vector<Keys> GetKeyEnumValue(std::vector<std::string> keys);
+
+	/// <summary>
+	/// Returns true if given key is pressed on the keyboard.
+	/// </summary>
+	/// <param name="key">The key enum</param>
+	/// <returns></returns>
 	virtual bool IsKeyPressed(Keys key);
+
+	/// <summary>
+	/// Returns true if given key is pressed on the keyboard.
+	/// </summary>
+	/// <param name="key"></param>
+	/// <returns></returns>
 	virtual bool IsKeyPressed(wchar_t key);
+
+	/// <summary>
+	/// Returns true if any of the keys associated to this action is pressed.
+	/// </summary>
+	/// <param name="action">Name of action</param>
+	/// <returns>True if action is pressed.</returns>
 	virtual bool IsActionPressed(std::string action);
+
+	/// <summary>
+	/// Associate given keys with given action.
+	/// </summary>
+	/// <param name="action">Action name</param>
+	/// <param name="keys">List of keys</param>
 	void AddAction(std::string action, std::vector<Keys> keys);
 };

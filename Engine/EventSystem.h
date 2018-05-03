@@ -31,6 +31,14 @@ class EventSystem
 	static EventSystem* instance;
 	std::unordered_map<std::string, std::map<void*, std::function<void(void*)>>> eventMap;
 	std::unordered_map<EventUpdateType, std::queue<EventArgs>> eventQueue;
+
+	/// <summary>
+	/// Emits given event and invokes callback functions associated with event.
+	/// </summary>
+	/// <param name="eventType">Name of Event Type</param>
+	/// <param name="args">Arguments to pass to callback</param>
+	/// <param name="instance">Instance to refer for callback function.</param>
+	/// <remarks>Instances are used to map event type with given callback function.</remarks>
 	void EmitEvent(std::string eventType, void* args = nullptr, void* instance = nullptr);
 public:
 	/// <summary>
@@ -65,6 +73,10 @@ public:
 	/// <param name="instance"></param>
 	void EmitEventQueued(std::string eventType, EventUpdateType update, void* args = nullptr, void* instance = nullptr);
 
+	/// <summary>
+	/// Process all queued events of given type.
+	/// </summary>
+	/// <param name="updateType">Type of event update</param>
 	void ProcessQueuedEvents(EventUpdateType updateType);
 
 	EventSystem();

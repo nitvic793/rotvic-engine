@@ -66,8 +66,18 @@ class DebugDraw
 
 	void Draw(ID3D11DeviceContext *context, ID3D11Buffer* vertexBuffer, ID3D11Buffer* indexBuffer, UINT indexCount);
 public:
+	/// <summary>
+	/// Enable or disable wireframe draw 
+	/// </summary>
+	/// <param name="enabled">Boolean indicating if wireframe draw is enabled or not.</param>
 	void SetWireframeDrawEnabled(bool enabled);
 
+	/// <summary>
+	/// Draw the scene as wireframe if wireframe draw is enabled. 
+	/// </summary>
+	/// <remarks>
+	/// Sets the rasterizer to draw as Wireframe in the rendering pipeline.
+	/// </remarks>
 	void DrawAsWireframeIfEnabled();
 
 	/// <summary>

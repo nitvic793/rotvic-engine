@@ -29,12 +29,40 @@ class Terrain : public Entity
 	int indexCount;
 	SystemCore* core;
 public:
+	/// <summary>
+	/// Get height map of Terrain.
+	/// </summary>
+	/// <returns></returns>
 	XMFLOAT3* GetHeightMap();
+
+	/// <summary>
+	/// Get max height of terrain
+	/// </summary>
+	/// <returns></returns>
 	const int GetTerrainHeight();
+
+	/// <summary>
+	/// Get width of terrain.
+	/// </summary>
+	/// <returns></returns>
 	const int GetTerrainWidth();
+
+	/// <summary>
+	/// Calculate the normals of the terrain.
+	/// </summary>
 	void CalculateNormals();
+
+	/// <summary>
+	/// Calculate the texture UV coordinates of the terrain.
+	/// </summary>
 	void CalculateUVCoordinates();
 	void Initialize();
+
+	/// <summary>
+	/// Initializes given height map.
+	/// </summary>
+	/// <param name="filename"></param>
+	/// <returns></returns>
 	bool Initialize(const char* filename);
 	void _temp_Init();
 	Terrain(SystemCore* sysCore, rp3d::DynamicsWorld* physicsWorld);

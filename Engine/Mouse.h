@@ -17,7 +17,7 @@ using namespace DirectX;
 enum MouseButton{MBLeft, MBRight, MBMiddle};
 
 /// <summary>
-/// Mouse class to encapsulate all mouse related input. 
+/// Mouse class to encapsulate all mouse related input functionality. 
 /// </summary>
 class Mouse
 {
@@ -25,6 +25,7 @@ class Mouse
 	std::map<MouseButton, wchar_t> KeyMap;
 	static Mouse *instance;
 
+	//Event callbacks.
 	std::vector<std::function< void(WPARAM, int, int) >>	buttonUpCallbacks;
 	std::vector<std::function< void(WPARAM, int, int) >>	buttonDownCallbacks;
 	std::vector<std::function< void(WPARAM, int, int) >>	mouseMoveCallbacks;
@@ -60,18 +61,54 @@ public:
 	/// <returns>Returns Mouse Instance</returns>
 	static Mouse* GetInstance();
 
+	/// <summary>
+	/// Registers a callback for OnMouseButtonUp event. 
+	/// </summary>
+	/// <param name="callback">Callback to be invoked on event.</param>
 	void RegisterOnButtonUpCallback(std::function<void(WPARAM, int, int)> callback);
 
+	/// <summary>
+	/// Registers a callback for OnMouseMove event. 
+	/// </summary>
+	/// <param name="callback">Callback to be invoked on event.</param>
 	void RegisterOnMouseMoveCallback(std::function<void(WPARAM, int, int)> callback);
 
+	/// <summary>
+	/// Registers a callback for OnMouseButtonDown event. 
+	/// </summary>
+	/// <param name="callback">Callback to be invoked on event.</param>
 	void RegisterOnButtonDownCallback(std::function<void(WPARAM, int, int)> callback);
 
+	/// <summary>
+	/// This function is invoked by the system on OnMouseUp event. 
+	/// </summary>
+	/// <param name="wParam">WPARAM</param>
+	/// <param name="x">X Position</param>
+	/// <param name="y">Y Position</param>
 	void OnMouseUp(WPARAM wParam, int x, int y);
 
+	/// <summary>
+	/// This function is invoked by the system on OnMouseDown event. 
+	/// </summary>
+	/// <param name="wParam">WPARAM</param>
+	/// <param name="x">X Position</param>
+	/// <param name="y">Y Position</param>
 	void OnMouseDown(WPARAM wParam, int x, int y);
 
+	/// <summary>
+	/// This function is invoked by the system on OnMouseMove event. 
+	/// </summary>
+	/// <param name="wParam">WPARAM</param>
+	/// <param name="x">X Position</param>
+	/// <param name="y">Y Position</param>
 	void OnMouseMove(WPARAM wParam, int x, int y);
 
+	/// <summary>
+	/// This function is invoked by the system on OnMouseWheel event. 
+	/// </summary>
+	/// <param name="wParam">WPARAM</param>
+	/// <param name="x">X Position</param>
+	/// <param name="y">Y Position</param>
 	void OnMouseWheel(float wheelData, int x, int y);
 
 	Mouse(HWND hInstance);
