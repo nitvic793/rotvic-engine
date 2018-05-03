@@ -25,3 +25,4 @@
 #include "WorkerThread.h"
 #include "UICanvas.h"
 #include "UIText.h"
+#include "ThirdPersonPlayerEntity.h"

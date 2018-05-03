@@ -188,6 +188,8 @@
     <ClInclude Include="SystemCore.h" />
     <ClInclude Include="Keyboard.h" />
     <ClInclude Include="Terrain.h" />
+    <ClInclude Include="ThirdPersonCamera.h" />
+    <ClInclude Include="ThirdPersonPlayerEntity.h" />
     <ClInclude Include="Transform.h" />
     <ClInclude Include="UICanvas.h" />
     <ClInclude Include="UIComponent.h" />
@@ -230,6 +232,8 @@
     <ClCompile Include="Skybox.cpp" />
     <ClCompile Include="SystemCore.cpp" />
     <ClCompile Include="Terrain.cpp" />
+    <ClCompile Include="ThirdPersonCamera.cpp" />
+    <ClCompile Include="ThirdPersonPlayerEntity.cpp" />
     <ClCompile Include="Transform.cpp" />
     <ClCompile Include="UICanvas.cpp" />
     <ClCompile Include="UIComponent.cpp" />

@@ -105,16 +105,16 @@ void Game::LoadLevel()
 	/* Add Entitites */
 
 	// Player Entity
-	auto entity = new Entity(resource->GetMesh("man"), resource->GetMaterial("man"), rp3d::Vector3(0, -2, 5), dynamicsWorld);
-	entity->isAnimated = true;
-	entity->SetScale(0.03, 0.03, 0.03);
-	entity->SetRigidBodyParameters(true);
-	entity->GetRigidBody()->setMass(0.1f);
-	entity->GetRigidBody()->getMaterial().setFrictionCoefficient(1.1f);
+	auto pEntity = new ThirdPersonPlayerEntity(resource->GetMesh("man"), resource->GetMaterial("man"), rp3d::Vector3(0, -2, 5), dynamicsWorld);
+	pEntity->isAnimated = true;
+	pEntity->SetScale(0.03, 0.03, 0.03);
+	pEntity->SetRigidBodyParameters(true);
+	pEntity->GetRigidBody()->setMass(0.1f);
+	pEntity->GetRigidBody()->getMaterial().setFrictionCoefficient(1.1f);
 	//entity->SetRotation(0, 3.14, 0);
-	entity->CreateBoxCollider(rp3d::Vector3(1, 1, 1), rp3d::Vector3(0, 1, 0));
+	pEntity->CreateBoxCollider(rp3d::Vector3(1, 1, 1), rp3d::Vector3(0, 1, 0));
 	//entity->CreateCapsuleCollider(rp3d::decimal(1), rp3d::decimal(2));
-	AddEntity(entity, "man");
+	AddEntity(pEntity, "man");
 	//{auto entity = new Entity(resource->GetMesh("cylinder"), resource->GetMaterial("metal"), rp3d::Vector3(2, 0, 0), dynamicsWorld, { new Flocker() });
 	//entity->CreateCylinderCollider(.5, 1);
 	//AddEntity(entity, "Flocker1");  // Flocker 1
@@ -146,7 +146,7 @@ void Game::LoadLevel()
 	//dynamic_cast<Flocker*>(entities["Flocker5"]->scripts[0])->Init(entities["Flocker5"], camera, &centroidForward, &centroidPosition, &entities);
 	//}
 
-	entity = new Entity(resource->GetMesh("sphere"), resource->GetMaterial("metal"), rp3d::Vector3(5, 5, 0), dynamicsWorld);
+	auto entity = new Entity(resource->GetMesh("sphere"), resource->GetMaterial("metal"), rp3d::Vector3(5, 5, 0), dynamicsWorld);
 	entity->CreateSphereCollider(.5);
 	AddEntity(entity, "Collider1");  // Collider 1
 	//entity->SetRigidBodyParameters(true); 
@@ -331,65 +331,11 @@ void Game::Update(float deltaTime)
 		DebugDraw::Draw<Ray>(ray);
 		DebugDraw::Draw<Sphere>(sphere, "Collision");
 		DebugDraw::Draw<Cylinder>(cyl, "Collision");
-		forwardDir = rp3d::Vector3(5 * sin(rotationAngle), 0, 5 * cos(rotationAngle));
-		if (keyboard->IsKeyPressed(W))
-		{
-			isAnimationTransitioning = true;
-			animTransitionDirection = false;
-			
-			entities["man"]->ApplyForce(forwardDir * 2);
-			//entities["man"]->GetRigidBody()->setLinearVelocity(entities["man"]->GetForward()*10);
-			//entities["man"]->GetRigidBody()->setLinearVelocity(forwardDir);
-		}
-		else
-		{
-			isAnimationTransitioning = true;
-			animTransitionDirection = true;
-			//entities["man"]->GetRigidBody()->setLinearVelocity(rp3d::Vector3(0, 0, 0));
-			//entities["man"]->GetRigidBody()->setLinearVelocity(forwardDir);
-		}
-
-
-		if (keyboard->IsKeyPressed(D))
-		{
-			rotationAngle += 2 * deltaTime;
-
-		}
-
-		if (keyboard->IsKeyPressed(A))
-		{
-			rotationAngle -= 2 * deltaTime;
-		}
-		entities["man"]->SetRotation(0, rotationAngle, 0);
-		// Forward Movement 
-	
-
-		// Animation State Transitions
-		if (isAnimationTransitioning)
-		{
-			if (animTransitionDirection)
-			{
-				resource->blendWeight += 0.04f;
-				if (resource->blendWeight > 1.0f)
-				{
-					resource->blendWeight = 1.0f;
-					isAnimationTransitioning = false;
-				}
-			}
-			else
-			{
-				resource->blendWeight -= 0.04f;
-				if (resource->blendWeight < 0.0f)
-				{
-					resource->blendWeight = 0.0f;
-					isAnimationTransitioning = false;
-				}
-			}
-		}
 	}
-
-	DebugDraw::Draw<Grid>(grid, "Collision");
-
+	else
+	{
+		DebugDraw::Draw<Grid>(grid, "Collision");
+	}
 
 	delayTime += deltaTime;
 	if (keyboard->IsKeyPressed(Tilde) && delayTime > 0.2f)

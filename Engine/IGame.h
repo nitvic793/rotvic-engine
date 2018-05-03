@@ -43,7 +43,7 @@ protected:
 	std::unique_ptr<UICanvas> uiCanvas;
 	void ClearEntities();
 	const Vector2f& GetMousePosition2D();
-	const float timeStep = 1.0f / 60.0; // Constant physics time step 
+	const float timeStep = 1.0f / 60.0f; // Constant physics time step 
 	float physicsTimer = 0;
 	bool AreResourcesInitialized = false;
 	bool isPhysicsEnabled = false;
@@ -79,10 +79,5 @@ public:
 
 	IGame();
 	virtual ~IGame();
-
-	bool isAnimationTransitioning = false;
-	bool animTransitionDirection = true;
-	rp3d::Vector3 forwardDir = rp3d::Vector3(0, 0, 0);
-	float rotationAngle = 0;
 };
 
