@@ -14,6 +14,7 @@ FBXLoader::FBXLoader()
 {
 	InitializeSdkObjects();
 
+	// Filepaths of fbx animations
 	FbxString lFilePath1("../../axe-idle.fbx");
 	FbxString lFilePath2("../../axe-walk.fbx");
 
@@ -34,10 +35,6 @@ FBXLoader::FBXLoader()
 		FBXSDK_printf("\n\nAn error occurred while loading the scene...");
 	}
 
-
-
-	//evaluator = scene->GetAnimationEvaluator();
-	//evaluator2 = scene2->GetAnimationEvaluator();
 }
 
 FBXLoader::~FBXLoader()
@@ -47,7 +44,7 @@ FBXLoader::~FBXLoader()
 
 void FBXLoader::InitializeSdkObjects()
 {
-	//The first thing to do is to create the FBX Manager which is the object allocator for almost all the classes in the SDK
+	// create the FBX Manager which is the object allocator for almost all the classes in the SDK
 	fbxManager = FbxManager::Create();
 	if (!fbxManager)
 	{
@@ -56,15 +53,15 @@ void FBXLoader::InitializeSdkObjects()
 	}
 	else FBXSDK_printf("Autodesk FBX SDK version %s\n", fbxManager->GetVersion());
 
-	//Create an IOSettings object. This object holds all import/export settings.
+	// Create an IOSettings object. This object holds all import/export settings.
 	FbxIOSettings* ios = FbxIOSettings::Create(fbxManager, IOSROOT);
 	fbxManager->SetIOSettings(ios);
 
-	//Load plugins from the executable directory (optional)
+	// Load plugins from the executable directory (optional)
 	FbxString lPath = FbxGetApplicationDirectory();
 	fbxManager->LoadPluginsDirectory(lPath.Buffer());
 
-	//Create an FBX scene. This object holds most objects imported/exported from/to files.
+	// Create an FBX scene. This object holds most objects imported/exported from/to files.
 	scene = FbxScene::Create(fbxManager, "My Scene");
 	if (!scene)
 	{
@@ -181,7 +178,7 @@ bool FBXLoader::LoadScene(const char* pFilename, FbxScene* pScene)
 
 
 
-
+/* Recursive function that loads the bones into the skeleton */
 void FBXLoader::LoadNodes(FbxNode* node, std::vector<Joint>& Joints)
 {
 	
@@ -213,6 +210,7 @@ void FBXLoader::LoadNodes(FbxNode* node, std::vector<Joint>& Joints)
 }
 
 
+/* Retrieves the mesh's vertex data like positions, normals, texture coordinates, etc*/
 Mesh* FBXLoader::GetMesh(FbxNode * node , ID3D11Device* device)
 {
 	FbxString name1 = node->GetName();
@@ -234,7 +232,7 @@ Mesh* FBXLoader::GetMesh(FbxNode * node , ID3D11Device* device)
 		for (int i = 0; i < vertexCount; i++)
 		{
 
-			v.Position.x = (float)controlPoints[i].mData[0];
+			v.Position.x = (float)controlPoints[i].mData[0];		// Vertex Position
 			v.Position.y = (float)controlPoints[i].mData[1];
 			v.Position.z = (float)controlPoints[i].mData[2];
 			v.Position.w = 1;
@@ -245,20 +243,13 @@ Mesh* FBXLoader::GetMesh(FbxNode * node , ID3D11Device* device)
 			//normals.push_back(XMFLOAT3(0, 0, 0));
 		}
 
-		/*
-		for (int i = 8; i < vertexCount; i++)
-		{
-			vertices[i].Boneids.x = 1;
-		}
-		*/
-		//int* indices_array = fbxMesh->GetPolygonVertices();
+		
 
 		int polygonCount = fbxMesh->GetPolygonCount();
 		int polygonSize = fbxMesh->GetPolygonSize(0);
 		unsigned int indexCount = polygonCount * polygonSize;
 
-		//fbxMesh->GenerateTangentsData();
-		//int tangentCount = fbxMesh->GetElementTangentCount();
+		
 
 		for (int i = 0; i < fbxMesh->GetPolygonCount(); i++)
 		{
@@ -272,7 +263,7 @@ Mesh* FBXLoader::GetMesh(FbxNode * node , ID3D11Device* device)
 
 				fbxMesh->GetPolygonVertexNormal(i, j, norm);
 
-				verticesAnim[ind].Normal.x += norm.mData[0];
+				verticesAnim[ind].Normal.x += norm.mData[0];		// Vertex Normals
 				verticesAnim[ind].Normal.y += norm.mData[1];
 				verticesAnim[ind].Normal.z += norm.mData[2];
 
@@ -282,7 +273,7 @@ Mesh* FBXLoader::GetMesh(FbxNode * node , ID3D11Device* device)
 
 				fbxMesh->GetPolygonVertexUV(i, j, uvSet, uvCoord, uvFlag);
 
-				verticesAnim[ind].UV.x = uvCoord.mData[0];
+				verticesAnim[ind].UV.x = uvCoord.mData[0];			// Vertex Texture Coordinates
 				verticesAnim[ind].UV.y = uvCoord.mData[1];
 				
 			}
@@ -326,6 +317,7 @@ Mesh* FBXLoader::GetMesh(FbxNode * node , ID3D11Device* device)
 
 				int Count = currCluster->GetControlPointIndicesCount();
 
+				// Finding the 4 joints with the highest influence and storing the bone indices and weights in a float4
 				for (int i = 0; i < currCluster->GetControlPointIndicesCount(); ++i)
 				{
 					int index = currCluster->GetControlPointIndices()[i];
@@ -463,7 +455,7 @@ void FBXLoader::GetMatricesFromMesh(FbxNode * node, ID3D11Device *, std::vector<
 
 
 
-																			 // Update the information in mSkeleton 
+				// Update the information in mSkeleton 
 				globalBindposeInverseMatrix = globalBindposeInverseMatrix.Transpose();
 				transformLinkMatrix = transformLinkMatrix.Transpose();
 
@@ -484,6 +476,7 @@ void FBXLoader::GetMatricesFromMesh(FbxNode * node, ID3D11Device *, std::vector<
 }
 
 
+/* Find joint index with name */
 unsigned int FBXLoader::FindJointIndex(const std::string & jointname, std::vector<Joint>& Joints)
 {
 	for (int i = 0; i < Joints.size(); i++)
@@ -496,15 +489,16 @@ unsigned int FBXLoader::FindJointIndex(const std::string & jointname, std::vecto
 }
 
 
-
+/* Updates the array of bone transforms which are passed into the vertex shader (AnimationVS)*/
 void FBXLoader::GetAnimatedMatrixExtra()
 {
 	FbxTime repeat = 0;
 	repeat.SetSecondDouble(3.4);
 	time.SetSecondDouble(T);
-	T += 0.07;
 	
-	if(time > repeat)
+	T += 0.07; // Speed of animation 
+	
+	if(time > repeat) // Loop condition
 	{
 		T = 0;
 	}
@@ -521,7 +515,7 @@ void FBXLoader::GetAnimatedMatrixExtra()
 }
 
 
-
+/* Get global transform of a single joint from a vector of joints */
 XMFLOAT4X4 FBXLoader::GetJointGlobalTransform(int boneIndex, std::vector<Joint>& Joints)
 {
 	FbxAMatrix jointTransform;
@@ -541,6 +535,8 @@ XMFLOAT4X4 FBXLoader::GetJointGlobalTransform(int boneIndex, std::vector<Joint>&
 	return XMFLOAT4X4(globalTransform);
 }
 
+
+/* Converts FBX column major matrices to DirectX row major matrices*/
 XMFLOAT4X4 FBXLoader::FbxAMatrixToXMFloat4x4(FbxAMatrix jointTransform)
 {
 	jointTransform = jointTransform.Transpose();

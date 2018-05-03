@@ -3,15 +3,8 @@
 #include "Mesh.h"
 #include <fbxsdk.h>
 
-struct Keyframe {
-	FbxLongLong mFrameNum;
-	FbxAMatrix mGlobalTransform;
-	Keyframe* mNext;
 
-	Keyframe() : mNext(nullptr)
-	{}
-};
-
+/* Joints are the transforms that make a skeleton */
 struct Joint {
 public:
 	int mBoneIndex;
@@ -20,13 +13,12 @@ public:
 	DirectX::XMFLOAT4X4 mGlobalBindposeInverse = {};
 	FbxAMatrix mFbxTransform = {};
 	DirectX::XMFLOAT4X4 mTransform = {};
-	Keyframe* mAnimation;
+	
 	FbxNode *mNode;
 	int mKeyIndex = 0;
 
 	Joint() :
-		mNode(nullptr),
-		mAnimation(nullptr)
+		mNode(nullptr)
 	{
 		//mGlobalBindposeInverse.XMMatrixIdentity();
 		mBoneIndex = -1;
@@ -38,11 +30,13 @@ public:
 	}
 };
 
+/* Collection of joints used for animation */
 struct Skeleton {
 	std::vector<Joint> mJoints;
 	std::vector<Joint> mJoints2;
 };
 
+/* Struct holding the transform and inverse bind pose transform of a joint */
 struct Bones
 {
 	DirectX::XMFLOAT4X4 BoneTransform = {};
