@@ -94,7 +94,7 @@ CoreGame::CoreGame(std::string configFileName)
 	asyncLoader = std::unique_ptr<AsyncLoader>(new AsyncLoader(&worker));
 	resourceManager = new ResourceManager();
 	resourceManager->SetAsyncLoader(asyncLoader.get());
-	gravity = rp3d::Vector3(0, -9.81, 0);
+	gravity = rp3d::Vector3(0, -9.81f, 0);
 	dynamicsWorld = new rp3d::DynamicsWorld(gravity);
 }
 
@@ -137,7 +137,7 @@ CoreGame::CoreGame(int height, int width, std::string title)
 	renderer = new Renderer(Core, width, height);
 	saveSystem = new SaveSystem();
 	resourceManager = new ResourceManager();
-	gravity = rp3d::Vector3(0, -9.81, 0);
+	gravity = rp3d::Vector3(0, -9.81f, 0);
 	dynamicsWorld = new rp3d::DynamicsWorld(gravity);
 	mouse = nullptr;
 }

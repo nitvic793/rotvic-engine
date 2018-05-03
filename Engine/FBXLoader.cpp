@@ -191,7 +191,7 @@ void FBXLoader::LoadNodes(FbxNode* node, std::vector<Joint>& Joints)
 		if (Joints.size() == 0)
 			joint.mParentIndex = -1;
 		else
-			joint.mParentIndex = Joints.size() - 1;
+			joint.mParentIndex = (int)Joints.size() - 1;
 			
 
 		joint.mName = node->GetName();
@@ -229,7 +229,7 @@ Mesh* FBXLoader::GetMesh(FbxNode * node , ID3D11Device* device)
 		unsigned int vertexCount = fbxMesh->GetControlPointsCount();
 		VertexAnimated v;
 
-		for (int i = 0; i < vertexCount; i++)
+		for (unsigned int i = 0; i < vertexCount; i++)
 		{
 
 			v.Position.x = (float)controlPoints[i].mData[0];		// Vertex Position
@@ -263,9 +263,9 @@ Mesh* FBXLoader::GetMesh(FbxNode * node , ID3D11Device* device)
 
 				fbxMesh->GetPolygonVertexNormal(i, j, norm);
 
-				verticesAnim[ind].Normal.x += norm.mData[0];		// Vertex Normals
-				verticesAnim[ind].Normal.y += norm.mData[1];
-				verticesAnim[ind].Normal.z += norm.mData[2];
+				verticesAnim[ind].Normal.x += (float)norm.mData[0];		// Vertex Normals
+				verticesAnim[ind].Normal.y += (float)norm.mData[1];
+				verticesAnim[ind].Normal.z += (float)norm.mData[2];
 
 				FbxVector2 uvCoord(0, 0);
 				const char* uvSet = "map1";
@@ -273,8 +273,8 @@ Mesh* FBXLoader::GetMesh(FbxNode * node , ID3D11Device* device)
 
 				fbxMesh->GetPolygonVertexUV(i, j, uvSet, uvCoord, uvFlag);
 
-				verticesAnim[ind].UV.x = uvCoord.mData[0];			// Vertex Texture Coordinates
-				verticesAnim[ind].UV.y = uvCoord.mData[1];
+				verticesAnim[ind].UV.x = (float)uvCoord.mData[0];			// Vertex Texture Coordinates
+				verticesAnim[ind].UV.y = (float)uvCoord.mData[1];
 				
 			}
 
@@ -308,9 +308,25 @@ Mesh* FBXLoader::GetMesh(FbxNode * node , ID3D11Device* device)
 				globalBindposeInverseMatrix = globalBindposeInverseMatrix.Transpose();
 				transformLinkMatrix = transformLinkMatrix.Transpose();
 
-				skeleton.mJoints[currJointIndex].mGlobalBindposeInverse = XMFLOAT4X4(globalBindposeInverseMatrix.GetRow(0)[0], globalBindposeInverseMatrix.GetRow(0)[1], globalBindposeInverseMatrix.GetRow(0)[2], globalBindposeInverseMatrix.GetRow(0)[3], globalBindposeInverseMatrix.GetRow(1)[0], globalBindposeInverseMatrix.GetRow(1)[1], globalBindposeInverseMatrix.GetRow(1)[2], globalBindposeInverseMatrix.GetRow(1)[3], globalBindposeInverseMatrix.GetRow(2)[0], globalBindposeInverseMatrix.GetRow(2)[1], globalBindposeInverseMatrix.GetRow(2)[2], globalBindposeInverseMatrix.GetRow(2)[3], globalBindposeInverseMatrix.GetRow(3)[0], globalBindposeInverseMatrix.GetRow(3)[1], globalBindposeInverseMatrix.GetRow(3)[2], globalBindposeInverseMatrix.GetRow(3)[3]);
+				skeleton.mJoints[currJointIndex].mGlobalBindposeInverse = XMFLOAT4X4((float)globalBindposeInverseMatrix.GetRow(0)[0], 
+					(float)globalBindposeInverseMatrix.GetRow(0)[1], (float)globalBindposeInverseMatrix.GetRow(0)[2], 
+					(float)globalBindposeInverseMatrix.GetRow(0)[3], (float)globalBindposeInverseMatrix.GetRow(1)[0], 
+					(float)globalBindposeInverseMatrix.GetRow(1)[1], (float)globalBindposeInverseMatrix.GetRow(1)[2], 
+					(float)globalBindposeInverseMatrix.GetRow(1)[3], (float)globalBindposeInverseMatrix.GetRow(2)[0],
+					(float)globalBindposeInverseMatrix.GetRow(2)[1], (float)globalBindposeInverseMatrix.GetRow(2)[2], 
+					(float)globalBindposeInverseMatrix.GetRow(2)[3], 
+					(float)globalBindposeInverseMatrix.GetRow(3)[0], (float)globalBindposeInverseMatrix.GetRow(3)[1],
+					(float)globalBindposeInverseMatrix.GetRow(3)[2], (float)globalBindposeInverseMatrix.GetRow(3)[3]);
 				skeleton.mJoints[currJointIndex].mNode = currCluster->GetLink();
-				skeleton.mJoints[currJointIndex].mTransform = XMFLOAT4X4(transformLinkMatrix.GetRow(0)[0], transformLinkMatrix.GetRow(0)[1], transformLinkMatrix.GetRow(0)[2], transformLinkMatrix.GetRow(0)[3], transformLinkMatrix.GetRow(1)[0], transformLinkMatrix.GetRow(1)[1], transformLinkMatrix.GetRow(1)[2], transformLinkMatrix.GetRow(1)[3], transformLinkMatrix.GetRow(2)[0], transformLinkMatrix.GetRow(2)[1], transformLinkMatrix.GetRow(2)[2], transformLinkMatrix.GetRow(2)[3], transformLinkMatrix.GetRow(3)[0], transformLinkMatrix.GetRow(3)[1], transformLinkMatrix.GetRow(3)[2], transformLinkMatrix.GetRow(3)[3]);
+				skeleton.mJoints[currJointIndex].mTransform = XMFLOAT4X4((float)transformLinkMatrix.GetRow(0)[0], 
+					(float)transformLinkMatrix.GetRow(0)[1], (float)transformLinkMatrix.GetRow(0)[2], 
+					(float)transformLinkMatrix.GetRow(0)[3], (float)transformLinkMatrix.GetRow(1)[0], 
+					(float)transformLinkMatrix.GetRow(1)[1], (float)transformLinkMatrix.GetRow(1)[2], 
+					(float)transformLinkMatrix.GetRow(1)[3], (float)transformLinkMatrix.GetRow(2)[0], 
+					(float)transformLinkMatrix.GetRow(2)[1], (float)transformLinkMatrix.GetRow(2)[2], 
+					(float)transformLinkMatrix.GetRow(2)[3], (float)transformLinkMatrix.GetRow(3)[0], 
+					(float)transformLinkMatrix.GetRow(3)[1], (float)transformLinkMatrix.GetRow(3)[2], 
+					(float)transformLinkMatrix.GetRow(3)[3]);
 				skeleton.mJoints[currJointIndex].mNode = currCluster->GetLink();
 				skeleton.mJoints[currJointIndex].mFbxTransform = transformLinkMatrix;
 				skeleton.mJoints[currJointIndex].mBoneIndex = currJointIndex;
@@ -327,27 +343,27 @@ Mesh* FBXLoader::GetMesh(FbxNode * node , ID3D11Device* device)
 					
 					if (verticesAnim[index].Boneids.x == -1 && verticesAnim[index].Weights.x == -1)
 					{		
-							verticesAnim[index].Boneids.x = currJointIndex;
-							verticesAnim[index].Weights.x = currCluster->GetControlPointWeights()[i];
+							verticesAnim[index].Boneids.x = (float)currJointIndex;
+							verticesAnim[index].Weights.x = (float)currCluster->GetControlPointWeights()[i];
 					}
 					else if (verticesAnim[index].Boneids.y == -1 && verticesAnim[index].Weights.y == -1)
 					{
-							verticesAnim[index].Boneids.y = currJointIndex;
-							verticesAnim[index].Weights.y = currCluster->GetControlPointWeights()[i];
+							verticesAnim[index].Boneids.y = (float)currJointIndex;
+							verticesAnim[index].Weights.y = (float)currCluster->GetControlPointWeights()[i];
 					}
 					else if (verticesAnim[index].Boneids.z == -1 && verticesAnim[index].Weights.z == -1)
 					{
-							verticesAnim[index].Boneids.z = currJointIndex;
-							verticesAnim[index].Weights.z = currCluster->GetControlPointWeights()[i];
+							verticesAnim[index].Boneids.z = (float)currJointIndex;
+							verticesAnim[index].Weights.z = (float)currCluster->GetControlPointWeights()[i];
 					}
 					else if (verticesAnim[index].Boneids.w == -1 && verticesAnim[index].Weights.w == -1)
 					{
-							verticesAnim[index].Boneids.w = currJointIndex;
-							verticesAnim[index].Weights.w = currCluster->GetControlPointWeights()[i];
+							verticesAnim[index].Boneids.w = (float)currJointIndex;
+							verticesAnim[index].Weights.w = (float)currCluster->GetControlPointWeights()[i];
 					}
 					else
 					{
-						float currentWeight = currCluster->GetControlPointWeights()[i];
+						float currentWeight = (float)currCluster->GetControlPointWeights()[i];
 						//int smallestWeight = 0;
 
 						if (verticesAnim[index].Weights.x < verticesAnim[index].Weights.y)
@@ -356,48 +372,48 @@ Mesh* FBXLoader::GetMesh(FbxNode * node , ID3D11Device* device)
 							{
 								if (verticesAnim[index].Weights.x < verticesAnim[index].Weights.w)
 								{
-									verticesAnim[index].Boneids.x = currJointIndex;
-									verticesAnim[index].Weights.x = currentWeight;
+									verticesAnim[index].Boneids.x = (float)currJointIndex;
+									verticesAnim[index].Weights.x = (float)currentWeight;
 								}
 								else 
 								{
-									verticesAnim[index].Boneids.w = currJointIndex;
-									verticesAnim[index].Weights.w = currentWeight;
+									verticesAnim[index].Boneids.w = (float)currJointIndex;
+									verticesAnim[index].Weights.w = (float)currentWeight;
 								}
 							}
 							else if (verticesAnim[index].Weights.w < verticesAnim[index].Weights.z)
 							{
-								verticesAnim[index].Boneids.w = currJointIndex;
-								verticesAnim[index].Weights.w = currentWeight;
+								verticesAnim[index].Boneids.w = (float)currJointIndex;
+								verticesAnim[index].Weights.w = (float)currentWeight;
 							}
 							else
 							{
-								verticesAnim[index].Boneids.z = currJointIndex;
-								verticesAnim[index].Weights.z = currentWeight;
+								verticesAnim[index].Boneids.z = (float)currJointIndex;
+								verticesAnim[index].Weights.z = (float)currentWeight;
 							}
 						}
 						else if (verticesAnim[index].Weights.z < verticesAnim[index].Weights.y)
 						{
 							if (verticesAnim[index].Weights.w < verticesAnim[index].Weights.z)
 							{
-								verticesAnim[index].Boneids.w = currJointIndex;
-								verticesAnim[index].Weights.w = currentWeight;
+								verticesAnim[index].Boneids.w = (float)currJointIndex;
+								verticesAnim[index].Weights.w = (float)currentWeight;
 							}
 							else
 							{
-								verticesAnim[index].Boneids.z = currJointIndex;
-								verticesAnim[index].Weights.z = currentWeight;
+								verticesAnim[index].Boneids.z = (float)currJointIndex;
+								verticesAnim[index].Weights.z = (float)currentWeight;
 							}
 						}
 						else if (verticesAnim[index].Weights.w < verticesAnim[index].Weights.y)
 						{
-							verticesAnim[index].Boneids.w = currJointIndex;
-							verticesAnim[index].Weights.w = currentWeight;
+							verticesAnim[index].Boneids.w = (float)currJointIndex;
+							verticesAnim[index].Weights.w = (float)currentWeight;
 						}
 						else
 						{
-							verticesAnim[index].Boneids.y = currJointIndex;
-							verticesAnim[index].Weights.y = currentWeight;
+							verticesAnim[index].Boneids.y = (float)currJointIndex;
+							verticesAnim[index].Weights.y = (float)currentWeight;
 						}
 
 
@@ -459,9 +475,25 @@ void FBXLoader::GetMatricesFromMesh(FbxNode * node, ID3D11Device *, std::vector<
 				globalBindposeInverseMatrix = globalBindposeInverseMatrix.Transpose();
 				transformLinkMatrix = transformLinkMatrix.Transpose();
 
-				Joints[currJointIndex].mGlobalBindposeInverse = XMFLOAT4X4(globalBindposeInverseMatrix.GetRow(0)[0], globalBindposeInverseMatrix.GetRow(0)[1], globalBindposeInverseMatrix.GetRow(0)[2], globalBindposeInverseMatrix.GetRow(0)[3], globalBindposeInverseMatrix.GetRow(1)[0], globalBindposeInverseMatrix.GetRow(1)[1], globalBindposeInverseMatrix.GetRow(1)[2], globalBindposeInverseMatrix.GetRow(1)[3], globalBindposeInverseMatrix.GetRow(2)[0], globalBindposeInverseMatrix.GetRow(2)[1], globalBindposeInverseMatrix.GetRow(2)[2], globalBindposeInverseMatrix.GetRow(2)[3], globalBindposeInverseMatrix.GetRow(3)[0], globalBindposeInverseMatrix.GetRow(3)[1], globalBindposeInverseMatrix.GetRow(3)[2], globalBindposeInverseMatrix.GetRow(3)[3]);
+				Joints[currJointIndex].mGlobalBindposeInverse = XMFLOAT4X4((float)globalBindposeInverseMatrix.GetRow(0)[0], 
+					(float)globalBindposeInverseMatrix.GetRow(0)[1], (float)globalBindposeInverseMatrix.GetRow(0)[2], 
+					(float)globalBindposeInverseMatrix.GetRow(0)[3], (float)globalBindposeInverseMatrix.GetRow(1)[0], 
+					(float)globalBindposeInverseMatrix.GetRow(1)[1], (float)globalBindposeInverseMatrix.GetRow(1)[2], 
+					(float)globalBindposeInverseMatrix.GetRow(1)[3], (float)globalBindposeInverseMatrix.GetRow(2)[0], 
+					(float)globalBindposeInverseMatrix.GetRow(2)[1], (float)globalBindposeInverseMatrix.GetRow(2)[2], 
+					(float)globalBindposeInverseMatrix.GetRow(2)[3], (float)globalBindposeInverseMatrix.GetRow(3)[0], 
+					(float)globalBindposeInverseMatrix.GetRow(3)[1], (float)globalBindposeInverseMatrix.GetRow(3)[2], 
+					(float)globalBindposeInverseMatrix.GetRow(3)[3]);
 				Joints[currJointIndex].mNode = currCluster->GetLink();
-				Joints[currJointIndex].mTransform = XMFLOAT4X4(transformLinkMatrix.GetRow(0)[0], transformLinkMatrix.GetRow(0)[1], transformLinkMatrix.GetRow(0)[2], transformLinkMatrix.GetRow(0)[3], transformLinkMatrix.GetRow(1)[0], transformLinkMatrix.GetRow(1)[1], transformLinkMatrix.GetRow(1)[2], transformLinkMatrix.GetRow(1)[3], transformLinkMatrix.GetRow(2)[0], transformLinkMatrix.GetRow(2)[1], transformLinkMatrix.GetRow(2)[2], transformLinkMatrix.GetRow(2)[3], transformLinkMatrix.GetRow(3)[0], transformLinkMatrix.GetRow(3)[1], transformLinkMatrix.GetRow(3)[2], transformLinkMatrix.GetRow(3)[3]);
+				Joints[currJointIndex].mTransform = XMFLOAT4X4((float)transformLinkMatrix.GetRow(0)[0], 
+					(float)transformLinkMatrix.GetRow(0)[1], (float)transformLinkMatrix.GetRow(0)[2], 
+					(float)transformLinkMatrix.GetRow(0)[3], (float)transformLinkMatrix.GetRow(1)[0], 
+					(float)transformLinkMatrix.GetRow(1)[1], (float)transformLinkMatrix.GetRow(1)[2], 
+					(float)transformLinkMatrix.GetRow(1)[3], (float)transformLinkMatrix.GetRow(2)[0], 
+					(float)transformLinkMatrix.GetRow(2)[1], (float)transformLinkMatrix.GetRow(2)[2], 
+					(float)transformLinkMatrix.GetRow(2)[3], (float)transformLinkMatrix.GetRow(3)[0], 
+					(float)transformLinkMatrix.GetRow(3)[1], (float)transformLinkMatrix.GetRow(3)[2], 
+					(float)transformLinkMatrix.GetRow(3)[3]);
 				Joints[currJointIndex].mNode = currCluster->GetLink();
 				Joints[currJointIndex].mFbxTransform = transformLinkMatrix;
 				Joints[currJointIndex].mBoneIndex = currJointIndex;
@@ -486,6 +518,7 @@ unsigned int FBXLoader::FindJointIndex(const std::string & jointname, std::vecto
 			return i;
 		}
 	}
+	return 0;
 }
 
 
@@ -540,5 +573,13 @@ XMFLOAT4X4 FBXLoader::GetJointGlobalTransform(int boneIndex, std::vector<Joint>&
 XMFLOAT4X4 FBXLoader::FbxAMatrixToXMFloat4x4(FbxAMatrix jointTransform)
 {
 	jointTransform = jointTransform.Transpose();
-	return XMFLOAT4X4(jointTransform.GetRow(0)[0], jointTransform.GetRow(0)[1], jointTransform.GetRow(0)[2], jointTransform.GetRow(0)[3], jointTransform.GetRow(1)[0], jointTransform.GetRow(1)[1], jointTransform.GetRow(1)[2], jointTransform.GetRow(1)[3], jointTransform.GetRow(2)[0], jointTransform.GetRow(2)[1], jointTransform.GetRow(2)[2], jointTransform.GetRow(2)[3], jointTransform.GetRow(3)[0], jointTransform.GetRow(3)[1], jointTransform.GetRow(3)[2], jointTransform.GetRow(3)[3]);
+	return XMFLOAT4X4((float)jointTransform.GetRow(0)[0], 
+		(float)jointTransform.GetRow(0)[1], (float)jointTransform.GetRow(0)[2], 
+		(float)jointTransform.GetRow(0)[3], (float)jointTransform.GetRow(1)[0],
+		(float)jointTransform.GetRow(1)[1], (float)jointTransform.GetRow(1)[2], 
+		(float)jointTransform.GetRow(1)[3], (float)jointTransform.GetRow(2)[0], 
+		(float)jointTransform.GetRow(2)[1], (float)jointTransform.GetRow(2)[2], 
+		(float)jointTransform.GetRow(2)[3], (float)jointTransform.GetRow(3)[0], 
+		(float)jointTransform.GetRow(3)[1], (float)jointTransform.GetRow(3)[2], 
+		(float)jointTransform.GetRow(3)[3]);
 }

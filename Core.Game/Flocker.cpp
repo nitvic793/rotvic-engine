@@ -82,7 +82,7 @@ void Flocker::Update(float deltaTime)
 
 		if (count > 0) // Only do extra calculations if there are vehicles to avoid
 		{
-			sTotal = sTotal / count; // Average the force and scale to max speed
+			sTotal = sTotal / (float)count; // Average the force and scale to max speed
 			sTotal.normalize();
 			sTotal = sTotal * maxSpeed;
 			sTotal -= gameObject->GetLinearVelocity();
@@ -90,7 +90,7 @@ void Flocker::Update(float deltaTime)
 		}
 	}
 	XMVECTOR s = XMVectorSet(steeringForce.x, steeringForce.y, steeringForce.z, 0);
-	XMVector3ClampLength(s, .01, maxForce);
+	XMVector3ClampLength(s, .01f, maxForce);
 	steeringForce.x = XMVectorGetX(s);
 	steeringForce.y = XMVectorGetY(s);
 	steeringForce.z = XMVectorGetZ(s);

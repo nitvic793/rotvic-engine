@@ -288,7 +288,7 @@ void Entity::CreateCapsuleCollider(rp3d::decimal radius, rp3d::decimal height)
 /// <param name="height">The height of the cylinder collider</param>
 void Entity::CreateCylinderCollider(rp3d::decimal radius, rp3d::decimal height)
 {
-	shape = new rp3d::CylinderShape(radius, height, .001);
+	shape = new rp3d::CylinderShape(radius, height, .001f);
 	proxyShape = rigidBody->addCollisionShape(shape, rp3d::Transform::identity(), rp3d::decimal(1.0));
 	rigidBody->setAngularDamping(rp3d::decimal(1)); // 1 is maximum
 

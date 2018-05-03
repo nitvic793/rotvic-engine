@@ -99,13 +99,13 @@ VertexToPixel main(VertexShaderInput input)
 	*/
 	output.position = mul(mul(bonetransform, input.position), worldViewProj);
 
-	output.normal = mul(mul(bonetransform, input.normal), (float3x3)world);
+	output.normal = mul((float3)mul(bonetransform, float4(input.normal,1.0)), (float3x3)world);
 
 	output.worldPos = mul(input.position, world).xyz;
 
 	output.uv = input.uv;
 
-	output.tangent = normalize(mul(mul(bonetransform, input.tangent), (float3x3)world));
+	output.tangent = normalize(mul((float3)mul(bonetransform, float4(input.tangent,1.0)), (float3x3)world));
 
 
 	return output;

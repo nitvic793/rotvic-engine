@@ -35,9 +35,9 @@ void Terrain::CalculateNormals()
 	}
 
 	// Go through all the faces in the mesh and calculate their normals.
-	for (j = 0; j<(terrainHeight - 1); j++)
+	for (j = 0; j < (terrainHeight - 1); j++)
 	{
-		for (i = 0; i<(terrainWidth - 1); i++)
+		for (i = 0; i < (terrainWidth - 1); i++)
 		{
 			index1 = (j * terrainHeight) + i;
 			index2 = (j * terrainHeight) + (i + 1);
@@ -75,9 +75,9 @@ void Terrain::CalculateNormals()
 
 	// Now go through all the vertices and take an average of each face normal 	
 	// that the vertex touches to get the averaged normal for that vertex.
-	for (j = 0; j<terrainHeight; j++)
+	for (j = 0; j < terrainHeight; j++)
 	{
-		for (i = 0; i<terrainWidth; i++)
+		for (i = 0; i < terrainWidth; i++)
 		{
 			// Initialize the sum.
 			sum[0] = 0.0f;
@@ -175,9 +175,9 @@ void Terrain::CalculateUVCoordinates()
 	tvCount = 0;
 
 	// Loop through the entire height map and calculate the tu and tv texture coordinates for each vertex.
-	for (j = 0; j<terrainHeight; j++)
+	for (j = 0; j < terrainHeight; j++)
 	{
-		for (i = 0; i<terrainWidth; i++)
+		for (i = 0; i < terrainWidth; i++)
 		{
 			// Store the texture coordinate in the height map.
 			textureCoords[(terrainHeight * j) + i].x = tuCoordinate; //u
@@ -221,9 +221,9 @@ void Terrain::Initialize()
 	Vertex *vertices = new Vertex[vertexCount];
 	UINT *indices = new UINT[indexCount];
 
-	for (int j = 0; j<(terrainHeight - 1); j++)
+	for (int j = 0; j < (terrainHeight - 1); j++)
 	{
-		for (int i = 0; i<(terrainWidth - 1); i++)
+		for (int i = 0; i < (terrainWidth - 1); i++)
 		{
 			// LINE 1
 			// Upper left.
@@ -395,15 +395,15 @@ bool Terrain::Initialize(const char * filename)
 
 	k = 0;
 
-	for (j = 0; j<terrainHeight; j++)
+	for (j = 0; j < terrainHeight; j++)
 	{
-		for (i = 0; i<terrainWidth; i++)
+		for (i = 0; i < terrainWidth; i++)
 		{
 			height = bitmapImage[k];
 			float actualHeight = (float)height / 15;
 			if (actualHeight < minHeight) minHeight = actualHeight;
 			if (actualHeight > maxHeight) maxHeight = actualHeight;
-			heightValues[(terrainHeight * j) + i] = actualHeight+1;
+			heightValues[(terrainHeight * j) + i] = actualHeight + 1;
 			k += 3;
 		}
 	}
@@ -416,18 +416,18 @@ bool Terrain::Initialize(const char * filename)
 	shape->getLocalBounds(min, max);
 	k = 0;
 
-	for (j = 0; j<terrainHeight; j++)
+	for (j = 0; j < terrainHeight; j++)
 	{
-		for (i = 0; i<terrainWidth; i++)
+		for (i = 0; i < terrainWidth; i++)
 		{
 			height = bitmapImage[k];
 			if (height < minHeight) minHeight = height;
 			if (height > maxHeight) maxHeight = height;
 			index = (terrainWidth * (terrainHeight - 1 - j)) + i;
 
-			heightMap[index].x = (float)i + min.x-1;
-			heightMap[index].y = (float)height-1.5;
-			heightMap[index].z = -(float)j-1;
+			heightMap[index].x = (float)i + min.x - 1;
+			heightMap[index].y = (float)height - 1.5f;
+			heightMap[index].z = -(float)j - 1;
 			heightMap[index].z += (float)(terrainHeight - 1) + min.z;
 
 			k += 3;
@@ -435,9 +435,9 @@ bool Terrain::Initialize(const char * filename)
 	}
 
 	//Remove spikes and smoothen terrain
-	for (j = 0; j<terrainHeight; j++)
+	for (j = 0; j < terrainHeight; j++)
 	{
-		for (i = 0; i<terrainWidth; i++)
+		for (i = 0; i < terrainWidth; i++)
 		{
 			heightMap[(terrainHeight * j) + i].y /= 15.0f;
 			//heightValues[(terrainHeight * j) + i] = heightMap[(terrainHeight*j) + i].y * 2;
@@ -456,9 +456,9 @@ bool Terrain::Initialize(const char * filename)
 	indices = new UINT[indexCount];
 	float tu, tv;
 
-	for (int j = 0; j<(terrainHeight - 1); j++)
+	for (int j = 0; j < (terrainHeight - 1); j++)
 	{
-		for (int i = 0; i<(terrainWidth - 1); i++)
+		for (int i = 0; i < (terrainWidth - 1); i++)
 		{
 			int index1 = (terrainWidth * j) + i;          // Upper left.
 			int index2 = (terrainWidth * j) + (i + 1);      // Upper right.
@@ -560,11 +560,11 @@ void Terrain::_temp_Init()
 	SetPosition(0, -8, 0);
 
 	int k = 0, index = 0;
-	for (int j = 0; j<terrainHeight; j++)
+	for (int j = 0; j < terrainHeight; j++)
 	{
 		for (int i = 0; i < terrainWidth; i++)
 		{
-			
+
 			index = (terrainWidth * (terrainHeight - 1 - j)) + i;
 			int height = index % 2 + 1;
 			int index2 = (terrainHeight * (terrainWidth - 1 - j)) + i;
@@ -588,7 +588,7 @@ void Terrain::_temp_Init()
 	shape->getLocalBounds(min, max);
 	printf("%f %f %f %f %f %f", min.x, min.y, min.z, max.x, max.y, max.z);
 
-	for (int j = 0; j<terrainHeight; j++)
+	for (int j = 0; j < terrainHeight; j++)
 	{
 		for (int i = 0; i < terrainWidth; i++)
 		{
@@ -596,10 +596,10 @@ void Terrain::_temp_Init()
 			index = (terrainWidth * (terrainHeight - 1 - j)) + i;
 			//int index2 = (terrainHeight * (terrainWidth - 1 - j)) + i;
 			//heightValues[index] = height;
-			heightMap[index].x = (float)i + min.x-1;
+			heightMap[index].x = (float)i + min.x - 1;
 			//heightMap[index].y = (float)height + min.y-1.5;
 			heightMap[index].y = (float)-0.5;
-			heightMap[index].z = -(float)j-1;
+			heightMap[index].z = -(float)j - 1;
 			heightMap[index].z += (float)(terrainHeight - 1) + min.z;
 
 			k += 3;
@@ -613,9 +613,9 @@ void Terrain::_temp_Init()
 	index = 0;
 	CalculateUVCoordinates();
 	CalculateNormals();
-	for (int j = 0; j<(terrainHeight - 1); j++)
+	for (int j = 0; j < (terrainHeight - 1); j++)
 	{
-		for (int i = 0; i<(terrainWidth - 1); i++)
+		for (int i = 0; i < (terrainWidth - 1); i++)
 		{
 			int index1 = (terrainWidth * j) + i;          // Upper left.
 			int index2 = (terrainWidth * j) + (i + 1);      // Upper right.
@@ -624,7 +624,7 @@ void Terrain::_temp_Init()
 
 
 															  // Upper left.
-			int tv = textureCoords[index3].y;
+			float tv = textureCoords[index3].y;
 
 			// Modify the texture coordinates to cover the top edge.
 			if (tv == 1.0f) { tv = 0.0f; }
@@ -637,7 +637,7 @@ void Terrain::_temp_Init()
 			index++;
 
 			// Upper right.
-			int tu = textureCoords[index4].x;
+			float tu = textureCoords[index4].x;
 			tv = textureCoords[index4].y;
 
 			// Modify the texture coordinates to cover the top and right edge.
@@ -703,7 +703,7 @@ void Terrain::_temp_Init()
 }
 
 Terrain::Terrain(SystemCore* sysCore, rp3d::DynamicsWorld* physicsWorld) :
-	Entity(nullptr, nullptr, rp3d::Vector3(0,0,0), physicsWorld)
+	Entity(nullptr, nullptr, rp3d::Vector3(0, 0, 0), physicsWorld)
 {
 	core = sysCore;
 	terrainHeight = terrainWidth = 100;

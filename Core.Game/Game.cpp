@@ -62,7 +62,7 @@ void Game::PreInitialize()
 	IGame::PreInitialize();
 	loadingText = std::unique_ptr<UIText>(new UIText());
 	loadingText->SetText(L"Loading...");
-	loadingText->SetPosition(XMFLOAT3(core->GetScreenWidth() - 250, core->GetScreenHeight() - 100, 0));
+	loadingText->SetPosition(XMFLOAT3((float)core->GetScreenWidth() - 250.f, (float)core->GetScreenHeight() - 100.f, 0));
 	uiCanvas->AddComponent(loadingText.get(), "LoadingText");
 }
 
@@ -108,7 +108,7 @@ void Game::LoadLevel()
 	// Player Entity
 	auto pEntity = new ThirdPersonPlayerEntity(resource->GetMesh("man"), resource->GetMaterial("man"), rp3d::Vector3(0, -2, 5), dynamicsWorld);
 	pEntity->isAnimated = true;
-	pEntity->SetScale(0.03, 0.03, 0.03);
+	pEntity->SetScale(0.03f, 0.03f, 0.03f);
 	pEntity->SetRigidBodyParameters(true);
 	pEntity->GetRigidBody()->setMass(0.1f);
 	pEntity->GetRigidBody()->getMaterial().setFrictionCoefficient(1.1f);
@@ -329,7 +329,7 @@ void Game::Update(float deltaTime)
 		//	centroidPosition = centroidPosition / 5.0f;
 
 		//}
-		entities["Collider2"]->ApplyForce(rp3d::Vector3(-.1, 0, 0));
+		entities["Collider2"]->ApplyForce(rp3d::Vector3(-.1f, 0, 0));
 		DebugDraw::Draw<Frustum>(fr, "Test");
 		DebugDraw::Draw<Box>(box, "Collision");
 		DebugDraw::Draw<Ray>(ray);

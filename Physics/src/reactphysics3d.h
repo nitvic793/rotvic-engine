@@ -34,6 +34,10 @@
 #ifndef REACTPHYSICS3D_H
 #define REACTPHYSICS3D_H
 
+//Custom code to disable 3rd party warnings
+#pragma warning (disable : 4267)
+#pragma warning (disable : 4244)
+
 // Libraries
 #include "configuration.h"
 #include "mathematics/mathematics.h"

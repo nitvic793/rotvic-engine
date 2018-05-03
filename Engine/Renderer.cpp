@@ -77,7 +77,7 @@ void Renderer::SetShadersAndDrawAnimated(Entity * entity, Camera * camera, Light
 	resourceManager->fbxLoader.GetAnimatedMatrixExtra();
 
 	//Setting bones
-	int numBones = resourceManager->fbxLoader.skeleton.mJoints.size();
+	int numBones = (int)resourceManager->fbxLoader.skeleton.mJoints.size();
 	for (int i = 0; i < numBones; i++)
 	{
 
@@ -93,7 +93,7 @@ void Renderer::SetShadersAndDrawAnimated(Entity * entity, Camera * camera, Light
 	}
 	vertexShader->SetData("bones", &bones, bonesSize);
 
-	numBones = resourceManager->fbxLoader.skeleton.mJoints2.size();
+	numBones = (int)resourceManager->fbxLoader.skeleton.mJoints2.size();
 	for (int i = 0; i < numBones; i++)
 	{
 
