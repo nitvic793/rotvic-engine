@@ -14,7 +14,7 @@ class Game : public IGame
 protected:
 	static int InstanceCount;
 	float speed;
-
+	std::unique_ptr<ThirdPersonCamera> thirdPersonCamera;
 	std::unique_ptr<UIText> loadingText;
 	DirectionalLight light;
 	DirectionalLight secondaryLight;

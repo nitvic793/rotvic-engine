@@ -26,3 +26,4 @@
 #include "UICanvas.h"
 #include "UIText.h"
 #include "ThirdPersonPlayerEntity.h"
+#include "ThirdPersonCamera.h"

@@ -13,6 +13,7 @@ protected:
 	XMFLOAT4X4 projectionMatrix;
 	XMFLOAT3 position;
 	XMFLOAT3 direction;
+	XMFLOAT3 rotation;
 	float rotationY;
 	float rotationX;
 	bool isMouseDown;
@@ -20,9 +21,11 @@ protected:
 	int mousePrevY;
 	Keyboard* keyboard;
 public:
+	void SetPosition(XMFLOAT3 pos);
 	XMFLOAT3 GetPosition();
 	void RotateX(float x);
 	void RotateY(float y);
+	void SetRotation(XMFLOAT3 rotation);
 	XMFLOAT4X4 GetViewMatrix();
 	XMFLOAT4X4 GetProjectionMatrix();
 	void SetProjectionMatrix(float aspectRatio);

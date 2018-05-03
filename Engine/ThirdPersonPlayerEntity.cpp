@@ -63,6 +63,11 @@ void ThirdPersonPlayerEntity::Update(float deltaTime)
 	rigidBody->setLinearVelocity(velocity);
 }
 
+rp3d::Vector3 ThirdPersonPlayerEntity::GetForwardVector() const
+{
+	return forwardDir;
+}
+
 ThirdPersonPlayerEntity::ThirdPersonPlayerEntity(Mesh* m, Material* mat, rp3d::Vector3 position, rp3d::DynamicsWorld* world, std::vector<Script*> scripts)
 	:Entity(m, mat, position, world, scripts)
 {

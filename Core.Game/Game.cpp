@@ -74,6 +74,7 @@ void Game::Initialize()
 	asyncWorker.Start();
 
 	firstPersonCamera = new FirstPersonCamera((float)renderer->screenWidth / renderer->screenHeight);
+	thirdPersonCamera = std::unique_ptr<ThirdPersonCamera>(new ThirdPersonCamera((float)renderer->screenWidth / renderer->screenHeight));
 	freeCam = camera;
 	light.AmbientColor = XMFLOAT4(0.3f, 0.3f, 0.3f, 0);
 	light.DiffuseColor = XMFLOAT4(0.4f, 0.4f, 0.9f, 1.f);
@@ -112,9 +113,12 @@ void Game::LoadLevel()
 	pEntity->GetRigidBody()->setMass(0.1f);
 	pEntity->GetRigidBody()->getMaterial().setFrictionCoefficient(1.1f);
 	//entity->SetRotation(0, 3.14, 0);
-	pEntity->CreateBoxCollider(rp3d::Vector3(1, 1, 1), rp3d::Vector3(0, 1, 0));
+	pEntity->CreateBoxCollider(rp3d::Vector3(1, 1, 1), rp3d::Vector3(0, 1, 0), "player");
 	//entity->CreateCapsuleCollider(rp3d::decimal(1), rp3d::decimal(2));
 	AddEntity(pEntity, "man");
+	DebugDraw::GetInstance()->SetGroupActive("player", false);
+	thirdPersonCamera->AttachEntity(pEntity);
+	//camera = thirdPersonCamera.get();
 	//{auto entity = new Entity(resource->GetMesh("cylinder"), resource->GetMaterial("metal"), rp3d::Vector3(2, 0, 0), dynamicsWorld, { new Flocker() });
 	//entity->CreateCylinderCollider(.5, 1);
 	//AddEntity(entity, "Flocker1");  // Flocker 1

@@ -18,6 +18,7 @@ class ThirdPersonPlayerEntity :
 	float maxSpeed = 4.f;
 public:
 	void Update(float deltaTime) override;
+	rp3d::Vector3 GetForwardVector() const;
 	ThirdPersonPlayerEntity(Mesh* m, Material* mat, rp3d::Vector3 position, rp3d::DynamicsWorld* world, std::vector<Script*> scripts = std::vector<Script*>());
 	~ThirdPersonPlayerEntity();
 };

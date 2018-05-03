@@ -11,7 +11,7 @@ void FirstPersonCamera::Update(float deltaTime)
 	float speed = 10.f;
 	XMVECTOR pos = XMVectorSet(position.x, position.y, position.z, 0);
 	XMVECTOR dir = XMVectorSet(direction.x, direction.y, direction.z, 0);
-	auto rotQuaternion = XMQuaternionRotationRollPitchYaw(0, rotationY, 0);
+	auto rotQuaternion = XMQuaternionRotationRollPitchYaw(0, rotation.y, 0);
 	dir = XMVector3Rotate(dir, rotQuaternion);
 	XMVECTOR up = XMVectorSet(0, 1, 0, 0); // Y is up!
 
@@ -57,10 +57,10 @@ void FirstPersonCamera::OnMouseMove(WPARAM wParam, int x, int y)
 		deltaX *= 0.2f;
 	}
 
-	rotationY += deltaX * 0.6f * XM_PI / 180;
-	rotationX += deltaY * 0.6f * XM_PI / 180;
-	if (rotationX >= XM_PI / 2) rotationX = XM_PI / 2;
-	if (rotationX <= -XM_PI /2) rotationX = -XM_PI/2;
+	rotation.y += deltaX * 0.6f * XM_PI / 180;
+	rotation.x += deltaY * 0.6f * XM_PI / 180;
+	if (rotation.x >= XM_PI / 2) rotation.x = XM_PI / 2;
+	if (rotation.x <= -XM_PI /2) rotation.x = -XM_PI/2;
 
 	mousePrevX = x;
 	mousePrevY = y;

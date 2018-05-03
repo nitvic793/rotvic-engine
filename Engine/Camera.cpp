@@ -9,6 +9,11 @@
 #include <algorithm>
 #include "Console.h"
 
+void Camera::SetPosition(XMFLOAT3 pos)
+{
+	position = pos;
+}
+
 XMFLOAT3 Camera::GetPosition()
 {
 	return position;
@@ -16,17 +21,22 @@ XMFLOAT3 Camera::GetPosition()
 
 void Camera::RotateX(float x)
 {
-	rotationX += x;
+	rotation.x += x;
 }
 
 void Camera::RotateY(float y)
 {
-	rotationY += y;
+	rotation.y += y;
+}
+
+void Camera::SetRotation(XMFLOAT3 rotation)
+{
+	this->rotation = rotation;
 }
 
 XMFLOAT4X4 Camera::GetViewMatrix()
 {
-	auto rotQuaternion = XMQuaternionRotationRollPitchYaw(rotationX, rotationY, 0);
+	auto rotQuaternion = XMQuaternionRotationRollPitchYaw(rotation.x, rotation.y, rotation.z);
 	XMVECTOR pos = XMVectorSet(position.x, position.y, position.z, 0);
 	XMVECTOR dir = XMVectorSet(direction.x, direction.y, direction.z, 0);
 	XMVECTOR up = XMVectorSet(0, 1, 0, 0);
@@ -60,7 +70,7 @@ void Camera::Update(float deltaTime)
 	float speed = 10.f;
 	XMVECTOR pos = XMVectorSet(position.x, position.y, position.z, 0);
 	XMVECTOR dir = XMVectorSet(direction.x, direction.y, direction.z, 0);
-	auto rotQuaternion = XMQuaternionRotationRollPitchYaw(rotationX, rotationY, 0);
+	auto rotQuaternion = XMQuaternionRotationRollPitchYaw(rotation.x, rotation.y, rotation.z);
 	dir = XMVector3Rotate(dir, rotQuaternion);
 	XMVECTOR up = XMVectorSet(0, 1, 0, 0); // Y is up!
 
@@ -105,8 +115,8 @@ void Camera::OnMouseMove(WPARAM wParam, int x, int y)
 {
 	if (isMouseDown)
 	{
-		rotationY += (float)(x - mousePrevX) * 0.1f * XM_PI / 180;
-		rotationX += (float)(y - mousePrevY) * 0.1f * XM_PI / 180;
+		rotation.y += (float)(x - mousePrevX) * 0.1f * XM_PI / 180;
+		rotation.x += (float)(y - mousePrevY) * 0.1f * XM_PI / 180;
 	}
 	mousePrevX = x;
 	mousePrevY = y;
@@ -128,6 +138,7 @@ Camera::Camera(float aspectRatio)
 	isMouseDown = false;
 	position = XMFLOAT3(0.f, 0.f, -8.f);
 	direction = XMFLOAT3(0.f, 0.f, 1.f);
+	rotation = XMFLOAT3(0.f, 0.f, 0.f);
 	rotationX = rotationY = 0.f;
 
 	XMVECTOR pos = XMVectorSet(0, 0, -8, 0);
