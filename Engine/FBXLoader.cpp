@@ -6,12 +6,12 @@
 #endif
 
 
-FBXLoader::FBXLoader()
+FBXLoader::FBXLoader(FbxString name,FbxString lFilePath1, FbxString lFilePath2)
 {
+	meshName = name;
+
 	InitializeSdkObjects();
 
-	FbxString lFilePath1("../../axe-idle.fbx");
-	FbxString lFilePath2("../../axe-walk.fbx");
 
 	if (lFilePath1.IsEmpty())
 	{
@@ -180,7 +180,7 @@ bool FBXLoader::LoadScene(const char* pFilename, FbxScene* pScene)
 
 void FBXLoader::LoadNodes(FbxNode* node, std::vector<Joint>& Joints)
 {
-	
+	 FbxString name = node->GetName();
 
 	if (node->GetNodeAttribute() && node->GetNodeAttribute()->GetAttributeType() && node->GetNodeAttribute()->GetAttributeType() == FbxNodeAttribute::eSkeleton)
 	{
@@ -275,6 +275,9 @@ Mesh* FBXLoader::GetMesh(FbxNode * node , ID3D11Device* device)
 				FbxVector2 uvCoord(0, 0);
 				const char* uvSet = "map1";
 				bool uvFlag = true;
+
+				if (meshName == "bee")
+					uvSet = "DiffuseUV";
 
 				fbxMesh->GetPolygonVertexUV(i, j, uvSet, uvCoord, uvFlag);
 
@@ -492,16 +495,23 @@ unsigned int FBXLoader::FindJointIndex(const std::string & jointname, std::vecto
 }
 
 
-void FBXLoader::GetAnimatedMatrixExtra()
+void FBXLoader::GetAnimatedMatrixExtra(float delTime)
 {
 	FbxTime repeat = 0;
 	repeat.SetSecondDouble(3.3);
-	time.SetSecondDouble(T);
-	T += 0.075;
+	time.SetSecondDouble(currentTime);
+	currentTime += delTime;
+
 	
 	if(time > repeat)
 	{
-		T = 0;
+		currentTime -= 3.3;
+		time.SetSecondDouble(currentTime);
+	}
+	else if (time < 0)
+	{
+		currentTime += 3.3;
+		time.SetSecondDouble(currentTime);
 	}
 
 

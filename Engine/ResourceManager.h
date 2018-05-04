@@ -32,8 +32,9 @@ public:
 	SimplePixelShader *pixelShaderAnimated;
 	
 	// Animation Data
-	FBXLoader fbxLoader;
-	float blendWeight = 0;
+	FBXLoader * fbxLoader;   // Player FBX Loader
+	FBXLoader * enemyFBXLoader;    // Enemy FBX Loader
+	
 
 	/// <summary>
 	/// Loads resources based on given config data.

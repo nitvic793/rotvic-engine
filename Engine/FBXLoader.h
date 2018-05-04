@@ -53,7 +53,7 @@ struct Bones
 class FBXLoader 
 {
 public:
-
+	FbxString meshName;
 	FbxManager* fbxManager = NULL;
 
 	FbxScene* scene = NULL;
@@ -62,18 +62,17 @@ public:
 	//FbxAnimEvaluator* evaluator;
 	//FbxAnimEvaluator* evaluator2;
 
-	FbxNode* childNode;
 	bool lResult;
 	
 	FbxTime time;
-	double T = 0.0;
+	double currentTime = 0.0;
 
 	FbxAnimStack * animStack;
 
-
 	Skeleton skeleton;
+	float blendWeight = 1;
 
-	FBXLoader();
+	FBXLoader(FbxString, FbxString, FbxString);
 	~FBXLoader();
 
 	void InitializeSdkObjects();
@@ -83,8 +82,7 @@ public:
 	Mesh* GetMesh(FbxNode*, ID3D11Device*);
 	void GetMatricesFromMesh(FbxNode*, ID3D11Device*, std::vector<Joint>&);
 	unsigned int FindJointIndex(const std::string &, std::vector<Joint>& Joints);
-	void GetAnimatedMatrix();
-	void GetAnimatedMatrixExtra();
+	void GetAnimatedMatrixExtra(float delTime);
 	XMFLOAT4X4 GetJointGlobalTransform(int , std::vector<Joint>&);
 	XMFLOAT4X4 FbxAMatrixToXMFloat4x4(FbxAMatrix);
 };

@@ -91,11 +91,44 @@ void Game::LoadLevel()
 	/* Add Entitites */
 	auto entity = new Entity(resource->GetMesh("man"), resource->GetMaterial("man"), rp3d::Vector3(0, 0, 5), dynamicsWorld);
 	entity->isAnimated = true;
+	entity->fbx = resource->fbxLoader;
 	entity->SetScale(0.03, 0.03, 0.03);
 	entity->SetRotation(0, 3.14, 0);
 	entity->CreateBoxCollider(rp3d::Vector3(2, 2, 2));
 	AddEntity(entity, "man");
 	entity->SetRigidBodyParameters(true);
+
+
+	entity = new Entity(resource->GetMesh("bee"), resource->GetMaterial("bee"), rp3d::Vector3(0, 0, 25), dynamicsWorld);
+	entity->isAnimated = true;
+	entity->fbx = resource->enemyFBXLoader;
+	entity->SetPosition(0, 0, 25);
+	entity->SetScale(0.03, 0.03, 0.03);
+	entity->SetRotation(-1.57, 3.14, 0);
+	//entity->CreateBoxCollider(rp3d::Vector3(2, 2, 2));
+	AddEntity(entity, "bee");
+
+	entity = new Entity(resource->GetMesh("bee"), resource->GetMaterial("bee"), rp3d::Vector3(4, 0, 25), dynamicsWorld);
+	entity->isAnimated = true;
+	entity->fbx = resource->enemyFBXLoader;
+	entity->enemyInstanceNumber = 1;
+	entity->SetPosition(4, 0, 25);
+	entity->SetScale(0.03, 0.03, 0.03);
+	entity->SetRotation(-1.57, 3.14, 0);
+	AddEntity(entity, "bee");
+
+	entity = new Entity(resource->GetMesh("bee"), resource->GetMaterial("bee"), rp3d::Vector3(-4, 0, 25), dynamicsWorld);
+	entity->isAnimated = true;
+	entity->fbx = resource->enemyFBXLoader;
+	entity->enemyInstanceNumber = 2;
+	entity->SetPosition(-4, 0, 25);
+	entity->SetScale(0.03, 0.03, 0.03);
+	entity->SetRotation(-1.57, 3.14, 0);
+	AddEntity(entity, "bee");
+	//entity->SetRigidBodyParameters(true);
+
+
+
 	//{auto entity = new Entity(resource->GetMesh("cylinder"), resource->GetMaterial("metal"), rp3d::Vector3(2, 0, 0), dynamicsWorld, { new Flocker() });
 	//entity->CreateCylinderCollider(.5, 1);
 	//AddEntity(entity, "Flocker1");  // Flocker 1
@@ -374,19 +407,19 @@ void Game::Update(float deltaTime)
 	{
 		if(animTransitionDirection)
 		{ 
-			resource->blendWeight += 0.04f;
-			if (resource->blendWeight > 1.0f)
+			resource->fbxLoader->blendWeight += 0.04f;
+			if (resource->fbxLoader->blendWeight > 1.0f)
 			{
-				resource->blendWeight = 1.0f;
+				resource->fbxLoader->blendWeight = 1.0f;
 				isAnimationTransitioning = false;
 			}
 		}
 		else
 		{
-			resource->blendWeight -= 0.04f;
-			if (resource->blendWeight < 0.0f)
+			resource->fbxLoader->blendWeight -= 0.04f;
+			if (resource->fbxLoader->blendWeight < 0.0f)
 			{
-				resource->blendWeight = 0.0f;
+				resource->fbxLoader->blendWeight = 0.0f;
 				isAnimationTransitioning = false;
 			}
 		}
