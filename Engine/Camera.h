@@ -98,7 +98,7 @@ public:
 	/// Gets the view matrix of this camera.
 	/// </summary>
 	/// <returns>The view matrix.</returns>
-	XMFLOAT4X4 GetViewMatrix();
+	virtual XMFLOAT4X4 GetViewMatrix();
 
 	/// <summary>
 	/// Gets the projection matrix of this camera.

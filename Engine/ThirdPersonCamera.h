@@ -33,6 +33,13 @@ public:
 	/// <param name="x"></param>
 	/// <param name="y"></param>
 	void OnMouseMove(WPARAM wParam, int x, int y) override;
+
+	/// <summary>
+	/// Gets the view matrix of this camera.
+	/// </summary>
+	/// <returns>The view matrix.</returns>
+	XMFLOAT4X4 GetViewMatrix() override;
+
 	ThirdPersonCamera(float aspectRatio);
 	~ThirdPersonCamera();
 };

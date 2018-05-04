@@ -118,7 +118,7 @@ void Game::LoadLevel()
 	AddEntity(pEntity, "man");
 	DebugDraw::GetInstance()->SetGroupActive("player", false);
 	thirdPersonCamera->AttachEntity(pEntity);
-	//camera = thirdPersonCamera.get();
+	camera = thirdPersonCamera.get();
 	//{auto entity = new Entity(resource->GetMesh("cylinder"), resource->GetMaterial("metal"), rp3d::Vector3(2, 0, 0), dynamicsWorld, { new Flocker() });
 	//entity->CreateCylinderCollider(.5, 1);
 	//AddEntity(entity, "Flocker1");  // Flocker 1
