@@ -53,9 +53,11 @@ XMFLOAT4X4 ThirdPersonCamera::GetViewMatrix()
 	auto forward = entity->GetForwardVector();
 	//forward.normalize();
 	auto left = forward.cross(rp3d::Vector3(0, 1, 0));
-	auto target = entityPos - (forward * 2) - (left * 1.2f);
+	entityPos = entityPos - left * 0.8f;// +(forward * 1.5f);
+	auto target = entityPos  - (left * 0.5f) - (forward * 1.5f);
+	
 	XMVECTOR pos = XMVectorSet(target.x, target.y + 5, target.z, 0);
-	XMVECTOR dir = XMVectorSet(entityPos.x + 3, entityPos.y + 3, entityPos.z, 0);
+	XMVECTOR dir = XMVectorSet(entityPos.x , entityPos.y + 4, entityPos.z, 0);
 	XMVECTOR up = XMVectorSet(0, 1, 0, 0);
 	//pos = XMVector3Rotate(pos, rotQuaternion);
 	
