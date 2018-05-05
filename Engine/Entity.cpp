@@ -262,6 +262,7 @@ void Entity::CreateBoxCollider(rp3d::Vector3 halfwidths, rp3d::Vector3 offset, s
 	shape = new rp3d::BoxShape(halfwidths);
 	auto transform = rp3d::Transform::identity();
 	transform.setPosition(offset);
+	rigidBody->setCenterOfMassLocal(offset);
 	proxyShape = rigidBody->addCollisionShape(shape, transform, rp3d::decimal(1.0));
 	shapeType = BOX;
 	auto box = new Box();

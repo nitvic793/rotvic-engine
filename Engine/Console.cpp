@@ -6,6 +6,67 @@
 
 Console* Console::instance = nullptr;
 
+std::wstring ToWstring(std::string narrow)
+{
+	std::wstring_convert<std::codecvt_utf8_utf16<wchar_t>> converter;
+	return converter.from_bytes(narrow);
+}
+
+void Console::RegisterSystemCommands()
+{
+	auto listCallback = [&](std::vector<std::string> args)
+	{
+		if (!showCommandList)
+		{
+			showCommandList = true;
+			WriteLine(L"Type in 'list' again to disable command list", Info);
+		}
+		else
+			showCommandList = false;
+
+		if (args.size() > 0)
+		{
+			if (stoi(args[0]) == 0)
+			{
+				showCommandList = false;
+			}
+		}
+	};
+
+	RegisterCommand("list", listCallback, { "Will list all available commands on right side of the screen." });
+
+	auto helpCallback = [&](std::vector<std::string> args)
+	{
+		if (args.size() == 0)
+		{
+			WriteLine(L"No command name given.", Error);
+			WriteLine(L"Syntax: 'help CommandName'", Info);
+			return;
+		}
+
+		auto cmdName = args[0];
+		if (commandHelpMap.find(cmdName) == commandHelpMap.end())
+		{
+			WriteLine(L"Command not found.", Error);
+			return;
+		}
+
+		auto helpText = commandHelpMap[cmdName];
+		if (helpText.size() == 0)
+		{
+			WriteLine(L"Help for command not found.", Error);
+			return;
+		}
+
+		for (auto text : helpText)
+		{
+			WriteLine(ToWstring(text), Info);
+		}
+	};
+
+	RegisterCommand("help", helpCallback);
+}
+
 float Console::CalculateCaretX()
 {
 	float xLength = DirectX::XMVectorGetX(spriteFont->MeasureString(L"_"));
@@ -25,6 +86,12 @@ float Console::CalculateCaretX()
 
 void Console::ProcessCommand(std::string commandName, std::vector<std::string> params)
 {
+	if (commandMap.find(commandName) == commandMap.end())
+	{
+		WriteLine(L"Command not found", Error);
+		return;
+	}
+
 	auto command = commandMap[commandName];
 	if (command)
 	{
@@ -32,7 +99,7 @@ void Console::ProcessCommand(std::string commandName, std::vector<std::string> p
 	}
 	else
 	{
-		WriteLine(L"Command not found");
+		WriteLine(L"Error in executing command.", Error);
 	}
 }
 
@@ -87,9 +154,9 @@ void Console::OnKeyPress(char key)
 	else if (key == '\b') //Backspace
 	{
 		if (caretPosition == 0) return;
-		if(currentCommand.str()[caretPosition-1]==L' ' && !spaceStack.empty())spaceStack.pop();
+		if (currentCommand.str()[caretPosition - 1] == L' ' && !spaceStack.empty())spaceStack.pop();
 		caretPosition--;
-		auto cmd = currentCommand.str();		
+		auto cmd = currentCommand.str();
 		if (caretPosition != 0)
 		{
 			cmd.pop_back();
@@ -98,7 +165,7 @@ void Console::OnKeyPress(char key)
 		}
 		else
 			currentCommand.str(std::wstring());
-		
+
 	}
 	else if (key == '\r') //Enter
 	{
@@ -120,7 +187,7 @@ void Console::OnKeyPress(char key)
 			else args.push_back(input);
 		}
 
-		WriteLine(L"Command " + currentCommand.str());
+		WriteLine(L"Executing Command: " + currentCommand.str());
 		ProcessCommand(command, args);
 
 		while (!commandHistoryUp.empty())
@@ -142,35 +209,56 @@ void Console::OnKeyPress(char key)
 	}
 }
 
-void Console::WriteLine(std::wstring line)
+void Console::WriteLine(std::wstring line, XMFLOAT4 color)
 {
 	if (currentLine < maxLines)
 	{
-		buffer.push_back(line);
+		buffer.push_back({ line, color });
 		currentLine++;
 	}
 	else
 	{
 		buffer.erase(buffer.begin());
-		buffer.push_back(line);
+		buffer.push_back({ line, color });
 	}
+}
+
+void Console::WriteLine(std::wstring line, ConsoleMessageType type)
+{
+	XMFLOAT4 color = Color::White;
+	switch (type)
+	{
+	case Error:
+		color = Color::Red;
+		break;
+	case Info:
+		color = Color::Blue;
+		break;
+	case Success:
+		color = Color::Green;
+		break;
+	default:
+		break;
+	}
+	WriteLine(line, color);
 }
 
 void Console::Render()
 {
 	spriteBatch->Begin();
+	RenderCommandList();
 	int counter = 1;
-	for (auto line : buffer)
+	for (auto lb : buffer)
 	{
 		if (counter > currentLine)break;
-		spriteFont->DrawString(spriteBatch.get(), line.c_str(), XMVectorSet(10, (float)height * counter, 0, 0));
+		spriteFont->DrawString(spriteBatch.get(), lb.line.c_str(), XMVectorSet(10, (float)height * counter, 0, 0), XMLoadFloat4(&lb.color));
 		counter++;
 	}
 
 	float xLength = DirectX::XMVectorGetX(spriteFont->MeasureString(L"_"));
 	spriteFont->DrawString(spriteBatch.get(), L":", XMVectorSet(10, (float)height * counter, 0, 0));
 	spriteFont->DrawString(spriteBatch.get(), currentCommand.str().c_str(), XMVectorSet(15 + DirectX::XMVectorGetX(spriteFont->MeasureString(L":")), (float)height * counter, 0, 0));
-	spriteFont->DrawString(spriteBatch.get(), L"_", XMVectorSet(CalculateCaretX(), (float)height * counter, 0, 0));
+	spriteFont->DrawString(spriteBatch.get(), L"_", XMVectorSet(CalculateCaretX(), (float)height * counter, 0, 0), XMLoadFloat4(&Color::Green));
 	spriteBatch->End();
 
 	// Reset render states, since sprite batch changes these!
@@ -178,9 +266,29 @@ void Console::Render()
 	core->GetDeviceContext()->OMSetDepthStencilState(0, 0);
 }
 
-void Console::RegisterCommand(std::string commandName, CommandCallback command)
+void Console::RenderCommandList()
+{
+	if (showCommandList)
+	{
+		int counter = 1;
+		int width = core->GetScreenWidth();
+		for (auto command : commandMap)
+		{
+			spriteFont->DrawString(
+				spriteBatch.get(),
+				ToWstring(command.first).c_str(),
+				XMVectorSet(width - 200, (float)height * counter, 0, 0),
+				DirectX::Colors::Blue
+			);
+			counter++;
+		}
+	}
+}
+
+void Console::RegisterCommand(std::string commandName, CommandCallback command, std::vector<std::string> helpText)
 {
 	commandMap.insert(std::pair<std::string, CommandCallback>(commandName, command));
+	commandHelpMap.insert(std::pair<std::string, std::vector<std::string>>(commandName, helpText));
 }
 
 Console::Console(SystemCore* sysCore)
@@ -197,6 +305,8 @@ Console::Console(SystemCore* sysCore)
 	caretPosition = 0;
 	//buffer = std::vector<std::wstring>(maxLines);
 	instance = this;
+	showCommandList = false;
+	RegisterSystemCommands();
 }
 
 

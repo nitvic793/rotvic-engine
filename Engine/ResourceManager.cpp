@@ -231,7 +231,7 @@ void ResourceManager::LoadResourcesAsync(ConfigMap config, SystemCore * core, st
 
 
 		CreateWICTextureFromFile(device, context, L"../../Assets/Textures/beeColor.png", nullptr, &srv);
-		CreateWICTextureFromFile(device, context, L"../../Assets/Textures/beeNormal.png", nullptr, &normalSrv);
+		CreateWICTextureFromFile(device, context, L"../../Assets/Textures/beeNormal2.png", nullptr, &normalSrv);
 		textures.insert(std::pair<std::string, ID3D11ShaderResourceView*>("bee", srv));
 		textures.insert(std::pair<std::string, ID3D11ShaderResourceView*>("beeNormal", normalSrv));
 		material = new Material(core, vertexShaderAnimated, pixelShaderAnimated, srv, normalSrv, sampler);

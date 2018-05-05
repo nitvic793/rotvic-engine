@@ -17,7 +17,7 @@ void CoreGame::InitializeInstance()
 		gameInstance->SetPhysicsActive(true);
 	});
 
-	resourceManager->LoadResourcesAsync(config, Core, [&]() 
+	resourceManager->LoadResourcesAsync(config, Core, [&]()
 	{
 		eventSystem->EmitEventQueued("ResourceLoadComplete", GENERIC, nullptr, gameInstance);
 	});
@@ -268,43 +268,54 @@ void CoreGame::RegisterConsoleCommands()
 	{
 		if (params.size() < 2)
 		{
-			console->WriteLine(L"Invalid params supplied");
+			console->WriteLine(L"Invalid params supplied", Error);
 			return;
 		}
 		auto action = params[0];
 		params.erase(params.begin());
 		auto keys = keyboard->GetKeyEnumValue(params);
 		keyboard->AddAction(action, keys);
+	},
+	{
+		"Syntax: Rebind actionName key1 key2 ..."
 	});
 
 	console->RegisterCommand("ToggleDebug", [&](std::vector<std::string> params)
 	{
 		if (params.size() != 2)
 		{
-			console->WriteLine(L"Invalid params supplied");
+			console->WriteLine(L"Invalid params supplied", Error);
 			return;
 		}
 		auto group = params[0];
 		auto active = std::stoi(params[1].c_str());
 		debugDraw->SetGroupActive(group, active);
+	},
+	{
+		"Syntax: ToggleDebug groupName 0",
+		"The value can be 0(false) or 1(true)."
 	});
 
 	console->RegisterCommand("SetDebugDraw", [&](std::vector<std::string> params)
 	{
 		if (params.size() != 1)
 		{
-			console->WriteLine(L"Invalid params supplied");
+			console->WriteLine(L"Invalid params supplied", Error);
 			return;
 		}
 		auto enable = std::stoi(params[0].c_str());
 		debugDraw->SetEnabled(enable);
+	},
+	{
+		"Syntax: SetDebugDraw 0",
+		"Set 0 to disable, 1 to enable Debug Draw."
 	});
 
 	console->RegisterCommand("Instantiate", [&](std::vector<std::string> params)
 	{
 		if (params.size() < 2)
 		{
-			console->WriteLine(L"Invalid params supplied");
+			console->WriteLine(L"Invalid params supplied", Error);
 			return;
 		}
 		auto shapeName = params[0];
@@ -331,13 +342,18 @@ void CoreGame::RegisterConsoleCommands()
 				entity->CreateSphereCollider(1);
 			}
 		}
+	},
+	{
+		"Syntax: Instantiate meshName entityName",
+		"This will instantiate an entity with given mesh and entity name in the scene.",
+		"Note: It is assumed that given mesh has been loaded as a resource."
 	});
 
 	console->RegisterCommand("SetPosition", [&](std::vector<std::string> params)
 	{
 		if (params.size() != 4)
 		{
-			console->WriteLine(L"Invalid params supplied");
+			console->WriteLine(L"Invalid params supplied", Error);
 			return;
 		}
 
@@ -353,13 +369,17 @@ void CoreGame::RegisterConsoleCommands()
 			return;
 		}
 		entity->SetPosition(x, y, z);
+	},
+	{
+		"Syntax: SetPosition entityName x y z",
+		"Where x,y and z are decimal/float values."
 	});
 
 	console->RegisterCommand("SetRotation", [&](std::vector<std::string> params)
 	{
 		if (params.size() != 4)
 		{
-			console->WriteLine(L"Invalid params supplied");
+			console->WriteLine(L"Invalid params supplied", Error);
 			return;
 		}
 
@@ -371,17 +391,21 @@ void CoreGame::RegisterConsoleCommands()
 		auto entity = gameInstance->GetEntity(entityName);
 		if (entity == nullptr)
 		{
-			console->WriteLine(L"Entity with given name not found");
+			console->WriteLine(L"Entity with given name not found", Error);
 			return;
 		}
 		entity->SetRotation(x, y, z);
+	},
+	{
+		"Syntax: SetRotation entityName x y z",
+		"Where x,y and z are decimal/float values."
 	});
 
 	console->RegisterCommand("SetScale", [&](std::vector<std::string> params)
 	{
 		if (params.size() != 4)
 		{
-			console->WriteLine(L"Invalid params supplied");
+			console->WriteLine(L"Invalid params supplied", Error);
 			return;
 		}
 
@@ -393,17 +417,21 @@ void CoreGame::RegisterConsoleCommands()
 		auto entity = gameInstance->GetEntity(entityName);
 		if (entity == nullptr)
 		{
-			console->WriteLine(L"Entity with given name not found");
+			console->WriteLine(L"Entity with given name not found", Error);
 			return;
 		}
 		entity->SetScale(x, y, z);
+	},
+	{
+		"Syntax: SetScale entityName x y z",
+		"Where x,y and z are decimal/float values."
 	});
 
 	console->RegisterCommand("SetMaterial", [&](std::vector<std::string> params)
 	{
 		if (params.size() != 2)
 		{
-			console->WriteLine(L"Invalid params supplied");
+			console->WriteLine(L"Invalid params supplied", Error);
 			return;
 		}
 
@@ -414,21 +442,30 @@ void CoreGame::RegisterConsoleCommands()
 		auto entity = gameInstance->GetEntity(entityName);
 		if (entity == nullptr || material == nullptr)
 		{
-			console->WriteLine(L"Entity or Material not found");
+			console->WriteLine(L"Entity or Material not found", Error);
 			return;
 		}
 		entity->SetMaterial(material);
+	},
+	{
+		"Syntax: SetMaterial entityName materialName",
+		"This will apply given material to given entity.",
+		"It is assumed that given material is loaded as a resource"
 	});
 
 	console->RegisterCommand("SetWireframe", [&](std::vector<std::string> params)
 	{
 		if (params.size() != 1)
 		{
-			console->WriteLine(L"Invalid params supplied");
+			console->WriteLine(L"Invalid params supplied", Error);
 			return;
 		}
 		auto enable = std::stoi(params[0].c_str());
 		debugDraw->SetWireframeDrawEnabled(enable);
+	},
+	{
+		"Syntax: SetWireframe 0",
+		"Set 0 to disable, 1 to enable wireframe rendering"
 	});
 
 }

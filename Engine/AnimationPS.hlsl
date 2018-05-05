@@ -41,19 +41,9 @@ struct VertexToPixel
 	float3 tangent		: TANGENT;
 };
 
-
-
-
-
-
 Texture2D diffuseTexture : register(t0);
 Texture2D normalTexture : register(t1);
 SamplerState basicSampler : register(s0);
-
-
-
-
-
 
 float4 calculateDirectionalLight(float3 normal, DirectionalLight light)
 {
@@ -91,11 +81,6 @@ float3 calculateNormalFromMap(float2 uv, float3 normal, float3 tangent)
 	float3x3 TBN = float3x3(T, B, N);
 	return normalize(mul(unpackedNormal, TBN));
 }
-
-
-
-
-
 
 
 float4 main(VertexToPixel input) : SV_TARGET

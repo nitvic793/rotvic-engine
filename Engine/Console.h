@@ -17,11 +17,30 @@
 #include <locale>
 #include <codecvt>
 #include <stack>
+#include "Colors.h"
 
 using namespace DirectX;
 
 typedef std::function<void(std::vector<std::string>)> CommandCallback;
 typedef std::unordered_map<std::string, CommandCallback> CommandMap;
+typedef std::unordered_map<std::string, std::vector<std::string>> CommandHelpMap;
+
+enum ConsoleMessageType
+{
+	Default = 0,
+	Info,
+	Success, 
+	Error
+};
+
+/// <summary>
+/// Defines a line buffer in the console
+/// </summary>
+struct LineBuffer
+{
+	std::wstring line;
+	XMFLOAT4 color;
+};
 
 /// <summary>
 /// In-game console
@@ -39,13 +58,20 @@ class Console
 	int height;
 	int caretPosition;
 	float delayTime;
-	std::vector<std::wstring> buffer;
+	std::vector<LineBuffer> buffer;
 	std::wstringstream currentCommand;
 	std::stack<std::wstring> commandHistory;
 	std::stack<std::wstring> commandHistoryUp;
 	std::stack<char> spaceStack;
 	CommandMap commandMap;
+	CommandHelpMap commandHelpMap;
 	Keyboard* keyboard;
+	bool showCommandList;
+
+	/// <summary>
+	/// Register in-built system commands to console.
+	/// </summary>
+	void RegisterSystemCommands();
 
 	/// <summary>
 	/// Calculates where the caret should be
@@ -88,7 +114,9 @@ public:
 	/// Write to the console.
 	/// </summary>
 	/// <param name="line"></param>
-	void WriteLine(std::wstring line);
+	void WriteLine(std::wstring line, XMFLOAT4 color = Color::White);
+
+	void WriteLine(std::wstring line, ConsoleMessageType type);
 
 	/// <summary>
 	/// Renders the console on-screen
@@ -96,11 +124,17 @@ public:
 	void Render();
 
 	/// <summary>
+	/// Renders the available command list.
+	/// </summary>
+	void RenderCommandList();
+
+	/// <summary>
 	/// Register a command to the console. This command will be invoke-able from the console.
 	/// </summary>
 	/// <param name="commandName">Name of the command. This will be used to invoke the command</param>
 	/// <param name="command">The function to call when the command is invoked</param>
-	void RegisterCommand(std::string commandName, CommandCallback command);
+	/// <param name="helpText">Help text for given command.</param>
+	void RegisterCommand(std::string commandName, CommandCallback command, std::vector<std::string> helpText = std::vector<std::string>());
 
 	/// <summary>
 	/// Console constructor

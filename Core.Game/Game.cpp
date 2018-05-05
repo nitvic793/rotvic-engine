@@ -117,36 +117,35 @@ void Game::LoadLevel()
 	pEntity->CreateBoxCollider(rp3d::Vector3(1, 1, 1), rp3d::Vector3(0, 1, 0), "player");
 	//entity->CreateCapsuleCollider(rp3d::decimal(1), rp3d::decimal(2));
 	AddEntity(pEntity, "man");
-	DebugDraw::GetInstance()->SetGroupActive("player", false);
 	thirdPersonCamera->AttachEntity(pEntity);
 	camera = thirdPersonCamera.get();
 
 
-	auto entity = new Entity(resource->GetMesh("bee"), resource->GetMaterial("bee"), rp3d::Vector3(0, 0, 25), dynamicsWorld);
+	auto entity = new Entity(resource->GetMesh("bee"), resource->GetMaterial("bee"), rp3d::Vector3(0, -5, 25), dynamicsWorld);
 	entity->isAnimated = true;
 	entity->fbx = resource->enemyFBXLoader;
-	entity->SetPosition(0, 0, 25);
-	entity->SetScale(0.03, 0.03, 0.03);
-	entity->SetRotation(-1.57, 3.14, 0);
+	//entity->SetPosition(0, 0, 25);
+	entity->SetScale(0.03f, 0.03f, 0.03f);
+	entity->SetRotation(-1.57f, 3.14f, 0);
 	//entity->CreateBoxCollider(rp3d::Vector3(2, 2, 2));
 	AddEntity(entity, "bee1");
 
-	entity = new Entity(resource->GetMesh("bee"), resource->GetMaterial("bee"), rp3d::Vector3(4, 0, 25), dynamicsWorld);
+	entity = new Entity(resource->GetMesh("bee"), resource->GetMaterial("bee"), rp3d::Vector3(4, -5, 25), dynamicsWorld);
 	entity->isAnimated = true;
 	entity->fbx = resource->enemyFBXLoader;
 	entity->enemyInstanceNumber = 1;
-	entity->SetPosition(4, 0, 25);
-	entity->SetScale(0.03, 0.03, 0.03);
-	entity->SetRotation(-1.57, 3.14, 0);
+	//entity->SetPosition(4, 0, 25);
+	entity->SetScale(0.03f, 0.03f, 0.03f);
+	entity->SetRotation(-1.57f, 3.14f, 0);
 	AddEntity(entity, "bee2");
 
-	entity = new Entity(resource->GetMesh("bee"), resource->GetMaterial("bee"), rp3d::Vector3(-4, 0, 25), dynamicsWorld);
+	entity = new Entity(resource->GetMesh("bee"), resource->GetMaterial("bee"), rp3d::Vector3(-4, -5, 25), dynamicsWorld);
 	entity->isAnimated = true;
 	entity->fbx = resource->enemyFBXLoader;
 	entity->enemyInstanceNumber = 2;
-	entity->SetPosition(-4, 0, 25);
-	entity->SetScale(0.03, 0.03, 0.03);
-	entity->SetRotation(-1.57, 3.14, 0);
+	//entity->SetPosition(-4, 0, 25);
+	entity->SetScale(0.03f, 0.03f, 0.03f);
+	entity->SetRotation(-1.57f, 3.14f, 0);
 	AddEntity(entity, "bee3");
 
 	//{auto entity = new Entity(resource->GetMesh("cylinder"), resource->GetMaterial("metal"), rp3d::Vector3(2, 0, 0), dynamicsWorld, { new Flocker() });
@@ -219,17 +218,6 @@ void Game::LoadLevel()
 	AddEntity(terrain, "Terrain2");
 
 	flocking = true;
-	console->RegisterCommand("ClearLevel", [=](std::vector<std::string> params)
-	{
-		flocking = false;
-		for (auto entity : entities)
-		{
-			delete entity.second;
-		}
-		entities.clear();
-		vEntities.clear();
-	});
-
 	console->RegisterCommand("AddTerrain", [=](std::vector<std::string> params)
 	{
 		if (params.size() < 1)
@@ -261,7 +249,7 @@ void Game::LoadLevel()
 
 	console->RegisterCommand("SwitchCam", [=](std::vector<std::string> params)
 	{
-		camera = camera == freeCam ? firstPersonCamera : freeCam;
+		camera = camera == freeCam ? thirdPersonCamera.get() : freeCam;
 	});
 }
 

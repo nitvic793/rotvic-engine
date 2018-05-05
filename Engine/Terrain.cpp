@@ -585,6 +585,8 @@ void Terrain::_temp_Init()
 	proxyShape = rigidBody->addCollisionShape(shape, rp3d::Transform::identity(), 1.f);
 	rigidBody->setType(rp3d::BodyType::STATIC);
 	rigidBody->enableGravity(false);
+	rigidBody->getMaterial().setBounciness(0.01f);
+	//rigidBody->getMaterial().setFrictionCoefficient(0.1f);
 	shape->getLocalBounds(min, max);
 	printf("%f %f %f %f %f %f", min.x, min.y, min.z, max.x, max.y, max.z);
 
