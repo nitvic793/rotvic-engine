@@ -38,6 +38,7 @@ EventSystem * EventSystem::GetInstance()
 
 void EventSystem::RegisterEventCallback(std::string eventType, void* instance, std::function<void(void*)> callback)
 {
+	std::lock_guard<std::mutex> lock(mutex);
 	if (eventMap.find(eventType) == eventMap.end()) //Event is present in map
 	{
 		eventMap.insert(std::pair<std::string, std::map<void*, std::function<void(void*)>>>(eventType, std::map<void*, std::function<void(void*)>>()));
@@ -48,11 +49,13 @@ void EventSystem::RegisterEventCallback(std::string eventType, void* instance, s
 
 void EventSystem::EmitEventImmediate(std::string eventType, void* args, void* instance)
 {
+	std::lock_guard<std::mutex> lock(mutex);
 	EmitEvent(eventType, args, instance);
 }
 
 void EventSystem::EmitEventQueued(std::string eventType, EventUpdateType update, void* args, void* instance)
 {
+	std::lock_guard<std::mutex> lock(mutex);
 	eventQueue[update].push(EventArgs{ eventType, instance, args });
 }
 

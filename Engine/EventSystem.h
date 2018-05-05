@@ -9,6 +9,7 @@
 #include <map>
 #include <queue>
 #include "Entity.h"
+#include <mutex>
 
 enum EventUpdateType
 {
@@ -29,6 +30,7 @@ struct EventArgs
 class EventSystem
 {
 	static EventSystem* instance;
+	std::mutex mutex;
 	std::unordered_map<std::string, std::map<void*, std::function<void(void*)>>> eventMap;
 	std::unordered_map<EventUpdateType, std::queue<EventArgs>> eventQueue;
 
