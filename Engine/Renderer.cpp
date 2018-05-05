@@ -74,15 +74,14 @@ void Renderer::SetShadersAndDrawAnimated(Entity * entity, Camera * camera, Light
 	Bones bones[72];
 	Bones bones2[72];
 
-	resourceManager->fbxLoader.GetAnimatedMatrixExtra();
 
 	//Setting bones
-	int numBones = (int)resourceManager->fbxLoader.skeleton.mJoints.size();
+	int numBones = (int)entity->fbx->skeleton.mJoints.size();
 	for (int i = 0; i < numBones; i++)
 	{
 
-		XMMATRIX jointTransformMatrix = XMLoadFloat4x4(&resourceManager->fbxLoader.skeleton.mJoints[i].mTransform);
-		XMMATRIX invJointTransformMatrix = XMLoadFloat4x4(&resourceManager->fbxLoader.skeleton.mJoints[i].mGlobalBindposeInverse);
+		XMMATRIX jointTransformMatrix = XMLoadFloat4x4(&entity->fbx->skeleton.mJoints[i].mTransform);
+		XMMATRIX invJointTransformMatrix = XMLoadFloat4x4(&entity->fbx->skeleton.mJoints[i].mGlobalBindposeInverse);
 
 		XMFLOAT4X4 trans = {};
 		XMStoreFloat4x4(&trans, XMMatrixTranspose(jointTransformMatrix));
@@ -93,12 +92,12 @@ void Renderer::SetShadersAndDrawAnimated(Entity * entity, Camera * camera, Light
 	}
 	vertexShader->SetData("bones", &bones, bonesSize);
 
-	numBones = (int)resourceManager->fbxLoader.skeleton.mJoints2.size();
+	numBones = (int)entity->fbx->skeleton.mJoints2.size();
 	for (int i = 0; i < numBones; i++)
 	{
 
-		XMMATRIX jointTransformMatrix = XMLoadFloat4x4(&resourceManager->fbxLoader.skeleton.mJoints2[i].mTransform);
-		XMMATRIX invJointTransformMatrix = XMLoadFloat4x4(&resourceManager->fbxLoader.skeleton.mJoints2[i].mGlobalBindposeInverse);
+		XMMATRIX jointTransformMatrix = XMLoadFloat4x4(&entity->fbx->skeleton.mJoints2[i].mTransform);
+		XMMATRIX invJointTransformMatrix = XMLoadFloat4x4(&entity->fbx->skeleton.mJoints2[i].mGlobalBindposeInverse);
 
 		XMFLOAT4X4 trans = {};
 		XMStoreFloat4x4(&trans, XMMatrixTranspose(jointTransformMatrix));
@@ -110,7 +109,7 @@ void Renderer::SetShadersAndDrawAnimated(Entity * entity, Camera * camera, Light
 	vertexShader->SetData("bones2", &bones2, bonesSize);
 
 	//int blendWeight = 1;
-	vertexShader->SetData("blendWeight", &resourceManager->blendWeight, sizeof(float));
+	vertexShader->SetData("blendWeight", &entity->fbx->blendWeight, sizeof(float));
 
 	/*
 	// Setting light
@@ -149,7 +148,6 @@ void Renderer::SetShadersAndDrawAnimated(Entity * entity, Camera * camera, Light
 	vertexShader->SetShader();
 	pixelShader->SetShader();
 
-	int a = 0;
 
 	UINT stride = sizeof(VertexAnimated);
 	UINT offset = 0;
@@ -305,7 +303,26 @@ void Renderer::Draw(Entity *entity)
 		Draw(entity->GetMesh());
 	}
 	else
+	{
+		if (entity->fbx->meshName == "bee")
+		{
+			if (entity->enemyInstanceNumber == 0)
+				entity->fbx->currentTime += 1.f;
+			else if (entity->enemyInstanceNumber == 1)
+				entity->fbx->currentTime += 1.f;
+			else if (entity->enemyInstanceNumber == 2)
+				entity->fbx->currentTime -= 2.f;
+
+			if (entity->fbx->currentTime >= 3.3f)
+				entity->fbx->currentTime -= 3.3f;
+
+			entity->fbx->GetAnimatedMatrixExtra(0.025);
+		}
+		else
+			entity->fbx->GetAnimatedMatrixExtra(0.075);
+
 		SetShadersAndDrawAnimated(entity, camera, lights, core->GetDeviceContext());
+	}
 	
 	core->Draw();
 }

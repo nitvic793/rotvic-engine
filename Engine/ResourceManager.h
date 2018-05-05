@@ -40,8 +40,8 @@ public:
 	SimplePixelShader *pixelShaderAnimated;
 	
 	// Animation Data
-	FBXLoader fbxLoader;
-	float blendWeight = 0;
+	FBXLoader * fbxLoader;   // Player FBX Loader
+	FBXLoader * enemyFBXLoader;    // Enemy FBX Loader
 
 	void SetAsyncLoader(AsyncLoader* loader);
 

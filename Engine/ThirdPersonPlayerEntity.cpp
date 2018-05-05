@@ -36,19 +36,19 @@ void ThirdPersonPlayerEntity::Update(float deltaTime)
 	{
 		if (animTransitionDirection)
 		{
-			resource->blendWeight += 0.04f;
-			if (resource->blendWeight > 1.0f)
+			resource->fbxLoader->blendWeight += 0.04f;
+			if (resource->fbxLoader->blendWeight > 1.0f)
 			{
-				resource->blendWeight = 1.0f;
+				resource->fbxLoader->blendWeight = 1.0f;
 				isAnimationTransitioning = false;
 			}
 		}
 		else
 		{
-			resource->blendWeight -= 0.04f;
-			if (resource->blendWeight < 0.0f)
+			resource->fbxLoader->blendWeight -= 0.04f;
+			if (resource->fbxLoader->blendWeight < 0.0f)
 			{
-				resource->blendWeight = 0.0f;
+				resource->fbxLoader->blendWeight = 0.0f;
 				isAnimationTransitioning = false;
 			}
 		}

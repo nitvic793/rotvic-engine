@@ -9,6 +9,7 @@
 #include "reactphysics3d.h"
 #include "Script.h"
 #include "PrimitiveShape.h"
+#include "FBXLoader.h"
 
 using namespace DirectX;
 
@@ -128,5 +129,7 @@ public:
 	virtual ~Entity();
 
 	bool isAnimated = false;
+	FBXLoader* fbx;
+	int enemyInstanceNumber = 0;
 };
 

@@ -190,26 +190,55 @@ void ResourceManager::LoadResourcesAsync(ConfigMap config, SystemCore * core, st
 
 
 		// Animation data
-		fbxLoader.LoadNodes(fbxLoader.scene->GetRootNode(), fbxLoader.skeleton.mJoints);
-		fbxLoader.LoadNodes(fbxLoader.scene2->GetRootNode(), fbxLoader.skeleton.mJoints2);
-		int numChildren = fbxLoader.scene->GetRootNode()->GetChildCount();
 
+		FbxString lFilePath1("../../axe-idle.fbx");		// Player Character Idle animation file path
+		FbxString lFilePath2("../../axe-walk.fbx");		// Player Character Walk animation file path
 
-		FbxNode* childNode = fbxLoader.scene->GetRootNode()->GetChild(1);
+		fbxLoader = new FBXLoader("man", lFilePath1, lFilePath2);
+		fbxLoader->LoadNodes(fbxLoader->scene->GetRootNode(), fbxLoader->skeleton.mJoints);
+		fbxLoader->LoadNodes(fbxLoader->scene2->GetRootNode(), fbxLoader->skeleton.mJoints2);
+		int numChildren = fbxLoader->scene->GetRootNode()->GetChildCount();
+
+		FbxNode* childNode = fbxLoader->scene->GetRootNode()->GetChild(1);
 		FbxString name1 = childNode->GetName();
-		meshes.insert(std::pair<std::string, Mesh*>("man", fbxLoader.GetMesh(childNode, device)));
+		meshes.insert(std::pair<std::string, Mesh*>("man", fbxLoader->GetMesh(childNode, device)));
 
-		childNode = fbxLoader.scene2->GetRootNode()->GetChild(1);
-		fbxLoader.GetMatricesFromMesh(childNode, device, fbxLoader.skeleton.mJoints2);
+		childNode = fbxLoader->scene2->GetRootNode()->GetChild(1);
+		fbxLoader->GetMatricesFromMesh(childNode, device, fbxLoader->skeleton.mJoints2);
 
 		CreateWICTextureFromFile(device, context, L"../../Assets/Textures/axe_base_color2.png", nullptr, &srv);
 		CreateWICTextureFromFile(device, context, L"../../Assets/Textures/axe_base_normal2.png", nullptr, &normalSrv);
 		textures.insert(std::pair<std::string, ID3D11ShaderResourceView*>("man", srv));
 		textures.insert(std::pair<std::string, ID3D11ShaderResourceView*>("manNormal", normalSrv));
 		material = new Material(core, vertexShaderAnimated, pixelShaderAnimated, srv, normalSrv, sampler);
-		materials.insert(std::pair<std::string, Material*>("man", material));		
-		deferredContext->FinishCommandList(false, &commandList);
+		materials.insert(std::pair<std::string, Material*>("man", material));
 
+
+		lFilePath1 = FbxString("../../Bee-Idle3.fbx");		// Enemy Character Idle animation file path
+		lFilePath2 = FbxString("../../Bee-Idle3.fbx");
+
+		enemyFBXLoader = new FBXLoader("bee", lFilePath1, lFilePath2);
+		enemyFBXLoader->LoadNodes(enemyFBXLoader->scene->GetRootNode()->GetChild(9), enemyFBXLoader->skeleton.mJoints);
+		enemyFBXLoader->LoadNodes(enemyFBXLoader->scene2->GetRootNode()->GetChild(9), enemyFBXLoader->skeleton.mJoints2);
+		numChildren = enemyFBXLoader->scene->GetRootNode()->GetChildCount();
+
+		childNode = enemyFBXLoader->scene->GetRootNode()->GetChild(8);
+		name1 = childNode->GetName();
+		meshes.insert(std::pair<std::string, Mesh*>("bee", enemyFBXLoader->GetMesh(childNode, device)));
+
+		childNode = enemyFBXLoader->scene2->GetRootNode()->GetChild(8);
+		enemyFBXLoader->GetMatricesFromMesh(childNode, device, enemyFBXLoader->skeleton.mJoints2);
+
+
+		CreateWICTextureFromFile(device, context, L"../../Assets/Textures/beeColor.png", nullptr, &srv);
+		CreateWICTextureFromFile(device, context, L"../../Assets/Textures/beeNormal.png", nullptr, &normalSrv);
+		textures.insert(std::pair<std::string, ID3D11ShaderResourceView*>("bee", srv));
+		textures.insert(std::pair<std::string, ID3D11ShaderResourceView*>("beeNormal", normalSrv));
+		material = new Material(core, vertexShaderAnimated, pixelShaderAnimated, srv, normalSrv, sampler);
+		materials.insert(std::pair<std::string, Material*>("bee", material));
+
+
+		deferredContext->FinishCommandList(false, &commandList);
 		events->EmitEventQueued("ResourceLoadComplete", GENERIC, commandList, this);
 		callback();
 		deferredContext->Release();
@@ -338,19 +367,22 @@ void ResourceManager::LoadResources(ConfigMap config, SystemCore* core)
 	meshes.insert(std::pair<std::string, Mesh*>("helix", new Mesh("../../Assets/Models/helix.obj", core)));
 	meshes.insert(std::pair<std::string, Mesh*>("torus", new Mesh("../../Assets/Models/torus.obj", core)));
 
-
 	// Animation data
-	fbxLoader.LoadNodes(fbxLoader.scene->GetRootNode(), fbxLoader.skeleton.mJoints);
-	fbxLoader.LoadNodes(fbxLoader.scene2->GetRootNode(), fbxLoader.skeleton.mJoints2);
-	int numChildren = fbxLoader.scene->GetRootNode()->GetChildCount();
 
+	FbxString lFilePath1("../../axe-idle.fbx");
+	FbxString lFilePath2("../../axe-walk.fbx");
 
-	FbxNode* childNode = fbxLoader.scene->GetRootNode()->GetChild(1);
+	fbxLoader = new FBXLoader("man", lFilePath1, lFilePath2);
+	fbxLoader->LoadNodes(fbxLoader->scene->GetRootNode(), fbxLoader->skeleton.mJoints);
+	fbxLoader->LoadNodes(fbxLoader->scene2->GetRootNode(), fbxLoader->skeleton.mJoints2);
+	int numChildren = fbxLoader->scene->GetRootNode()->GetChildCount();
+
+	FbxNode* childNode = fbxLoader->scene->GetRootNode()->GetChild(1);
 	FbxString name1 = childNode->GetName();
-	meshes.insert(std::pair<std::string, Mesh*>("man", fbxLoader.GetMesh(childNode, device)));
+	meshes.insert(std::pair<std::string, Mesh*>("man", fbxLoader->GetMesh(childNode, device)));
 
-	childNode = fbxLoader.scene2->GetRootNode()->GetChild(1);
-	fbxLoader.GetMatricesFromMesh(childNode, device, fbxLoader.skeleton.mJoints2);
+	childNode = fbxLoader->scene2->GetRootNode()->GetChild(1);
+	fbxLoader->GetMatricesFromMesh(childNode, device, fbxLoader->skeleton.mJoints2);
 
 	CreateWICTextureFromFile(device, context, L"../../Assets/Textures/axe_base_color2.png", nullptr, &srv);
 	CreateWICTextureFromFile(device, context, L"../../Assets/Textures/axe_base_normal2.png", nullptr, &normalSrv);
@@ -358,6 +390,31 @@ void ResourceManager::LoadResources(ConfigMap config, SystemCore* core)
 	textures.insert(std::pair<std::string, ID3D11ShaderResourceView*>("manNormal", normalSrv));
 	material = new Material(core, vertexShaderAnimated, pixelShaderAnimated, srv, normalSrv, sampler);
 	materials.insert(std::pair<std::string, Material*>("man", material));
+
+
+
+	lFilePath1 = FbxString("../../Bee-Idle3.fbx");
+	lFilePath2 = FbxString("../../Bee-Idle3.fbx");
+
+	enemyFBXLoader = new FBXLoader("bee", lFilePath1, lFilePath2);
+	enemyFBXLoader->LoadNodes(enemyFBXLoader->scene->GetRootNode()->GetChild(9), enemyFBXLoader->skeleton.mJoints);
+	enemyFBXLoader->LoadNodes(enemyFBXLoader->scene2->GetRootNode()->GetChild(9), enemyFBXLoader->skeleton.mJoints2);
+	numChildren = enemyFBXLoader->scene->GetRootNode()->GetChildCount();
+
+	childNode = enemyFBXLoader->scene->GetRootNode()->GetChild(8);
+	name1 = childNode->GetName();
+	meshes.insert(std::pair<std::string, Mesh*>("bee", enemyFBXLoader->GetMesh(childNode, device)));
+
+	childNode = enemyFBXLoader->scene2->GetRootNode()->GetChild(8);
+	enemyFBXLoader->GetMatricesFromMesh(childNode, device, enemyFBXLoader->skeleton.mJoints2);
+
+
+	CreateWICTextureFromFile(device, context, L"../../Assets/Textures/beeColor.png", nullptr, &srv);
+	CreateWICTextureFromFile(device, context, L"../../Assets/Textures/beeNormal.png", nullptr, &normalSrv);
+	textures.insert(std::pair<std::string, ID3D11ShaderResourceView*>("bee", srv));
+	textures.insert(std::pair<std::string, ID3D11ShaderResourceView*>("beeNormal", normalSrv));
+	material = new Material(core, vertexShaderAnimated, pixelShaderAnimated, srv, normalSrv, sampler);
+	materials.insert(std::pair<std::string, Material*>("bee", material));
 }
 
 Mesh * ResourceManager::GetMesh(std::string meshName)

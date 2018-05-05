@@ -108,6 +108,7 @@ void Game::LoadLevel()
 	// Player Entity
 	auto pEntity = new ThirdPersonPlayerEntity(resource->GetMesh("man"), resource->GetMaterial("man"), rp3d::Vector3(0, -2, 5), dynamicsWorld);
 	pEntity->isAnimated = true;
+	pEntity->fbx = resource->fbxLoader;
 	pEntity->SetScale(0.03f, 0.03f, 0.03f);
 	pEntity->SetRigidBodyParameters(true);
 	pEntity->GetRigidBody()->setMass(0.1f);
@@ -119,6 +120,35 @@ void Game::LoadLevel()
 	DebugDraw::GetInstance()->SetGroupActive("player", false);
 	thirdPersonCamera->AttachEntity(pEntity);
 	camera = thirdPersonCamera.get();
+
+
+	auto entity = new Entity(resource->GetMesh("bee"), resource->GetMaterial("bee"), rp3d::Vector3(0, 0, 25), dynamicsWorld);
+	entity->isAnimated = true;
+	entity->fbx = resource->enemyFBXLoader;
+	entity->SetPosition(0, 0, 25);
+	entity->SetScale(0.03, 0.03, 0.03);
+	entity->SetRotation(-1.57, 3.14, 0);
+	//entity->CreateBoxCollider(rp3d::Vector3(2, 2, 2));
+	AddEntity(entity, "bee1");
+
+	entity = new Entity(resource->GetMesh("bee"), resource->GetMaterial("bee"), rp3d::Vector3(4, 0, 25), dynamicsWorld);
+	entity->isAnimated = true;
+	entity->fbx = resource->enemyFBXLoader;
+	entity->enemyInstanceNumber = 1;
+	entity->SetPosition(4, 0, 25);
+	entity->SetScale(0.03, 0.03, 0.03);
+	entity->SetRotation(-1.57, 3.14, 0);
+	AddEntity(entity, "bee2");
+
+	entity = new Entity(resource->GetMesh("bee"), resource->GetMaterial("bee"), rp3d::Vector3(-4, 0, 25), dynamicsWorld);
+	entity->isAnimated = true;
+	entity->fbx = resource->enemyFBXLoader;
+	entity->enemyInstanceNumber = 2;
+	entity->SetPosition(-4, 0, 25);
+	entity->SetScale(0.03, 0.03, 0.03);
+	entity->SetRotation(-1.57, 3.14, 0);
+	AddEntity(entity, "bee3");
+
 	//{auto entity = new Entity(resource->GetMesh("cylinder"), resource->GetMaterial("metal"), rp3d::Vector3(2, 0, 0), dynamicsWorld, { new Flocker() });
 	//entity->CreateCylinderCollider(.5, 1);
 	//AddEntity(entity, "Flocker1");  // Flocker 1
@@ -150,7 +180,7 @@ void Game::LoadLevel()
 	//dynamic_cast<Flocker*>(entities["Flocker5"]->scripts[0])->Init(entities["Flocker5"], camera, &centroidForward, &centroidPosition, &entities);
 	//}
 
-	auto entity = new Entity(resource->GetMesh("sphere"), resource->GetMaterial("metal"), rp3d::Vector3(5, 5, 0), dynamicsWorld);
+	entity = new Entity(resource->GetMesh("sphere"), resource->GetMaterial("metal"), rp3d::Vector3(5, 5, 0), dynamicsWorld);
 	entity->CreateSphereCollider(.5);
 	AddEntity(entity, "Collider1");  // Collider 1
 	//entity->SetRigidBodyParameters(true); 

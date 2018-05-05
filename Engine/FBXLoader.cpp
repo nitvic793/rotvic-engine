@@ -10,13 +10,12 @@
 #endif
 
 
-FBXLoader::FBXLoader()
+FBXLoader::FBXLoader(FbxString name, FbxString lFilePath1, FbxString lFilePath2)
 {
+	meshName = name;
+
 	InitializeSdkObjects();
 
-	// Filepaths of fbx animations
-	FbxString lFilePath1("../../axe-idle.fbx");
-	FbxString lFilePath2("../../axe-walk.fbx");
 
 	if (lFilePath1.IsEmpty())
 	{
@@ -271,6 +270,9 @@ Mesh* FBXLoader::GetMesh(FbxNode * node , ID3D11Device* device)
 				const char* uvSet = "map1";
 				bool uvFlag = true;
 
+				if (meshName == "bee")
+					uvSet = "DiffuseUV";
+
 				fbxMesh->GetPolygonVertexUV(i, j, uvSet, uvCoord, uvFlag);
 
 				verticesAnim[ind].UV.x = (float)uvCoord.mData[0];			// Vertex Texture Coordinates
@@ -523,17 +525,23 @@ unsigned int FBXLoader::FindJointIndex(const std::string & jointname, std::vecto
 
 
 /* Updates the array of bone transforms which are passed into the vertex shader (AnimationVS)*/
-void FBXLoader::GetAnimatedMatrixExtra()
+void FBXLoader::GetAnimatedMatrixExtra(float delTime)
 {
 	FbxTime repeat = 0;
-	repeat.SetSecondDouble(3.4);
-	time.SetSecondDouble(T);
+	repeat.SetSecondDouble(3.3);
+	time.SetSecondDouble(currentTime);
 	
-	T += 0.07; // Speed of animation 
+	currentTime += delTime; // Speed of animation 
 	
-	if(time > repeat) // Loop condition
+	if (time > repeat) // Loop Condition
 	{
-		T = 0;
+		currentTime -= 3.3;
+		time.SetSecondDouble(currentTime);
+	}
+	else if (time < 0)
+	{
+		currentTime += 3.3;
+		time.SetSecondDouble(currentTime);
 	}
 
 
