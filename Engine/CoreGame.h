@@ -1,4 +1,5 @@
-// Most code written by Nitish Victor, rp3d integration by Trevor Walden with help from http://www.reactphysics3d.com/usermanual.html and the rp3d class list#pragma once
+// Most code written by Nitish Victor, rp3d integration by Trevor Walden with help from http://www.reactphysics3d.com/usermanual.html and the rp3d class list
+#pragma once
 #define NOMINMAX
 #include <Windows.h>
 #include <d3d11.h>
@@ -32,6 +33,10 @@ class CoreGame
 	__int64 startTime;
 	__int64 currentTime;
 	__int64 previousTime;
+	// FPS calculation
+	int fpsFrameCount;
+	float fpsTimeElapsed;
+
 protected:
 	SystemCore *Core;
 	int screenHeight;

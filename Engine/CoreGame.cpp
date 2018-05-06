@@ -528,7 +528,7 @@ void CoreGame::Draw()
 /// <summary>
 /// Updates the timer to calculate delta time and total time passed.
 /// </summary>
-void CoreGame::UpdateTimer()
+void CoreGame::UpdateTimer() // This method taken mostly from Chris Cascioli's DX11 Engine
 {
 	__int64 now;
 	QueryPerformanceCounter((LARGE_INTEGER*)&now);
@@ -536,4 +536,22 @@ void CoreGame::UpdateTimer()
 	deltaTime = std::max((float)((currentTime - previousTime) * perfCounterSeconds), 0.0f);
 	totalTime = (float)((currentTime - startTime) * perfCounterSeconds);
 	previousTime = currentTime;
+	fpsFrameCount++;
+
+	// Only calc FPS and update title bar once per second
+	float timeDiff = totalTime - fpsTimeElapsed;
+	if (timeDiff < 1.0f)
+		return;
+
+	// How long did each frame take?  (Approx)
+	float mspf = 1000.0f / (float)fpsFrameCount; std::ostringstream output;
+	output.precision(6);
+	output << screenTitle <<
+		"    FPS: " << fpsFrameCount <<
+		"    Frame Time: " << mspf << "ms";
+
+	// Actually update the title bar and reset fps data
+	SetWindowText(Core->GetWindowHandle(), output.str().c_str());
+	fpsFrameCount = 0;
+	fpsTimeElapsed += 1.0f;
 }

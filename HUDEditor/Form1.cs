@@ -120,14 +120,14 @@ namespace HUDEditor
             FileStream fstream;
             try
             {
-                fstream = new FileStream("..\\..\\..\\Assets\\GameUI.json", FileMode.CreateNew, FileAccess.ReadWrite);
+                fstream = new FileStream("..\\..\\..\\Assets\\GameHUD.json", FileMode.CreateNew, FileAccess.ReadWrite);
             }
             catch (IOException ex)
             {
-                DialogResult dialog = MessageBox.Show("A UI file already exists, are you sure you want to overwrite it?", "Overwrite File", MessageBoxButtons.OKCancel);
+                DialogResult dialog = MessageBox.Show("A HUD file already exists, are you sure you want to overwrite it?", "Overwrite File", MessageBoxButtons.OKCancel);
                 if (dialog == DialogResult.OK)
                 {
-                    fstream = new FileStream("..\\..\\..\\Assets\\GameUI.json", FileMode.Create, FileAccess.ReadWrite);
+                    fstream = new FileStream("..\\..\\..\\Assets\\GameHUD.json", FileMode.Create, FileAccess.ReadWrite);
                 }
                 else return;
             }
@@ -135,7 +135,7 @@ namespace HUDEditor
             // Save the json data
 
             fstream.Close();
-            MessageBox.Show("UI File successfully saved.", "Save File", MessageBoxButtons.OK);
+            MessageBox.Show("HUD File successfully saved.", "Save File", MessageBoxButtons.OK);
         }
     }
 }
