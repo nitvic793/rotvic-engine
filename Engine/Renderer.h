@@ -55,5 +55,8 @@ public:
 
 	void					GetResourceManager(ResourceManager *);
 	void					SetShadersAndDrawAnimated(Entity *entity, Camera* camera, LightsMap lights, ID3D11DeviceContext *context);
+	void					SetShadersAndDrawWeapon(Entity * entity, Camera * camera, LightsMap lights, ID3D11DeviceContext * context, Entity *);
+
+	Entity* playerEntity;
 };
 

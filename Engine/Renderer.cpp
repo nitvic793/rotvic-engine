@@ -79,6 +79,7 @@ void Renderer::SetShadersAndDrawAnimated(Entity * entity, Camera * camera, Light
 		XMMATRIX jointTransformMatrix = XMLoadFloat4x4(&entity->fbx->skeleton.mJoints[i].mTransform);
 		XMMATRIX invJointTransformMatrix = XMLoadFloat4x4(&entity->fbx->skeleton.mJoints[i].mGlobalBindposeInverse);
 
+
 		XMFLOAT4X4 trans = {};
 		XMStoreFloat4x4(&trans, XMMatrixTranspose(jointTransformMatrix));
 		bones[i].BoneTransform = trans;
@@ -151,6 +152,108 @@ void Renderer::SetShadersAndDrawAnimated(Entity * entity, Camera * camera, Light
 	context->IASetIndexBuffer(entity->GetMesh()->GetIndexBuffer(), DXGI_FORMAT_R32_UINT, 0);
 	context->DrawIndexed(entity->GetMesh()->GetIndexCount(), 0, 0);
 }
+
+
+void Renderer::SetShadersAndDrawWeapon(Entity * entity, Camera * camera, LightsMap lights, ID3D11DeviceContext * context, Entity *playerEntity)
+{
+	auto material = entity->GetMaterial();
+	auto pixelShader = material->GetPixelShader();
+	auto vertexShader = material->GetVertexShader();
+	vertexShader->SetMatrix4x4("world", entity->GetWorldMatrix());
+	vertexShader->SetMatrix4x4("view", camera->GetViewMatrix());
+	vertexShader->SetMatrix4x4("projection", camera->GetProjectionMatrix());
+	vertexShader->SetMatrix4x4("characterWorld", playerEntity->GetWorldMatrix());
+	Bones bones;
+
+	//Joint joint = entity->fbx->skeleton.mJoints2[56];
+	XMFLOAT4X4 transform = entity->fbx->skeleton.mJoints[29].mTransform;
+	XMFLOAT4X4 invTransform = entity->fbx->skeleton.mJoints[29].mGlobalBindposeInverse;
+
+	XMFLOAT4X4 ident = { 1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1 };
+	//XMStoreFloat4x4(&ident, jointTransformMatrix * invJointTransformMatrix);
+
+
+	invTransform._11 = 100;
+	invTransform._22 = -100;
+	invTransform._33 = -100;
+
+	invTransform._14 = 0;
+	invTransform._24 = 0;
+	invTransform._34 = 0;
+	invTransform._44 =	1;
+
+	XMMATRIX jointTransformMatrix = XMLoadFloat4x4(&transform);
+	XMMATRIX invJointTransformMatrix = XMLoadFloat4x4(&invTransform);
+
+
+	XMFLOAT4X4 trans = {};
+	XMStoreFloat4x4(&trans, XMMatrixTranspose(jointTransformMatrix));
+	bones.BoneTransform = trans;
+	XMFLOAT4X4 trans2 = {};
+	XMStoreFloat4x4(&trans2, XMMatrixTranspose(invJointTransformMatrix));
+	bones.InvBoneTransform = trans2;
+	
+	vertexShader->SetData("bone", &bones, sizeof(Bones));
+
+
+	transform = entity->fbx->skeleton.mJoints2[29].mTransform;
+	invTransform = entity->fbx->skeleton.mJoints2[29].mGlobalBindposeInverse;
+
+	invTransform._11 = 100;
+	invTransform._22 = -100;
+	invTransform._33 = -100;
+
+	invTransform._14 = 0;
+	invTransform._24 = 0;
+	invTransform._34 = 0;
+	invTransform._44 = 1;
+
+	jointTransformMatrix = XMLoadFloat4x4(&transform);
+	invJointTransformMatrix = XMLoadFloat4x4(&invTransform);
+
+
+	XMStoreFloat4x4(&trans, XMMatrixTranspose(jointTransformMatrix));
+	bones.BoneTransform = trans;
+	XMStoreFloat4x4(&trans2, XMMatrixTranspose(invJointTransformMatrix));
+	bones.InvBoneTransform = trans2;
+
+	vertexShader->SetData("bone2", &bones, sizeof(Bones));
+
+	vertexShader->SetData("blendWeight", &entity->fbx->blendWeight, sizeof(float));
+	
+
+
+	for (auto lightPair : lights)
+	{
+		auto light = lightPair.second;
+		switch (light->Type)
+		{
+		case Directional:
+			pixelShader->SetData(lightPair.first, light->GetLight<DirectionalLight>(), sizeof(DirectionalLight));
+			break;
+		case Point:
+			pixelShader->SetData(lightPair.first, light->GetLight<PointLight>(), sizeof(PointLight));
+			break;
+		}
+	}
+
+	pixelShader->SetSamplerState("basicSampler", material->GetSampler());
+	pixelShader->SetShaderResourceView("diffuseTexture", material->GetSRV());
+	pixelShader->SetShaderResourceView("normalTexture", material->GetNormalSRV());
+
+	vertexShader->CopyAllBufferData();
+	pixelShader->CopyAllBufferData();
+	vertexShader->SetShader();
+	pixelShader->SetShader();
+
+	UINT stride = sizeof(Vertex);
+	UINT offset = 0;
+	auto vertexBuffer = entity->GetMesh()->GetVertexBuffer();
+	context->IASetVertexBuffers(0, 1, &vertexBuffer, &stride, &offset);
+	context->IASetIndexBuffer(entity->GetMesh()->GetIndexBuffer(), DXGI_FORMAT_R32_UINT, 0);
+	context->DrawIndexed(entity->GetMesh()->GetIndexCount(), 0, 0);
+}
+
 
 /// <summary>
 /// Renderer class constructor.
@@ -292,12 +395,12 @@ void Renderer::Draw(Entity *entity)
 	if (entity == nullptr) {
 		throw std::exception("Null Mesh");
 	}
-	if (!entity->isAnimated)
+	if (!entity->isAnimated && !entity->isWeapon)
 	{
 		internalRenderer->SetShaders(entity, camera, lights);
 		Draw(entity->GetMesh());
 	}
-	else
+	else if(entity->isAnimated)
 	{ 
 		if (entity->fbx->meshName == "bee")
 		{
@@ -314,9 +417,16 @@ void Renderer::Draw(Entity *entity)
 			entity->fbx->GetAnimatedMatrixExtra(0.025);
 		}
 		else
+		{ 
 			entity->fbx->GetAnimatedMatrixExtra(0.075);
-
+			playerEntity = entity;
+		}
 		SetShadersAndDrawAnimated(entity, camera, lights, core->GetDeviceContext());
+		
+	}
+	else if (entity->isWeapon)
+	{
+		SetShadersAndDrawWeapon(entity, camera, lights, core->GetDeviceContext(), playerEntity);
 	}
 	
 	core->Draw();

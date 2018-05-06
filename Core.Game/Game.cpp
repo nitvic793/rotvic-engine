@@ -127,7 +127,12 @@ void Game::LoadLevel()
 	AddEntity(entity, "bee");
 	//entity->SetRigidBodyParameters(true);
 
-
+	entity = new Entity(resource->GetMesh("mace"), resource->GetMaterial("mace"), rp3d::Vector3(0, 0, 5), dynamicsWorld);
+	entity->isWeapon = true;
+	entity->fbx = resource->fbxLoader;
+	entity->SetScale(2.5, 2.5, 2.5);
+	entity->SetRotation(1.57, 0, 0);
+	AddEntity(entity, "mace");
 
 	//{auto entity = new Entity(resource->GetMesh("cylinder"), resource->GetMaterial("metal"), rp3d::Vector3(2, 0, 0), dynamicsWorld, { new Flocker() });
 	//entity->CreateCylinderCollider(.5, 1);
@@ -425,8 +430,8 @@ void Game::Update(float deltaTime)
 		}
 	}
 
-
-	// Character Movement
+	
+	//entities["mace"]->SetPosition(entities["man"]->GetPosition().x*1.2f, entities["man"]->GetPosition().y*1.2f, entities["man"]->GetPosition().z*1.2f);
 
 
 	delayTime += deltaTime;

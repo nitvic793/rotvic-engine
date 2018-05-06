@@ -30,6 +30,7 @@ public:
 	PixelShaderMap pixelShaders;
 	SimpleVertexShader *vertexShaderAnimated;
 	SimplePixelShader *pixelShaderAnimated;
+	SimpleVertexShader *vertexShaderWeapon;
 	
 	// Animation Data
 	FBXLoader * fbxLoader;   // Player FBX Loader

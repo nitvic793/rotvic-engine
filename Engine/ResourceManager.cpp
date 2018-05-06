@@ -63,6 +63,10 @@ void ResourceManager::LoadResources(ConfigMap config, SystemCore* core)
 	pixelShaderAnimated->LoadShaderFile(L"AnimationPS.cso");
 	pixelShaders.insert(PixelShaderMapType("man", pixelShaderAnimated));
 
+	vertexShaderWeapon = new SimpleVertexShader(device, context);
+	vertexShaderWeapon->LoadShaderFile(L"WeaponVS.cso");
+	vertexShaders.insert(VertexShaderMapType("weapon", vertexShaderWeapon));
+
 	Material *material = nullptr;
 	ID3D11ShaderResourceView *srv = nullptr;
 	ID3D11ShaderResourceView *normalSrv = nullptr;
@@ -106,12 +110,20 @@ void ResourceManager::LoadResources(ConfigMap config, SystemCore* core)
 	material = new Material(core, vertexShader, pixelShader, srv, normalSrv, sampler);
 	materials.insert(std::pair<std::string, Material*>("grass", material));
 
+	CreateWICTextureFromFile(device, context, L"../../Assets/Textures/MaceDiffuse.png", nullptr, &srv);
+	CreateWICTextureFromFile(device, context, L"../../Assets/Textures/MaceNormal.png", nullptr, &normalSrv);
+	textures.insert(std::pair<std::string, ID3D11ShaderResourceView*>("mace", srv));
+	textures.insert(std::pair<std::string, ID3D11ShaderResourceView*>("maceNormal", normalSrv));
+	material = new Material(core, vertexShaderWeapon, pixelShader, srv, normalSrv, sampler);
+	materials.insert(std::pair<std::string, Material*>("mace", material));
+
 	meshes.insert(std::pair<std::string, Mesh*>("sphere", new Mesh("../../Assets/Models/sphere.obj", core)));
 	meshes.insert(std::pair<std::string, Mesh*>("cone", new Mesh("../../Assets/Models/cone.obj", core)));
 	meshes.insert(std::pair<std::string, Mesh*>("cylinder", new Mesh("../../Assets/Models/cylinder.obj", core)));
 	meshes.insert(std::pair<std::string, Mesh*>("cube", new Mesh("../../Assets/Models/cube.obj", core)));
 	meshes.insert(std::pair<std::string, Mesh*>("helix", new Mesh("../../Assets/Models/helix.obj", core)));
 	meshes.insert(std::pair<std::string, Mesh*>("torus", new Mesh("../../Assets/Models/torus.obj", core)));
+	meshes.insert(std::pair<std::string, Mesh*>("mace", new Mesh("../../Assets/Models/Mace.obj", core)));
 	
 
 	// Animation data

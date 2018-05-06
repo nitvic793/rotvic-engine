@@ -74,5 +74,6 @@ public:
 	bool isAnimated = false;
 	FBXLoader * fbx;
 	int enemyInstanceNumber = 0;
+	bool isWeapon = false;
 };
 
