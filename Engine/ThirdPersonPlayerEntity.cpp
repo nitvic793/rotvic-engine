@@ -28,7 +28,6 @@ void ThirdPersonPlayerEntity::Update(float deltaTime)
 	}
 
 	SetRotation(0, rotationAngle, 0);
-	// Forward Movement 
 
 
 	// Animation State Transitions
@@ -61,6 +60,7 @@ void ThirdPersonPlayerEntity::Update(float deltaTime)
 	if (velocity.z > maxSpeed)velocity.z = maxSpeed;
 	if (velocity.z < -maxSpeed)velocity.z = -maxSpeed;
 	rigidBody->setLinearVelocity(velocity);
+
 }
 
 rp3d::Vector3 ThirdPersonPlayerEntity::GetForwardVector() const

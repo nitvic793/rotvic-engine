@@ -12,6 +12,8 @@
 #include "Skybox.h"
 #include "ResourceManager.h"
 #include "FBXLoader.h"
+#include "WeaponEntity.h"
+
 
 /// <summary>
 /// Internal render class to abstract the draw calls. 
@@ -59,5 +61,6 @@ public:
 
 	void					GetResourceManager(ResourceManager *);
 	void					SetShadersAndDrawAnimated(Entity *entity, Camera* camera, LightsMap lights, ID3D11DeviceContext *context);
+	void					SetShadersAndDrawWeapon(WeaponEntity *entity, Entity *playerEntity, Camera* camera, LightsMap lights, ID3D11DeviceContext *context);
 };
 

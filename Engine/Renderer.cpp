@@ -157,6 +157,114 @@ void Renderer::SetShadersAndDrawAnimated(Entity * entity, Camera * camera, Light
 	context->DrawIndexed(entity->GetMesh()->GetIndexCount(), 0, 0);
 }
 
+void Renderer::SetShadersAndDrawWeapon(WeaponEntity * entity, Entity * playerEntity, Camera * camera, LightsMap lights, ID3D11DeviceContext * context)
+{
+	auto material = entity->GetMaterial();
+	auto pixelShader = material->GetPixelShader();
+	auto vertexShader = material->GetVertexShader();
+	vertexShader->SetMatrix4x4("world", entity->GetWorldMatrix());
+	vertexShader->SetMatrix4x4("view", camera->GetViewMatrix());
+	vertexShader->SetMatrix4x4("projection", camera->GetProjectionMatrix());
+	vertexShader->SetMatrix4x4("characterWorld", playerEntity->GetWorldMatrix());
+
+	Bones bones;
+
+	XMFLOAT4X4 transform = entity->fbx->skeleton.mJoints[entity->boneIndex].mTransform;
+	XMFLOAT4X4 invTransform = entity->fbx->skeleton.mJoints[entity->boneIndex].mGlobalBindposeInverse;
+
+
+	invTransform._11 = 100;
+	invTransform._22 = 0;
+	invTransform._33 = 0;
+
+	invTransform._23 = 100;
+	invTransform._32 = -100;
+
+	invTransform._14 = 0;
+	invTransform._24 = 0;
+	invTransform._34 = 0;
+	invTransform._44 = 1;
+
+
+	XMMATRIX jointTransformMatrix = XMLoadFloat4x4(&transform);
+	XMMATRIX invJointTransformMatrix = XMLoadFloat4x4(&invTransform);
+	XMFLOAT4X4 trans = {};
+	XMStoreFloat4x4(&trans, XMMatrixTranspose(jointTransformMatrix));
+	bones.BoneTransform = trans;
+	XMFLOAT4X4 trans2 = {};
+	XMStoreFloat4x4(&trans2, XMMatrixTranspose(invJointTransformMatrix));
+	bones.InvBoneTransform = trans2;
+
+	vertexShader->SetData("bone", &bones, sizeof(Bones));
+
+
+	transform = entity->fbx->skeleton.mJoints2[entity->boneIndex].mTransform;
+	invTransform = entity->fbx->skeleton.mJoints2[entity->boneIndex].mGlobalBindposeInverse;
+
+	invTransform._11 = 100;
+	invTransform._22 = 0;
+	invTransform._33 = 0;
+
+	invTransform._23 = 100;
+	invTransform._32 = -100;
+
+	invTransform._14 = 0;
+	invTransform._24 = 0;
+	invTransform._34 = 0;
+	invTransform._44 = 1;
+
+	jointTransformMatrix = XMLoadFloat4x4(&transform);
+	invJointTransformMatrix = XMLoadFloat4x4(&invTransform);
+	XMStoreFloat4x4(&trans, XMMatrixTranspose(jointTransformMatrix));
+	bones.BoneTransform = trans;
+	XMStoreFloat4x4(&trans2, XMMatrixTranspose(invJointTransformMatrix));
+	bones.InvBoneTransform = trans2;
+
+	vertexShader->SetData("bone2", &bones, sizeof(Bones));
+
+
+	vertexShader->SetData("blendWeight", &entity->fbx->blendWeight, sizeof(float));
+
+
+
+	
+	for (auto lightPair : lights)
+	{
+		auto light = lightPair.second;
+		switch (light->Type)
+			{
+			case Directional:
+				pixelShader->SetData(lightPair.first, light->GetLight<DirectionalLight>(), sizeof(DirectionalLight));
+				break;
+			case Point:
+				pixelShader->SetData(lightPair.first, light->GetLight<PointLight>(), sizeof(PointLight));
+				break;
+
+			}
+
+	}
+
+
+	pixelShader->SetSamplerState("basicSampler", material->GetSampler());
+	pixelShader->SetShaderResourceView("diffuseTexture", material->GetSRV());
+	pixelShader->SetShaderResourceView("normalTexture", material->GetNormalSRV());
+
+
+	vertexShader->CopyAllBufferData();
+	pixelShader->CopyAllBufferData();
+	vertexShader->SetShader();
+	pixelShader->SetShader();
+
+
+	UINT stride = sizeof(Vertex);
+	UINT offset = 0;
+
+	auto vertexBuffer = entity->GetMesh()->GetVertexBuffer();
+	context->IASetVertexBuffers(0, 1, &vertexBuffer, &stride, &offset);
+	context->IASetIndexBuffer(entity->GetMesh()->GetIndexBuffer(), DXGI_FORMAT_R32_UINT, 0);
+	context->DrawIndexed(entity->GetMesh()->GetIndexCount(), 0, 0);
+}
+
 /// <summary>
 /// Renderer class constructor.
 /// </summary>
@@ -297,12 +405,12 @@ void Renderer::Draw(Entity *entity)
 	if (entity == nullptr) {
 		throw std::exception("Null Mesh");
 	}
-	if (!entity->isAnimated)
+	if (!entity->isAnimated && !entity->isWeapon)
 	{
 		internalRenderer->SetShaders(entity, camera, lights);
 		Draw(entity->GetMesh());
 	}
-	else
+	else if(entity->isAnimated)
 	{
 		if (entity->fbx->meshName == "bee")
 		{
@@ -322,6 +430,11 @@ void Renderer::Draw(Entity *entity)
 			entity->fbx->GetAnimatedMatrixExtra(0.075);
 
 		SetShadersAndDrawAnimated(entity, camera, lights, core->GetDeviceContext());
+	}
+	else if (entity->isWeapon)
+	{
+		WeaponEntity* weapon = (WeaponEntity*)entity;
+		SetShadersAndDrawWeapon(weapon, weapon->playerEntity, camera, lights, core->GetDeviceContext());
 	}
 	
 	core->Draw();

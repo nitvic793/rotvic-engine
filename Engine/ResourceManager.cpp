@@ -128,6 +128,10 @@ void ResourceManager::LoadResourcesAsync(ConfigMap config, SystemCore * core, st
 	pixelShaderAnimated->LoadShaderFile(L"AnimationPS.cso");
 	pixelShaders.insert(PixelShaderMapType("man", pixelShaderAnimated));
 
+	vertexShaderWeapon = new SimpleVertexShader(device, context);
+	vertexShaderWeapon->LoadShaderFile(L"WeaponVS.cso");
+	vertexShaders.insert(VertexShaderMapType("weapon", vertexShaderWeapon));
+
 	auto events = EventSystem::GetInstance();
 	auto job = [this, device, core, callback, events](void* args)
 	{
@@ -175,11 +179,32 @@ void ResourceManager::LoadResourcesAsync(ConfigMap config, SystemCore * core, st
 
 		CreateWICTextureFromFile(device, context, L"../../Assets/Textures/wood.jpg", nullptr, &srv);
 		CreateWICTextureFromFile(device, context, L"../../Assets/Textures/woodNormal.png", nullptr, &normalSrv);
-
 		textures.insert(std::pair<std::string, ID3D11ShaderResourceView*>("wood", srv));
 		textures.insert(std::pair<std::string, ID3D11ShaderResourceView*>("woodNormal", normalSrv));
 		material = new Material(core, vertexShader, pixelShader, srv, normalSrv, sampler);
 		materials.insert(std::pair<std::string, Material*>("wood", material));
+
+		CreateWICTextureFromFile(device, context, L"../../Assets/Textures/MaceDiffuse.png", nullptr, &srv);
+		CreateWICTextureFromFile(device, context, L"../../Assets/Textures/MaceNormal.png", nullptr, &normalSrv);
+		textures.insert(std::pair<std::string, ID3D11ShaderResourceView*>("mace", srv));
+		textures.insert(std::pair<std::string, ID3D11ShaderResourceView*>("maceNormal", normalSrv));
+		material = new Material(core, vertexShaderWeapon, pixelShader, srv, normalSrv, sampler);
+		materials.insert(std::pair<std::string, Material*>("mace", material));
+
+		CreateWICTextureFromFile(device, context, L"../../Assets/Textures/Mace2Diffuse.png", nullptr, &srv);
+		CreateWICTextureFromFile(device, context, L"../../Assets/Textures/Mace2Normal.png", nullptr, &normalSrv);
+		textures.insert(std::pair<std::string, ID3D11ShaderResourceView*>("mace2", srv));
+		textures.insert(std::pair<std::string, ID3D11ShaderResourceView*>("maceNormal2", normalSrv));
+		material = new Material(core, vertexShaderWeapon, pixelShader, srv, normalSrv, sampler);
+		materials.insert(std::pair<std::string, Material*>("mace2", material));
+
+		CreateWICTextureFromFile(device, context, L"../../Assets/Textures/Mace3Diffuse.png", nullptr, &srv);
+		CreateWICTextureFromFile(device, context, L"../../Assets/Textures/Mace3Normal.png", nullptr, &normalSrv);
+		textures.insert(std::pair<std::string, ID3D11ShaderResourceView*>("mace3", srv));
+		textures.insert(std::pair<std::string, ID3D11ShaderResourceView*>("mace3Normal", normalSrv));
+		material = new Material(core, vertexShaderWeapon, pixelShader, srv, normalSrv, sampler);
+		materials.insert(std::pair<std::string, Material*>("mace3", material));
+
 
 		meshes.insert(std::pair<std::string, Mesh*>("sphere", new Mesh("../../Assets/Models/sphere.obj", core)));
 		meshes.insert(std::pair<std::string, Mesh*>("cone", new Mesh("../../Assets/Models/cone.obj", core)));
@@ -187,7 +212,9 @@ void ResourceManager::LoadResourcesAsync(ConfigMap config, SystemCore * core, st
 		meshes.insert(std::pair<std::string, Mesh*>("cube", new Mesh("../../Assets/Models/cube.obj", core)));
 		meshes.insert(std::pair<std::string, Mesh*>("helix", new Mesh("../../Assets/Models/helix.obj", core)));
 		meshes.insert(std::pair<std::string, Mesh*>("torus", new Mesh("../../Assets/Models/torus.obj", core)));
-
+		meshes.insert(std::pair<std::string, Mesh*>("mace", new Mesh("../../Assets/Models/Mace.obj", core)));
+		meshes.insert(std::pair<std::string, Mesh*>("mace2", new Mesh("../../Assets/Models/Mace2.obj", core)));
+		meshes.insert(std::pair<std::string, Mesh*>("mace3", new Mesh("../../Assets/Models/Mace3.obj", core)));
 
 		// Animation data
 

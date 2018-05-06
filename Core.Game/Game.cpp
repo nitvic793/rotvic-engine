@@ -120,6 +120,15 @@ void Game::LoadLevel()
 	thirdPersonCamera->AttachEntity(pEntity);
 	camera = thirdPersonCamera.get();
 
+	// Weapon Entity
+	auto wEntity = new WeaponEntity(resource->GetMesh("mace"), resource->GetMaterial("mace"), rp3d::Vector3(0, 0, 5), dynamicsWorld);
+	wEntity->isWeapon = true;
+	wEntity->AttachToEntity(pEntity, 20);
+	wEntity->AddWeapon(resource->GetMesh("mace2"), resource->GetMaterial("mace2"));
+	wEntity->AddWeapon(resource->GetMesh("mace3"), resource->GetMaterial("mace3"));
+	wEntity->fbx = resource->fbxLoader;
+	AddEntity(wEntity, "weapon");
+
 
 	auto entity = new Entity(resource->GetMesh("bee"), resource->GetMaterial("bee"), rp3d::Vector3(0, -5, 25), dynamicsWorld);
 	entity->isAnimated = true;
@@ -147,6 +156,8 @@ void Game::LoadLevel()
 	entity->SetScale(0.03f, 0.03f, 0.03f);
 	entity->SetRotation(-1.57f, 3.14f, 0);
 	AddEntity(entity, "bee3");
+
+	
 
 	//{auto entity = new Entity(resource->GetMesh("cylinder"), resource->GetMaterial("metal"), rp3d::Vector3(2, 0, 0), dynamicsWorld, { new Flocker() });
 	//entity->CreateCylinderCollider(.5, 1);
@@ -372,7 +383,12 @@ void Game::Update(float deltaTime)
 		//console->WriteLine(L"Up action pressed");
 	}
 
-
+	if (keyboard->IsKeyPressed(Z) && delayTime > 0.3f)
+	{
+		delayTime = 0.f;
+		WeaponEntity * weapon = (WeaponEntity*)entities["weapon"];
+		weapon->SwitchWeapon();
+	}
 
 	delayTime += deltaTime;
 }

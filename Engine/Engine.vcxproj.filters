@@ -240,6 +240,9 @@
     <ClInclude Include="Colors.h">
       <Filter>Header Files\CoreTypes</Filter>
     </ClInclude>
+    <ClInclude Include="WeaponEntity.h">
+      <Filter>Header Files\Gameplay</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CoreGame.cpp">
@@ -365,6 +368,9 @@
     <ClCompile Include="ThirdPersonCamera.cpp">
       <Filter>Source Files\Gameplay</Filter>
     </ClCompile>
+    <ClCompile Include="WeaponEntity.cpp">
+      <Filter>Source Files\Gameplay</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="VertexShader.hlsl">
@@ -389,6 +395,9 @@
       <Filter>Shaders</Filter>
     </FxCompile>
     <FxCompile Include="AnimationPS.hlsl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="WeaponVS.hlsl">
       <Filter>Shaders</Filter>
     </FxCompile>
   </ItemGroup>
