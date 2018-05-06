@@ -1,5 +1,8 @@
 /// <summary>
-/// Author: Rahul SV
+/// Compiled By: Rahul SV using FBX SDK by Autodesk
+/// References -
+/// https://www.gamedev.net/articles/programming/graphics/how-to-work-with-fbx-sdk-r3582 
+/// FBX SDK Documentation & Sample Programs
 /// </summary>
 
 #include "FBXLoader.h"
@@ -9,7 +12,7 @@
 #define IOS_REF (*(fbxManager->GetIOSettings()))
 #endif
 
-
+/* Takes a user defined name and 2 file paths to fbx files */
 FBXLoader::FBXLoader(FbxString name, FbxString lFilePath1, FbxString lFilePath2)
 {
 	meshName = name;
@@ -41,6 +44,7 @@ FBXLoader::~FBXLoader()
 	DestroySdkObjects(lResult);
 }
 
+/* Initializing FBX SDK objects */
 void FBXLoader::InitializeSdkObjects()
 {
 	// create the FBX Manager which is the object allocator for almost all the classes in the SDK

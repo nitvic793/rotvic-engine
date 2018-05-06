@@ -1,3 +1,9 @@
+/// <summary>
+/// Author: Rahul SV
+/// </summary>
+
+
+
 #include "WeaponEntity.h"
 
 
@@ -8,12 +14,14 @@ WeaponEntity::WeaponEntity(Mesh* m, Material* mat, rp3d::Vector3 position, rp3d:
 	materials.push_back(mat);
 }
 
+/* attaches the weapon entity to the bone of a player entity */
 void WeaponEntity::AttachToEntity(ThirdPersonPlayerEntity* pEntity, int bIndex)
 {
 	playerEntity = pEntity;
 	boneIndex = bIndex;
 }
 
+/* add weapon to list of weapons (mesh+material) */
 void WeaponEntity::AddWeapon(Mesh * mesh, Material * material)
 {
 	meshes.push_back(mesh);
@@ -21,7 +29,7 @@ void WeaponEntity::AddWeapon(Mesh * mesh, Material * material)
 	numWeapons++;
 }
 
-
+/* iterate through weapons*/
 void WeaponEntity::SwitchWeapon()
 {
 	++weaponIndex;

@@ -3,6 +3,10 @@
 /// Base Code: Nitish Victor
 /// RP3D integration, Scripting: Trevor Walden
 /// Animations: Rahul SV
+/// 3D Model Credits:
+///		Axe (player model) by Dota2
+///		Weapon models by 3dregenerator at free3d.com
+///		Shedinja (enemy model) by poke_master at free3d.com
 /// </summary>
 /// <remarks>
 /// Code written by Nitish Victor and Trevor Walden, rp3d integration and scripting written by Trevor Walden.

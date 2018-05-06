@@ -1,10 +1,18 @@
+/// <summary>
+/// Compiled By: Rahul SV using FBX SDK by Autodesk
+/// References -
+/// https://www.gamedev.net/articles/programming/graphics/how-to-work-with-fbx-sdk-r3582 
+/// FBX SDK Documentation & Sample Programs
+/// </summary>
+
+
 #pragma once
 
 #include "Mesh.h"
 #include <fbxsdk.h>
 
 
-/* Joints are the transforms that make a skeleton */
+/* Joints are the objects (made of transforms and indices) that make a skeleton */
 struct Joint {
 public:
 	int mBoneIndex;
