@@ -423,10 +423,10 @@ void Renderer::Draw(Entity *entity)
 			if (entity->fbx->currentTime >= 3.3f)
 				entity->fbx->currentTime -= 3.3f;
 
-			entity->fbx->GetAnimatedMatrixExtra(0.025);
+			entity->fbx->GetAnimatedMatrixExtra(0.025f);
 		}
 		else
-			entity->fbx->GetAnimatedMatrixExtra(0.075);
+			entity->fbx->GetAnimatedMatrixExtra(0.075f);
 
 		SetShadersAndDrawAnimated(entity, camera, lights, core->GetDeviceContext());
 	}

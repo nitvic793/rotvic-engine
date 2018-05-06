@@ -551,7 +551,6 @@ void FBXLoader::GetAnimatedMatrixExtra(float delTime)
 
 	for (int i = 0; i < skeleton.mJoints.size(); i++)
 	{
-		
 		skeleton.mJoints[i].mTransform = GetJointGlobalTransform(i, skeleton.mJoints);
 		skeleton.mJoints2[i].mTransform = GetJointGlobalTransform(i, skeleton.mJoints2);
 	}
@@ -564,12 +563,11 @@ void FBXLoader::GetAnimatedMatrixExtra(float delTime)
 XMFLOAT4X4 FBXLoader::GetJointGlobalTransform(int boneIndex, std::vector<Joint>& Joints)
 {
 	FbxAMatrix jointTransform;
-	FbxTime start;
-	start.SetSecondDouble(0.0);
+	//FbxTime start;
+	//start.SetSecondDouble(0.0);
 
 	FbxNode* boneNode = Joints[boneIndex].mNode;
-	FbxString nameStack;
-	FbxString nameLayer;
+
 	if (boneNode)
 	{
 		jointTransform = boneNode->EvaluateGlobalTransform(time);
