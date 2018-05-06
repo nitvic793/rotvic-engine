@@ -32,12 +32,16 @@ namespace HUDEditor
             this.HUD_View = new System.Windows.Forms.GroupBox();
             this.CreateElement = new System.Windows.Forms.Button();
             this.editLabel = new System.Windows.Forms.Label();
+            this.exitButton = new System.Windows.Forms.Button();
+            this.comboBox1 = new System.Windows.Forms.ComboBox();
             this.SuspendLayout();
             // 
             // HUD_View
             // 
-            this.HUD_View.Location = new System.Drawing.Point(7, 59);
+            this.HUD_View.Location = new System.Drawing.Point(5, 48);
+            this.HUD_View.Margin = new System.Windows.Forms.Padding(2);
             this.HUD_View.Name = "HUD_View";
+            this.HUD_View.Padding = new System.Windows.Forms.Padding(2);
             this.HUD_View.Size = new System.Drawing.Size(1280, 720);
             this.HUD_View.TabIndex = 0;
             this.HUD_View.TabStop = false;
@@ -46,9 +50,10 @@ namespace HUDEditor
             // 
             // CreateElement
             // 
-            this.CreateElement.Location = new System.Drawing.Point(15, 21);
+            this.CreateElement.Location = new System.Drawing.Point(165, 22);
+            this.CreateElement.Margin = new System.Windows.Forms.Padding(2);
             this.CreateElement.Name = "CreateElement";
-            this.CreateElement.Size = new System.Drawing.Size(121, 26);
+            this.CreateElement.Size = new System.Drawing.Size(91, 21);
             this.CreateElement.TabIndex = 1;
             this.CreateElement.Text = "Create Element";
             this.CreateElement.UseVisualStyleBackColor = true;
@@ -57,22 +62,49 @@ namespace HUDEditor
             // editLabel
             // 
             this.editLabel.AutoSize = true;
-            this.editLabel.Location = new System.Drawing.Point(500, 26);
+            this.editLabel.Cursor = System.Windows.Forms.Cursors.Default;
+            this.editLabel.Location = new System.Drawing.Point(373, 26);
+            this.editLabel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.editLabel.Name = "editLabel";
-            this.editLabel.Size = new System.Drawing.Size(105, 17);
+            this.editLabel.Size = new System.Drawing.Size(78, 13);
             this.editLabel.TabIndex = 2;
             this.editLabel.Text = "Edit Element ():";
             // 
+            // exitButton
+            // 
+            this.exitButton.Location = new System.Drawing.Point(881, 23);
+            this.exitButton.Name = "exitButton";
+            this.exitButton.Size = new System.Drawing.Size(74, 20);
+            this.exitButton.TabIndex = 3;
+            this.exitButton.Text = "Exit";
+            this.exitButton.UseVisualStyleBackColor = true;
+            this.exitButton.Click += new System.EventHandler(this.exitButton_Click);
+            // 
+            // comboBox1
+            // 
+            this.comboBox1.FormattingEnabled = true;
+            this.comboBox1.Items.AddRange(new object[] {
+            "Text",
+            "Image"});
+            this.comboBox1.Location = new System.Drawing.Point(5, 22);
+            this.comboBox1.Name = "comboBox1";
+            this.comboBox1.Size = new System.Drawing.Size(145, 21);
+            this.comboBox1.TabIndex = 4;
+            // 
             // Form1
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1289, 781);
+            this.ClientSize = new System.Drawing.Size(1292, 773);
+            this.Controls.Add(this.comboBox1);
+            this.Controls.Add(this.exitButton);
             this.Controls.Add(this.editLabel);
             this.Controls.Add(this.CreateElement);
             this.Controls.Add(this.HUD_View);
+            this.Margin = new System.Windows.Forms.Padding(2);
             this.Name = "Form1";
             this.Text = "Form1";
+            this.Load += new System.EventHandler(this.Form1_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -83,6 +115,8 @@ namespace HUDEditor
         private System.Windows.Forms.GroupBox HUD_View;
         private System.Windows.Forms.Button CreateElement;
         private System.Windows.Forms.Label editLabel;
+        private System.Windows.Forms.Button exitButton;
+        private System.Windows.Forms.ComboBox comboBox1;
     }
 }
 

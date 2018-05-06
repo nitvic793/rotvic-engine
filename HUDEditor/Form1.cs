@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-// Code written by Trevor Walden
+// Code written by Trevor Walden with reference from MSDN documentation
 namespace HUDEditor
 {
     public partial class Form1 : Form // MSDN documentation for windows forms used as reference
@@ -15,6 +15,11 @@ namespace HUDEditor
         public Form1()
         {
             InitializeComponent();
+        }
+
+        private void Form1_Load(object sender, EventArgs e)
+        {
+
         }
 
         private void groupBox1_Enter(object sender, EventArgs e)
@@ -30,10 +35,16 @@ namespace HUDEditor
                 else if (c.Name == "updateButton") Controls.Remove(c);
             }
             Label newElement = new Label();
+            newElement.AutoSize = true;
             newElement.Name = "SpearCounter";
             newElement.Text = "Spears: 10";
             HUD_View.Controls.Add(newElement);
+            newElement.Cursor = Cursors.SizeAll;
             newElement.Location = new Point(50, 50);
+            newElement.Enabled = true;
+            newElement.AllowDrop = false; // Use this to do drag dropping
+
+            // Allow editing on click
             newElement.Click += delegate 
             {
                 editLabel.Text = "Edit Element ("+newElement.Name+"):";
@@ -53,6 +64,54 @@ namespace HUDEditor
                 button.Location = new Point(670, 16);
 
             };
+
+            newElement.MouseDown += delegate
+            {
+                //newElement.DoDragDrop(newElement, DragDropEffects.Move);
+                //if ()
+                newElement.AllowDrop = true;
+            };
+
+            newElement.MouseMove += delegate
+            {
+                if (newElement.AllowDrop)
+                {
+                    Point p = PointToClient(new Point(Cursor.Position.X - 5, Cursor.Position.Y - 48));
+                    int l = 0;
+                    int r = HUD_View.Size.Width;
+                    int t = 0;
+                    int b = HUD_View.Size.Height;
+                    if (p.X+newElement.Width > r)
+                    {
+                        p.X = r - newElement.Width;
+                    }
+                    if (p.X < l)
+                    {
+                        p.X = l;
+                    }
+                    if (p.Y+newElement.Height > b)
+                    {
+                        p.Y = b-newElement.Height;
+                    }
+                    if (p.Y < t)
+                    {
+                        p.Y = t;
+                    }
+                    newElement.Location = p;
+
+                }
+            };
+
+            newElement.MouseUp += delegate
+            {
+                //newElement.DoDragDrop(newElement, DragDropEffects.Move);
+                newElement.AllowDrop = false;
+            };
+        }
+
+        private void exitButton_Click(object sender, EventArgs e)
+        {
+            this.Close();
         }
     }
 }
