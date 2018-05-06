@@ -34,6 +34,7 @@ namespace HUDEditor
             this.editLabel = new System.Windows.Forms.Label();
             this.exitButton = new System.Windows.Forms.Button();
             this.comboBox1 = new System.Windows.Forms.ComboBox();
+            this.exportButton = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // HUD_View
@@ -41,7 +42,7 @@ namespace HUDEditor
             this.HUD_View.Location = new System.Drawing.Point(5, 48);
             this.HUD_View.Margin = new System.Windows.Forms.Padding(2);
             this.HUD_View.Name = "HUD_View";
-            this.HUD_View.Padding = new System.Windows.Forms.Padding(2);
+            this.HUD_View.Padding = new System.Windows.Forms.Padding(0);
             this.HUD_View.Size = new System.Drawing.Size(1280, 720);
             this.HUD_View.TabIndex = 0;
             this.HUD_View.TabStop = false;
@@ -72,7 +73,7 @@ namespace HUDEditor
             // 
             // exitButton
             // 
-            this.exitButton.Location = new System.Drawing.Point(881, 23);
+            this.exitButton.Location = new System.Drawing.Point(1206, 23);
             this.exitButton.Name = "exitButton";
             this.exitButton.Size = new System.Drawing.Size(74, 20);
             this.exitButton.TabIndex = 3;
@@ -91,11 +92,22 @@ namespace HUDEditor
             this.comboBox1.Size = new System.Drawing.Size(145, 21);
             this.comboBox1.TabIndex = 4;
             // 
+            // exportButton
+            // 
+            this.exportButton.Location = new System.Drawing.Point(1084, 23);
+            this.exportButton.Name = "exportButton";
+            this.exportButton.Size = new System.Drawing.Size(89, 20);
+            this.exportButton.TabIndex = 5;
+            this.exportButton.Text = "Export as UI File...";
+            this.exportButton.UseVisualStyleBackColor = true;
+            this.exportButton.Click += new System.EventHandler(this.exportButton_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1292, 773);
+            this.Controls.Add(this.exportButton);
             this.Controls.Add(this.comboBox1);
             this.Controls.Add(this.exitButton);
             this.Controls.Add(this.editLabel);
@@ -117,6 +129,7 @@ namespace HUDEditor
         private System.Windows.Forms.Label editLabel;
         private System.Windows.Forms.Button exitButton;
         private System.Windows.Forms.ComboBox comboBox1;
+        private System.Windows.Forms.Button exportButton;
     }
 }
 

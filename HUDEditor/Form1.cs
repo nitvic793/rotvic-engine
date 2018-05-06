@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.IO;
 // Code written by Trevor Walden with reference from MSDN documentation
 namespace HUDEditor
 {
@@ -112,6 +113,29 @@ namespace HUDEditor
         private void exitButton_Click(object sender, EventArgs e)
         {
             this.Close();
+        }
+
+        private void exportButton_Click(object sender, EventArgs e)
+        {
+            FileStream fstream;
+            try
+            {
+                fstream = new FileStream("..\\..\\..\\Assets\\GameUI.json", FileMode.CreateNew, FileAccess.ReadWrite);
+            }
+            catch (IOException ex)
+            {
+                DialogResult dialog = MessageBox.Show("A UI file already exists, are you sure you want to overwrite it?", "Overwrite File", MessageBoxButtons.OKCancel);
+                if (dialog == DialogResult.OK)
+                {
+                    fstream = new FileStream("..\\..\\..\\Assets\\GameUI.json", FileMode.Create, FileAccess.ReadWrite);
+                }
+                else return;
+            }
+
+            // Save the json data
+
+            fstream.Close();
+            MessageBox.Show("UI File successfully saved.", "Save File", MessageBoxButtons.OK);
         }
     }
 }
