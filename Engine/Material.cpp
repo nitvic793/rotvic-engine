@@ -3,6 +3,7 @@
 /// </summary>
 
 #include "Material.h"
+#include "ResourceManager.h"
 
 Material::Material(SystemCore* core)
 {
@@ -11,12 +12,14 @@ Material::Material(SystemCore* core)
 
 Material::Material(SystemCore* core, SimpleVertexShader *vertexShader, SimplePixelShader *pixelShader, ID3D11ShaderResourceView *srv, ID3D11ShaderResourceView *normal, ID3D11SamplerState *samplerState)
 {
+	auto rm = ResourceManager::GetInstance();
 	this->core = core;
 	this->vertexShader = vertexShader;
 	this->pixelShader = pixelShader;
 	textureSRV = srv;
 	sampler = samplerState;
 	normalSRV = normal;
+	roughnessSRV = rm->GetTexture("defaultSpecular");
 }
 
 Material::~Material()
@@ -55,6 +58,11 @@ SimpleVertexShader *Material::GetVertexShader()
 }
 
 
+void Material::SetRoughnessTexture(ID3D11ShaderResourceView * roughness)
+{
+	roughnessSRV = roughness;
+}
+
 ID3D11ShaderResourceView * Material::GetSRV()
 {
 	return textureSRV;
@@ -63,6 +71,11 @@ ID3D11ShaderResourceView * Material::GetSRV()
 ID3D11ShaderResourceView * Material::GetNormalSRV()
 {
 	return normalSRV;
+}
+
+ID3D11ShaderResourceView * Material::GetRoughnessSRV()
+{
+	return roughnessSRV;
 }
 
 ID3D11SamplerState * Material::GetSampler()

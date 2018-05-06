@@ -80,16 +80,16 @@ void Game::Initialize()
 	firstPersonCamera = new FirstPersonCamera((float)renderer->screenWidth / renderer->screenHeight);
 	thirdPersonCamera = std::unique_ptr<ThirdPersonCamera>(new ThirdPersonCamera((float)renderer->screenWidth / renderer->screenHeight));
 	freeCam = camera;
-	light.AmbientColor = XMFLOAT4(0.3f, 0.3f, 0.3f, 0);
+	light.AmbientColor = XMFLOAT4(0.1f, 0.1f, 0.1f, 0);
 	light.DiffuseColor = XMFLOAT4(0.4f, 0.4f, 0.9f, 1.f);
-	light.Direction = XMFLOAT3(1.f, 0, 0.f);
+	light.Direction = XMFLOAT3(-1.f, -1, 0.f);
 
-	secondaryLight.AmbientColor = XMFLOAT4(0.3f, 0.3f, 0.3f, 0);
-	secondaryLight.DiffuseColor = XMFLOAT4(0.9f, 0.4f, 0.4f, 1);
-	secondaryLight.Direction = XMFLOAT3(0, -1, 0);
+	secondaryLight.AmbientColor = XMFLOAT4(0.2f, 0.2f, 0.2f, 0);
+	secondaryLight.DiffuseColor = XMFLOAT4(0.6f, 0.9f, 0.6f, 1);
+	secondaryLight.Direction = XMFLOAT3(1, -1, 0);
 
-	pointLight.Color = XMFLOAT4(0.4f, 0.9f, 0.4f, 1);
-	pointLight.Position = XMFLOAT3(0, 0, 0);
+	pointLight.Color = XMFLOAT4(0.5f, 0.5f, 0.6f, 1);
+	pointLight.Position = XMFLOAT3(0, 2, 0);
 
 	lightsMap.insert(std::pair<std::string, Light*>("light", new Light{ &light, Directional }));
 	lightsMap.insert(std::pair<std::string, Light*>("secondaryLight", new Light{ &secondaryLight, Directional }));

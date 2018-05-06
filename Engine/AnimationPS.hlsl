@@ -24,13 +24,6 @@ cbuffer externalData : register(b0)
 	bool UseNormal;
 }
 
-/*
-cbuffer externalData : register(b0)
-{
-	DirectionalLight light1;
-};
-*/
-
 struct VertexToPixel
 {
 
@@ -43,32 +36,35 @@ struct VertexToPixel
 
 Texture2D diffuseTexture : register(t0);
 Texture2D normalTexture : register(t1);
+Texture2D roughnessTexture : register(t2);
 SamplerState basicSampler : register(s0);
 
-float4 calculateDirectionalLight(float3 normal, DirectionalLight light)
+float calculateSpecular(float3 normal, float3 worldPos, float3 dirToLight, float3 camPos)
+{
+	float3 dirToCamera = normalize(camPos - worldPos);
+	float3 halfwayVector = normalize(dirToLight + dirToCamera);
+	float shininess = 64;
+	return shininess == 0 ? 0.0f : pow(max(dot(halfwayVector, normal), 0), shininess);
+}
+
+float4 calculateDirectionalLight(float3 normal, float3 worldPos, DirectionalLight light, float roughness)
 {
 	float3 dirToLight = normalize(-light.Direction);
 	float NdotL = dot(normal, dirToLight);
 	NdotL = saturate(NdotL);
-	return light.DiffuseColor * NdotL + light.AmbientColor;
+
+	float spec = calculateSpecular(normal, worldPos, dirToLight, cameraPosition) * roughness;
+	return spec + light.DiffuseColor * NdotL + light.AmbientColor;
 }
 
-float calculateSpecular(float3 normal, float3 worldPos, float3 dirToPointLight, float3 camPos)
-{
-	float3 dirToCamera = normalize(camPos - worldPos);
-	float3 refl = reflect(-dirToPointLight, normal);
-	float specExp = 64;
-	float spec = pow(saturate(dot(dirToCamera, refl)), specExp);
-	return spec;
-}
 
-float4 calculatePointLight(float3 normal, float3 worldPos, PointLight light)
+float4 calculatePointLight(float3 normal, float3 worldPos, PointLight light, float roughness)
 {
 	float3 dirToPointLight = normalize(light.Position - worldPos);
 	float pointNdotL = dot(normal, dirToPointLight);
 	pointNdotL = saturate(pointNdotL);
-	float spec = calculateSpecular(normal, worldPos, dirToPointLight, cameraPosition);
-	return spec + light.Color * pointNdotL;
+	float spec = calculateSpecular(normal, worldPos, dirToPointLight, cameraPosition)  * roughness;
+	return  spec + light.Color * pointNdotL;
 }
 
 float3 calculateNormalFromMap(float2 uv, float3 normal, float3 tangent)
@@ -85,25 +81,15 @@ float3 calculateNormalFromMap(float2 uv, float3 normal, float3 tangent)
 
 float4 main(VertexToPixel input) : SV_TARGET
 {
-	/*
-	input.normal = normalize(input.normal);
-
-	//Light Calculations
-	float3 lightDir = -normalize(light.Direction);
-	float dirNdotL1 = dot(input.normal, lightDir);
-	dirNdotL1 = saturate(dirNdotL1);
-
-	return float4((dirNdotL1*light.DiffuseColor)  + light.AmbientColor);
-	*/
-	
-	
 	float4 surfaceColor = diffuseTexture.Sample(basicSampler, input.uv);
 	float3 finalNormal = calculateNormalFromMap(input.uv, input.normal, input.tangent);
+	float roughness = roughnessTexture.Sample(basicSampler, input.uv).r;
+	//return float4(roughness, roughness, roughness, 0);
 	input.normal = normalize(input.normal);
 	finalNormal = normalize(finalNormal);
-	float4 dirLight = calculateDirectionalLight(finalNormal, light) * surfaceColor;
-	float4 secDirLight = calculateDirectionalLight(finalNormal, secondaryLight) * surfaceColor;
-	float4 pLight = calculatePointLight(finalNormal, input.worldPos, pointLight)  * surfaceColor;
-	return dirLight + secDirLight + pLight;
+	float4 dirLight = calculateDirectionalLight(finalNormal, input.worldPos, light, roughness) * surfaceColor;
+	float4 secDirLight = calculateDirectionalLight(finalNormal, input.worldPos, secondaryLight, roughness) * surfaceColor;
+	float4 pLight = calculatePointLight(finalNormal, input.worldPos, pointLight, roughness)  * surfaceColor;
+	return dirLight +  pLight + secDirLight ;
 	
 }

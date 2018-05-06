@@ -37,9 +37,8 @@ void SystemRenderer::SetShaders(Entity *entity, Camera *camera, LightsMap lights
 	vertexShader->SetMatrix4x4(PROJECTION_STR, camera->GetProjectionMatrix());
 	pixelShader->SetSamplerState("basicSampler", material->GetSampler());
 	pixelShader->SetShaderResourceView("diffuseTexture", material->GetSRV());
-	if (material->GetNormalSRV())
-		pixelShader->SetShaderResourceView("normalTexture", material->GetNormalSRV());
-	else pixelShader->SetShaderResourceView("normalTexture", nullptr);
+	pixelShader->SetShaderResourceView("normalTexture", material->GetNormalSRV());
+	pixelShader->SetShaderResourceView("roughnessTexture", material->GetRoughnessSRV());
 	pixelShader->SetFloat3("cameraPosition", camera->GetPosition());
 	for (auto lightPair : lights)
 	{
@@ -60,7 +59,7 @@ void SystemRenderer::SetShaders(Entity *entity, Camera *camera, LightsMap lights
 	pixelShader->SetShader();
 }
 
-void Renderer::SetShadersAndDrawAnimated(Entity * entity, Camera * camera, LightsMap lights ,ID3D11DeviceContext * context)
+void Renderer::SetShadersAndDrawAnimated(Entity * entity, Camera * camera, LightsMap lights, ID3D11DeviceContext * context)
 {
 	auto material = entity->GetMaterial();
 	auto pixelShader = material->GetPixelShader();
@@ -142,7 +141,7 @@ void Renderer::SetShadersAndDrawAnimated(Entity * entity, Camera * camera, Light
 	pixelShader->SetSamplerState("basicSampler", material->GetSampler());
 	pixelShader->SetShaderResourceView("diffuseTexture", material->GetSRV());
 	pixelShader->SetShaderResourceView("normalTexture", material->GetNormalSRV());
-
+	pixelShader->SetShaderResourceView("roughnessTexture", material->GetRoughnessSRV());
 	vertexShader->CopyAllBufferData();
 	pixelShader->CopyAllBufferData();
 	vertexShader->SetShader();
@@ -227,20 +226,20 @@ void Renderer::SetShadersAndDrawWeapon(WeaponEntity * entity, Entity * playerEnt
 
 
 
-	
+
 	for (auto lightPair : lights)
 	{
 		auto light = lightPair.second;
 		switch (light->Type)
-			{
-			case Directional:
-				pixelShader->SetData(lightPair.first, light->GetLight<DirectionalLight>(), sizeof(DirectionalLight));
-				break;
-			case Point:
-				pixelShader->SetData(lightPair.first, light->GetLight<PointLight>(), sizeof(PointLight));
-				break;
+		{
+		case Directional:
+			pixelShader->SetData(lightPair.first, light->GetLight<DirectionalLight>(), sizeof(DirectionalLight));
+			break;
+		case Point:
+			pixelShader->SetData(lightPair.first, light->GetLight<PointLight>(), sizeof(PointLight));
+			break;
 
-			}
+		}
 
 	}
 
@@ -248,7 +247,7 @@ void Renderer::SetShadersAndDrawWeapon(WeaponEntity * entity, Entity * playerEnt
 	pixelShader->SetSamplerState("basicSampler", material->GetSampler());
 	pixelShader->SetShaderResourceView("diffuseTexture", material->GetSRV());
 	pixelShader->SetShaderResourceView("normalTexture", material->GetNormalSRV());
-
+	pixelShader->SetShaderResourceView("roughnessTexture", material->GetRoughnessSRV());
 
 	vertexShader->CopyAllBufferData();
 	pixelShader->CopyAllBufferData();
@@ -343,7 +342,7 @@ void Renderer::SetProjectionMatrix(int width, int height)
 {
 	XMMATRIX P = XMMatrixPerspectiveFovLH(
 		0.25f * XM_PI,
-		(float)width/height,
+		(float)width / height,
 		0.1f,
 		100.0f);
 	XMStoreFloat4x4(&projectionMatrix, XMMatrixTranspose(P));
@@ -410,7 +409,7 @@ void Renderer::Draw(Entity *entity)
 		internalRenderer->SetShaders(entity, camera, lights);
 		Draw(entity->GetMesh());
 	}
-	else if(entity->isAnimated)
+	else if (entity->isAnimated)
 	{
 		if (entity->fbx->meshName == "bee")
 		{
@@ -436,7 +435,7 @@ void Renderer::Draw(Entity *entity)
 		WeaponEntity* weapon = (WeaponEntity*)entity;
 		SetShadersAndDrawWeapon(weapon, weapon->playerEntity, camera, lights, core->GetDeviceContext());
 	}
-	
+
 	core->Draw();
 }
 

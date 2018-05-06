@@ -2,6 +2,7 @@
 #include "SimpleShader.h"
 #include "SystemCore.h"
 
+
 /// <summary>
 /// Material class represents the shader and other material related properties of a mesh. 
 /// </summary>
@@ -13,8 +14,15 @@ protected:
 	SimpleVertexShader *vertexShader;
 	ID3D11ShaderResourceView*	textureSRV;
 	ID3D11ShaderResourceView*	normalSRV;
+	ID3D11ShaderResourceView*	roughnessSRV;
 	ID3D11SamplerState*			sampler;
 public:
+
+	/// <summary>
+	/// Sets the roughness texture for the material.
+	/// </summary>
+	void SetRoughnessTexture(ID3D11ShaderResourceView* roughness);
+
 	/// <summary>
 	/// Gets the main texture associated with material
 	/// </summary>
@@ -26,6 +34,12 @@ public:
 	/// </summary>
 	/// <returns></returns>
 	ID3D11ShaderResourceView*	GetNormalSRV();
+
+	/// <summary>
+	/// Gets the roughness texture associated with the material.
+	/// </summary>
+	/// <returns></returns>
+	ID3D11ShaderResourceView*	GetRoughnessSRV();
 
 	/// <summary>
 	/// Gets the D3D11 sampler. 

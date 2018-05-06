@@ -140,10 +140,19 @@ void ResourceManager::LoadResourcesAsync(ConfigMap config, SystemCore * core, st
 		ID3D11DeviceContext *deferredContext;
 		device->CreateDeferredContext(0, &deferredContext);
 		auto context = deferredContext;
-		
+
 		Material *material = nullptr;
 		ID3D11ShaderResourceView *srv = nullptr;
 		ID3D11ShaderResourceView *normalSrv = nullptr;
+
+		CreateWICTextureFromFile(device, context, L"../../Assets/Textures/defaultSpecular.png", nullptr, &srv);
+		textures.insert(std::pair<std::string, ID3D11ShaderResourceView*>("defaultSpecular", srv));
+		CreateWICTextureFromFile(device, context, L"../../Assets/Textures/default.png", nullptr, &srv);
+		CreateWICTextureFromFile(device, context, L"../../Assets/Textures/defaultNormal.png", nullptr, &normalSrv);
+		textures.insert(std::pair<std::string, ID3D11ShaderResourceView*>("default", srv));
+		textures.insert(std::pair<std::string, ID3D11ShaderResourceView*>("defaultNormal", normalSrv));
+		material = new Material(core, vertexShader, pixelShader, srv, normalSrv, sampler);
+		materials.insert(std::pair<std::string, Material*>("default", material));
 
 		CreateDDSTextureFromFile(device, L"../../Assets/Textures/SunnyCubeMap.dds", 0, &srv);
 		textures.insert(std::pair<std::string, ID3D11ShaderResourceView*>("skybox", srv));
@@ -162,13 +171,6 @@ void ResourceManager::LoadResourcesAsync(ConfigMap config, SystemCore * core, st
 		material = new Material(core, vertexShader, pixelShader, srv, normalSrv, sampler);
 
 		materials.insert(std::pair<std::string, Material*>("fabric", material));
-
-		CreateWICTextureFromFile(device, context, L"../../Assets/Textures/default.png", nullptr, &srv);
-		CreateWICTextureFromFile(device, context, L"../../Assets/Textures/defaultNormal.png", nullptr, &normalSrv);
-		textures.insert(std::pair<std::string, ID3D11ShaderResourceView*>("default", srv));
-		textures.insert(std::pair<std::string, ID3D11ShaderResourceView*>("defaultNormal", normalSrv));
-		material = new Material(core, vertexShader, pixelShader, srv, normalSrv, sampler);
-		materials.insert(std::pair<std::string, Material*>("default", material));
 
 		CreateWICTextureFromFile(device, context, L"../../Assets/Textures/grass01.jpg", nullptr, &srv);
 		CreateWICTextureFromFile(device, context, L"../../Assets/Textures/grass01_n.jpg", nullptr, &normalSrv);
@@ -238,6 +240,9 @@ void ResourceManager::LoadResourcesAsync(ConfigMap config, SystemCore * core, st
 		textures.insert(std::pair<std::string, ID3D11ShaderResourceView*>("man", srv));
 		textures.insert(std::pair<std::string, ID3D11ShaderResourceView*>("manNormal", normalSrv));
 		material = new Material(core, vertexShaderAnimated, pixelShaderAnimated, srv, normalSrv, sampler);
+		CreateWICTextureFromFile(device, context, L"../../Assets/Textures/manSpecExp.png", nullptr, &srv);
+		textures.insert(std::pair<std::string, ID3D11ShaderResourceView*>("manSpec", srv));
+		material->SetRoughnessTexture(srv);
 		materials.insert(std::pair<std::string, Material*>("man", material));
 
 
@@ -258,10 +263,13 @@ void ResourceManager::LoadResourcesAsync(ConfigMap config, SystemCore * core, st
 
 
 		CreateWICTextureFromFile(device, context, L"../../Assets/Textures/beeColor.png", nullptr, &srv);
-		CreateWICTextureFromFile(device, context, L"../../Assets/Textures/beeNormal2.png", nullptr, &normalSrv);
+		CreateWICTextureFromFile(device, context, L"../../Assets/Textures/beeNormal.png", nullptr, &normalSrv);
 		textures.insert(std::pair<std::string, ID3D11ShaderResourceView*>("bee", srv));
 		textures.insert(std::pair<std::string, ID3D11ShaderResourceView*>("beeNormal", normalSrv));
 		material = new Material(core, vertexShaderAnimated, pixelShaderAnimated, srv, normalSrv, sampler);
+		CreateWICTextureFromFile(device, context, L"../../Assets/Textures/beeSpec2.png", nullptr, &srv);
+		textures.insert(std::pair<std::string, ID3D11ShaderResourceView*>("beeSepcular", srv));
+		material->SetRoughnessTexture(srv);
 		materials.insert(std::pair<std::string, Material*>("bee", material));
 
 
