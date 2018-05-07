@@ -1,5 +1,5 @@
 /// <summary>
-/// Author: Nitish Victor
+/// Authors: Nitish Victor and Trevor Walden
 /// </summary>
 
 #include "UIText.h"
@@ -14,8 +14,12 @@ std::wstring UIText::GetText()
 	return mText;
 }
 
-UIText::UIText()
+UIText::UIText(std::wstring text, float pSize, SpriteFont* font, XMFLOAT4 pColor) 
 {
+	mText = text;
+	size = pSize;
+	spriteFont = font;
+	color = pColor;
 }
 
 ComponentType UIText::GetType() const

@@ -13,7 +13,6 @@ class UICanvas
 {
 	SystemCore *core;
 	std::unique_ptr<SpriteBatch> spriteBatch;
-	std::unique_ptr<SpriteFont> spriteFont;
 	std::map<std::string, UIComponent*> mUIElements;
 public:
 	/// <summary>

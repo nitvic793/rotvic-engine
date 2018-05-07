@@ -47,7 +47,6 @@ namespace HUDEditor
             this.HUD_View.TabIndex = 0;
             this.HUD_View.TabStop = false;
             this.HUD_View.Text = "HUD View";
-            this.HUD_View.Enter += new System.EventHandler(this.groupBox1_Enter);
             // 
             // CreateElement
             // 
@@ -79,7 +78,7 @@ namespace HUDEditor
             this.exitButton.TabIndex = 3;
             this.exitButton.Text = "Exit";
             this.exitButton.UseVisualStyleBackColor = true;
-            this.exitButton.Click += new System.EventHandler(this.exitButton_Click);
+            this.exitButton.Click += new System.EventHandler(this.ExitButton_Click);
             // 
             // comboBox1
             // 
@@ -100,7 +99,7 @@ namespace HUDEditor
             this.exportButton.TabIndex = 5;
             this.exportButton.Text = "Export as UI File...";
             this.exportButton.UseVisualStyleBackColor = true;
-            this.exportButton.Click += new System.EventHandler(this.exportButton_Click);
+            this.exportButton.Click += new System.EventHandler(this.ExportButton_Click);
             // 
             // Form1
             // 

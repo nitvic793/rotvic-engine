@@ -103,6 +103,7 @@ xcopy /y  "$(ProjectDir)*.msh" "$(OutDir)"</Command>
       <AdditionalLibraryDirectories>$(SolutionDir)\Physics\;$(SolutionDir)\FBXSDK\lib\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>reactphysics3d.lib;libfbxsdk.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <GenerateDebugInformation>DebugFull</GenerateDebugInformation>
+      <AdditionalOptions>/ignore:4099 %(AdditionalOptions)</AdditionalOptions>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">

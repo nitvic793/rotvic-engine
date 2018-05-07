@@ -1,8 +1,12 @@
-// Most code written by Nitish Victor, rp3d integration written by Trevor Walden with help from http://www.reactphysics3d.com/usermanual.html and the rp3d classlist
+// Most code written by Nitish Victor, rp3d integration and HUD loading written by Trevor Walden
 #include "CoreGame.h"
 #include "ConfigLoader.h"
 #include <typeinfo>
 #include <stdexcept>
+#include <iostream>
+#include <fstream>
+#include <sstream>
+#include <iomanip>
 
 /// <summary>
 /// Initializes bound game instance.
@@ -140,6 +144,10 @@ CoreGame::CoreGame(int height, int width, std::string title)
 	gravity = rp3d::Vector3(0, -9.81f, 0);
 	dynamicsWorld = new rp3d::DynamicsWorld(gravity);
 	mouse = nullptr;
+}
+
+void CoreGame::LoadHUDFile(std::string fileName) 
+{
 }
 
 /// <summary>

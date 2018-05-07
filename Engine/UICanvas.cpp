@@ -1,5 +1,5 @@
 /// <summary>
-/// Author: Nitish Victor
+/// Authors: Nitish Victor and Trevor Walden
 /// </summary>
 
 #include "UICanvas.h"
@@ -32,15 +32,15 @@ void UICanvas::Render()
 		auto element = elementPair.second;
 		switch (element->GetType())
 		{
-		case ComponentType::UI_TEXT:
-		{
-			auto text = (UIText*)element;
+			case ComponentType::UI_TEXT:
+			{
+				auto text = (UIText*)element;
 			
-			spriteFont->DrawString(spriteBatch.get(), text->GetText().c_str(), XMLoadFloat3(&text->GetPosition()));
-			break;
-		}
-		default:
-			break;
+				text->spriteFont->DrawString(spriteBatch.get(), text->GetText().c_str(), XMLoadFloat3(&text->GetPosition()), XMLoadFloat4(&text->color), 0, g_XMZero, text->size);
+				break;
+			}
+			default:
+				break;
 		}
 	}
 	spriteBatch->End();

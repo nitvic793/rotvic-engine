@@ -65,6 +65,7 @@ public:
 	Renderer *GetRenderer();
 	SystemCore* GetSystemCore();
 	ResourceManager* GetResourceManager();
+	void LoadHUDFile(std::string fileName);
 
 	virtual void OnResizeCallback(int width, int height);
 	virtual void HandleError(std::exception *e);
