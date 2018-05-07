@@ -144,27 +144,6 @@ CoreGame::CoreGame(int height, int width, std::string title)
 	mouse = nullptr;
 }
 
-void CoreGame::LoadHUDFile(std::string fileName) 
-{
-	Json::Value root;
-	try
-	{
-		std::ifstream config_doc(fileName, std::ifstream::binary);
-		config_doc >> root;
-		auto memberNames = root.getMemberNames();
-		for (auto member : memberNames)
-		{
-			//configMap.insert(ConfigMap::value_type(member, root.get(member, "").asString()));
-		}
-		config_doc.close();
-	}
-	catch (std::exception)
-	{
-		// Console message here
-		return;
-	}
-}
-
 /// <summary>
 /// Core Game destructor
 /// </summary>

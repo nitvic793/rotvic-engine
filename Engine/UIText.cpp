@@ -14,8 +14,9 @@ std::wstring UIText::GetText()
 	return mText;
 }
 
-UIText::UIText(std::wstring text, float pSize, SpriteFont* font, XMFLOAT4 pColor) 
+UIText::UIText(XMFLOAT3 pos, std::wstring text, float pSize, SpriteFont* font, XMFLOAT4 pColor) 
 {
+	mPosition = pos;
 	mText = text;
 	size = pSize;
 	spriteFont = font;

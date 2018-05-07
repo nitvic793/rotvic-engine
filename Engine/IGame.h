@@ -59,6 +59,7 @@ public:
 	void SetPhysics(rp3d::Vector3 grav, rp3d::DynamicsWorld* world);
 	void SetResourceInitialized(bool init);
 	void SetPhysicsActive(bool active);
+	void LoadHUDFile(std::string fileName);
 
 	virtual void UpdateEntities(float deltaTime);
 	virtual void Update(float) = 0;

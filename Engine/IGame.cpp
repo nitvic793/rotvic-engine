@@ -2,7 +2,19 @@
 
 #include "IGame.h"
 #include "EventSystem.h"
+#include <sstream>
+#include "UIText.h"
 
+namespace DirectX
+{
+	std::wstring s2ws(const std::string& str) // Code from top answer on https://stackoverflow.com/questions/10737644/convert-const-char-to-wstring
+	{
+		int size_needed = MultiByteToWideChar(CP_UTF8, 0, &str[0], (int)str.size(), NULL, 0);
+		std::wstring wstrTo(size_needed, 0);
+		MultiByteToWideChar(CP_UTF8, 0, &str[0], (int)str.size(), &wstrTo[0], size_needed);
+		return wstrTo;
+	}
+}
 
 IGame::IGame()
 {
@@ -83,6 +95,55 @@ void IGame::SetPhysics(rp3d::Vector3 grav, rp3d::DynamicsWorld* world)
 	physicsEntityMap = new PhysicsEntityMap();
 	physicsEventListener->SetEntityMap(physicsEntityMap);
 	world->setEventListener(physicsEventListener);
+}
+
+void IGame::LoadHUDFile(std::string fileName) // Reference used from Trevor's State Data project and the jsoncpp documentation
+{
+	Json::Value root;
+	try
+	{
+		std::ifstream config_doc(fileName, std::ifstream::binary);
+		config_doc >> root;
+		auto memberNames = root.getMemberNames();
+		for (auto member : memberNames)
+		{
+			try
+			{
+				auto element = root.get(member, "");
+				if (element.get("type", "") == "text")
+				{
+					XMFLOAT3 pos;
+					sscanf_s(element.get("position", "0,0").asCString(), "%f,%f", &pos.x, &pos.y);
+					pos.z = 0;
+
+					std::wstring text = s2ws(element.get("text", "").asCString());
+					SpriteFont* spriteFont = new SpriteFont(core->GetDevice(), L"../../Assets/Fonts/segoeUI.spritefont"); // TODO: Register a dictionary of spritefonts on load and access pointers from it
+					XMFLOAT4 color;
+					sscanf_s(element.get("color", "0,0,0,1").asCString(), "%f,%f,%f,%f", &color.x, &color.y, &color.z, &color.w);
+
+					float size;
+					sscanf_s(element.get("size", "1").asCString(), "%f", &size);
+
+					uiCanvas->AddComponent(new UIText(pos, text, size, spriteFont, color), member);
+				}
+				else if (element.get("type", "") == "image")
+				{
+
+				}
+			}
+			catch (std::exception e)
+			{
+				continue;
+			}
+			
+		}
+		config_doc.close();
+	}
+	catch (std::exception b)
+	{
+		// Console message here
+		return;
+	}
 }
 
 void IGame::SetResourceInitialized(bool init)

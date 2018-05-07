@@ -22,6 +22,7 @@ enum ComponentType
 /// </remarks>
 class UIComponent
 {
+protected:
 	DirectX::XMFLOAT3 mPosition;
 public:
 	/// <summary>

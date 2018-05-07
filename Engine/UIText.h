@@ -19,7 +19,7 @@ public:
 	SpriteFont* spriteFont;
 	float size; // Scale size
 	XMFLOAT4 color; // Font color
-	UIText(std::wstring text, float pSize, SpriteFont* font, XMFLOAT4 pColor);
+	UIText(XMFLOAT3 pos, std::wstring text, float pSize, SpriteFont* font, XMFLOAT4 pColor);
 	~UIText();
 
 	/// <summary>

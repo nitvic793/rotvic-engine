@@ -65,9 +65,7 @@ void Game::PreInitialize()
 {
 	IGame::PreInitialize();
 	SpriteFont* spriteFont = new SpriteFont(core->GetDevice(), L"../../Assets/Fonts/segoeUI.spritefont");
-	loadingText = std::unique_ptr<UIText>(new UIText(L"Loading...", 1, spriteFont, XMFLOAT4(0,0,0,1)));
-	loadingText->SetText(L"Loading...");
-	loadingText->SetPosition(XMFLOAT3((float)core->GetScreenWidth() - 250.f, (float)core->GetScreenHeight() - 100.f, 0));
+	loadingText = std::unique_ptr<UIText>(new UIText(XMFLOAT3((float)core->GetScreenWidth() - 250.f, (float)core->GetScreenHeight() - 100.f, 0), L"Loading...", 1, spriteFont, XMFLOAT4(0,0,0,1)));
 	uiCanvas->AddComponent(loadingText.get(), "LoadingText");
 }
 
@@ -97,7 +95,7 @@ void Game::Initialize()
 	lightsMap.insert(std::pair<std::string, Light*>("pointLight", new Light{ &pointLight, Point }));
 	skybox = new Skybox(resource->GetMesh("cube"), resource->vertexShaders["sky"], resource->pixelShaders["sky"], resource->GetTexture("skybox"), core->GetDevice());
 	LoadLevel();
-	//LoadHUDFile("..\\..\\Assets\\GameHUD.json");
+	LoadHUDFile("..\\..\\Assets\\GameHUD.json");
 	hasLoaded = true;
 	uiCanvas->RemoveComponent("LoadingText");
 }

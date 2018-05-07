@@ -59,4 +59,5 @@ UICanvas::UICanvas(SystemCore *core)
 
 UICanvas::~UICanvas()
 {
+	mUIElements.clear();
 }
