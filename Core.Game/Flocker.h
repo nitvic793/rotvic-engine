@@ -10,12 +10,12 @@ public:
 	Flocker();
 	~Flocker();
 	Entity* gameObject;
-	Camera* followObject;
+	Entity* followObject;
 	rp3d::Vector3* centroidForward;
 	rp3d::Vector3* centroidPosition;
 	std::map<std::string, Entity*>* entities;
 
-	void Init(Entity* parent, Camera* follow, rp3d::Vector3* centroidFor, rp3d::Vector3* centroidPos, std::map<std::string, Entity*>* entitymap); // Called to do initialization
+	void Init(Entity* parent, Entity* follow, rp3d::Vector3* centroidFor, rp3d::Vector3* centroidPos, std::map<std::string, Entity*>* entitymap); // Called to do initialization
 	void Update(float deltaTime); // Called by the parent GameObject each frame
 protected:
 	rp3d::Vector3 desired;

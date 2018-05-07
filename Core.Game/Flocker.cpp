@@ -12,7 +12,7 @@ Flocker::~Flocker()
 {
 }
 
-void Flocker::Init(Entity* parent, Camera* follow, rp3d::Vector3* centroidFor, rp3d::Vector3* centroidPos, std::map<std::string, Entity*>* entitymap)
+void Flocker::Init(Entity* parent, Entity* follow, rp3d::Vector3* centroidFor, rp3d::Vector3* centroidPos, std::map<std::string, Entity*>* entitymap)
 {
 	gameObject = parent;
 	followObject = follow;
@@ -20,7 +20,7 @@ void Flocker::Init(Entity* parent, Camera* follow, rp3d::Vector3* centroidFor, r
 	centroidPosition = centroidPos;
 	entities = entitymap;
 	steeringForce = rp3d::Vector3(0,0,0); // Initialize the steering force
-	desiredSeparation = gameObject->GetScale().x * 2.0f;  // Separation based on size
+	desiredSeparation = 3.0f;  // Separation based on size
 	sPartial = rp3d::Vector3(0, 0, 0);
 	sTotal = rp3d::Vector3(0, 0, 0);
 	arrivalDistSq = std::powf(arrivalDist, 2.0f); // Square once and never again
@@ -66,10 +66,10 @@ void Flocker::Update(float deltaTime)
 	sTotal = rp3d::Vector3(0, 0, 0); // Separation, space out so the flock isn't just a tight bunch
 	int count = 0; // Create a counter for averaging the force vectors
 	std::ostringstream flockerindex;
-	for (int i = 1; i < 6; i++) // Separation code, check against all flockers to see which ones need separaing from
+	for (int i = 1; i < 4; i++) // Separation code, check against all flockers to see which ones need separaing from
 	{
 		flockerindex = std::ostringstream();
-		flockerindex << "Flocker" << i;
+		flockerindex << "bee" << i;
 		sepDist = (gameObject->GetPosition() - (*entities)[flockerindex.str()]->GetPosition()).length(); // Get the distance between vehicles
 		if ((sepDist > 0) && (sepDist < desiredSeparation)) // If distance between them is more than 0 (same vehicle) and less than the desired distance,
 		{
@@ -92,7 +92,7 @@ void Flocker::Update(float deltaTime)
 	XMVECTOR s = XMVectorSet(steeringForce.x, steeringForce.y, steeringForce.z, 0);
 	XMVector3ClampLength(s, .01f, maxForce);
 	steeringForce.x = XMVectorGetX(s);
-	steeringForce.y = XMVectorGetY(s);
+	steeringForce.y = 0;
 	steeringForce.z = XMVectorGetZ(s);
 	//rp3d::Vector3 acceleration = steeringForce / 15; // Apply the force, accounting for mass
 	gameObject->ApplyForce(steeringForce); // Apply all forces to the acceleration as 1 force (ultimate force) in ApplyForce()

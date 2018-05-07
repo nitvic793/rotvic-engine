@@ -144,7 +144,7 @@ void Game::LoadLevel()
 	AddEntity(wEntity, "weapon");
 
 
-	auto entity = new Entity(resource->GetMesh("bee"), resource->GetMaterial("bee"), rp3d::Vector3(0, -5, 25), dynamicsWorld);
+	auto entity = new Entity(resource->GetMesh("bee"), resource->GetMaterial("bee"), rp3d::Vector3(0, -5, 25), dynamicsWorld, { new Flocker() });
 	entity->isAnimated = true;
 	entity->fbx = resource->enemyFBXLoader;
 	//entity->SetPosition(0, 0, 25);
@@ -152,8 +152,9 @@ void Game::LoadLevel()
 	entity->SetRotation(-1.57f, 3.14f, 0);
 	//entity->CreateBoxCollider(rp3d::Vector3(2, 2, 2));
 	AddEntity(entity, "bee1");
+	dynamic_cast<Flocker*>(entities["bee1"]->scripts[0])->Init(entities["bee1"], pEntity, &centroidForward, &centroidPosition, &entities);
 
-	entity = new Entity(resource->GetMesh("bee"), resource->GetMaterial("bee"), rp3d::Vector3(4, -5, 25), dynamicsWorld);
+	entity = new Entity(resource->GetMesh("bee"), resource->GetMaterial("bee"), rp3d::Vector3(4, -5, 25), dynamicsWorld, { new Flocker() });
 	entity->isAnimated = true;
 	entity->fbx = resource->enemyFBXLoader;
 	entity->enemyInstanceNumber = 1;
@@ -161,8 +162,9 @@ void Game::LoadLevel()
 	entity->SetScale(0.03f, 0.03f, 0.03f);
 	entity->SetRotation(-1.57f, 3.14f, 0);
 	AddEntity(entity, "bee2");
+	dynamic_cast<Flocker*>(entities["bee2"]->scripts[0])->Init(entities["bee2"], pEntity, &centroidForward, &centroidPosition, &entities);
 
-	entity = new Entity(resource->GetMesh("bee"), resource->GetMaterial("bee"), rp3d::Vector3(-4, -5, 25), dynamicsWorld);
+	entity = new Entity(resource->GetMesh("bee"), resource->GetMaterial("bee"), rp3d::Vector3(-4, -5, 25), dynamicsWorld, { new Flocker() });
 	entity->isAnimated = true;
 	entity->fbx = resource->enemyFBXLoader;
 	entity->enemyInstanceNumber = 2;
@@ -170,39 +172,8 @@ void Game::LoadLevel()
 	entity->SetScale(0.03f, 0.03f, 0.03f);
 	entity->SetRotation(-1.57f, 3.14f, 0);
 	AddEntity(entity, "bee3");
+	dynamic_cast<Flocker*>(entities["bee3"]->scripts[0])->Init(entities["bee3"], pEntity, &centroidForward, &centroidPosition, &entities);
 
-	
-
-	//{auto entity = new Entity(resource->GetMesh("cylinder"), resource->GetMaterial("metal"), rp3d::Vector3(2, 0, 0), dynamicsWorld, { new Flocker() });
-	//entity->CreateCylinderCollider(.5, 1);
-	//AddEntity(entity, "Flocker1");  // Flocker 1
-	////entity->SetRigidBodyParameters(true); 
-	//dynamic_cast<Flocker*>(entities["Flocker1"]->scripts[0])->Init(entities["Flocker1"], camera, &centroidForward, &centroidPosition, &entities);
-
-	//entity = new Entity(resource->GetMesh("cylinder"), resource->GetMaterial("metal"), rp3d::Vector3(0, 0, 0), dynamicsWorld, { new Flocker() });
-	//entity->CreateCylinderCollider(.5, 1);
-	//AddEntity(entity, "Flocker2");
-	////entity2->SetRigidBodyParameters(true);
-	//dynamic_cast<Flocker*>(entities["Flocker2"]->scripts[0])->Init(entities["Flocker2"], camera, &centroidForward, &centroidPosition, &entities);
-
-	//entity = new Entity(resource->GetMesh("cylinder"), resource->GetMaterial("metal"), rp3d::Vector3(-2, 0, 0), dynamicsWorld, { new Flocker() });
-	//entity->CreateCylinderCollider(.5, 1);
-	//AddEntity(entity, "Flocker3");
-	////entity2->SetRigidBodyParameters(true);
-	//dynamic_cast<Flocker*>(entities["Flocker3"]->scripts[0])->Init(entities["Flocker3"], camera, &centroidForward, &centroidPosition, &entities);
-
-	//entity = new Entity(resource->GetMesh("cylinder"), resource->GetMaterial("metal"), rp3d::Vector3(0, 0, 2), dynamicsWorld, { new Flocker() });
-	//entity->CreateCylinderCollider(.5, 1);
-	//AddEntity(entity, "Flocker4");
-	////entity2->SetRigidBodyParameters(true);
-	//dynamic_cast<Flocker*>(entities["Flocker4"]->scripts[0])->Init(entities["Flocker4"], camera, &centroidForward, &centroidPosition, &entities);
-
-	//entity = new Entity(resource->GetMesh("cylinder"), resource->GetMaterial("metal"), rp3d::Vector3(0, 0, -2), dynamicsWorld, { new Flocker() });
-	//entity->CreateCylinderCollider(.5, 1);
-	//AddEntity(entity, "Flocker5");
-	////entity2->SetRigidBodyParameters(true);
-	//dynamic_cast<Flocker*>(entities["Flocker5"]->scripts[0])->Init(entities["Flocker5"], camera, &centroidForward, &centroidPosition, &entities);
-	//}
 
 	entity = new Entity(resource->GetMesh("sphere"), resource->GetMaterial("metal"), rp3d::Vector3(5, 5, 0), dynamicsWorld);
 	entity->CreateSphereCollider(.5);
@@ -368,20 +339,20 @@ void Game::Update(float deltaTime)
 
 	if (hasLoaded)
 	{
-		//std::ostringstream flockerindex;
-		//if (flocking)
-		//{
-		//	for (int i = 1; i < 6; i++) // Update the flocking variables
-		//	{
-		//		flockerindex = std::ostringstream();
-		//		flockerindex << "Flocker" << i;
-		//		centroidForward += entities[flockerindex.str()]->GetForward(); // Add all the directions and positions
-		//		centroidPosition += entities[flockerindex.str()]->GetPosition();
-		//	}
-		//	centroidForward = centroidForward / 5.0f; // Then divide them by the number of Daleks to compute the average
-		//	centroidPosition = centroidPosition / 5.0f;
+		std::ostringstream flockerindex;
+		if (flocking)
+		{
+			for (int i = 1; i < 4; i++) // Update the flocking variables
+			{
+				flockerindex = std::ostringstream();
+				flockerindex << "bee" << i;
+				centroidForward += entities[flockerindex.str()]->GetForward(); // Add all the directions and positions
+				centroidPosition += entities[flockerindex.str()]->GetPosition();
+			}
+			centroidForward = centroidForward / 5.0f; // Then divide them by the number of Daleks to compute the average
+			centroidPosition = centroidPosition / 5.0f;
 
-		//}
+		}
 		entities["Collider2"]->ApplyForce(rp3d::Vector3(-.1f, 0, 0));
 		DebugDraw::Draw<Frustum>(fr, "Test");
 		DebugDraw::Draw<Box>(box, "Collision");
