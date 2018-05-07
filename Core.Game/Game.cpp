@@ -72,7 +72,7 @@ void Game::PreInitialize()
 			L"Loading...", 
 			1, 
 			spriteFont, 
-			XMFLOAT4(1,1,1,1)));
+			XMFLOAT4(255,255,255,255)));
 	uiCanvas->AddComponent(loadingText.get(), "LoadingText");
 }
 
