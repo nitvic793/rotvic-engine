@@ -37,10 +37,10 @@ protected:
 	LightsMap lightsMap;
 	Console* console;
 	rp3d::Vector3 gravity;
-	rp3d::DynamicsWorld* dynamicsWorld;
 	Skybox* skybox;
 	PhysicsEntityMap* physicsEntityMap;
 	std::unique_ptr<UICanvas> uiCanvas;
+	rp3d::DynamicsWorld* dynamicsWorld;
 	void ClearEntities();
 	const Vector2f& GetMousePosition2D();
 	const float timeStep = 1.0f / 60.0f; // Constant physics time step 
@@ -48,6 +48,7 @@ protected:
 	bool AreResourcesInitialized = false;
 	bool isPhysicsEnabled = false;
 public:
+	
 	void BindConsole(Console* console);
 	void BindKeyboard(Keyboard* keyboard);
 	void SetCore(SystemCore* core);
@@ -70,6 +71,7 @@ public:
 	virtual bool Load();
 	virtual std::vector<Entity*> GetEntities();
 
+	rp3d::DynamicsWorld* GetDynamicsWorld();
 	bool IsResourcesInitialized() const;
 	Entity* GetEntity(std::string entity);
 	void AddEntity(Entity *entity, std::string entityName);

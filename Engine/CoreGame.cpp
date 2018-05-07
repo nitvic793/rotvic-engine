@@ -328,13 +328,13 @@ void CoreGame::RegisterConsoleCommands()
 			console->WriteLine(L"Invalid shape");
 			return;
 		}
-		auto entity = new Entity(shapeMesh, resourceManager->GetMaterial("default"), rp3d::Vector3(0, 0, 0), dynamicsWorld);
+		auto entity = new Entity(shapeMesh, resourceManager->GetMaterial("default"), rp3d::Vector3(0, 0, 0), gameInstance->GetDynamicsWorld());
 		gameInstance->AddEntity(entity, uniqueName);
 
 		if (params.size() > 2)
 		{
 			auto collider = params[2];
-			entity->SetRigidBodyParameters(true);
+			
 			if (collider == "Box")
 			{
 				entity->CreateBoxCollider(rp3d::Vector3(0.5f, 0.5f, 0.5f));
@@ -343,6 +343,7 @@ void CoreGame::RegisterConsoleCommands()
 			{
 				entity->CreateSphereCollider(1);
 			}
+			entity->SetRigidBodyParameters(true);
 		}
 	},
 	{

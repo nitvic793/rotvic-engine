@@ -44,6 +44,11 @@ std::vector<Entity*> IGame::GetEntities()
 	return vEntities;
 }
 
+rp3d::DynamicsWorld * IGame::GetDynamicsWorld()
+{
+	return dynamicsWorld;
+}
+
 bool IGame::IsResourcesInitialized() const
 {
 	return AreResourcesInitialized;
