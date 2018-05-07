@@ -435,8 +435,8 @@ void ResourceManager::LoadResourcesAsync(ConfigMap config, SystemCore * core, st
 		auto commandList = (ID3D11CommandList*)args;
 		context->ExecuteCommandList(commandList, true);
 		commandList->Release();
-
 	});
+
 	asyncWorker->EnqueueJob({ job, nullptr });
 }
 

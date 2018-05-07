@@ -39,7 +39,6 @@ public:
 	void PreInitialize() override;
 	void Initialize() override;
 
-	std::unique_ptr<SpriteFont> spriteFont;
 	virtual void LoadLevel();
 	virtual bool Save();
 	virtual bool Load();

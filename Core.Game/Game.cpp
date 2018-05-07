@@ -64,14 +64,14 @@ Game* Game::CreateInstance()
 void Game::PreInitialize()
 {
 	IGame::PreInitialize();
-	spriteFont = std::unique_ptr<SpriteFont>(new SpriteFont(core->GetDevice(), L"../../Assets/Fonts/segoeUI.spritefont"));
+	auto spriteFont = new SpriteFont(core->GetDevice(), L"../../Assets/Fonts/segoeUI.spritefont");
 	loadingText = std::unique_ptr<UIText>(
 		new UIText(XMFLOAT3(
 			(float)core->GetScreenWidth() - 250.f, 
 			(float)core->GetScreenHeight() - 100.f, 0), 
 			L"Loading...", 
 			1, 
-			spriteFont.get(), 
+			spriteFont, 
 			XMFLOAT4(1,1,1,1)));
 	uiCanvas->AddComponent(loadingText.get(), "LoadingText");
 }

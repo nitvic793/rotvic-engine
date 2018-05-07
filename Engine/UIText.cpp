@@ -31,4 +31,5 @@ ComponentType UIText::GetType() const
 
 UIText::~UIText()
 {
+	delete spriteFont;
 }
