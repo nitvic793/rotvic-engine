@@ -13,5 +13,13 @@
     "font": "Microsoft Sans Serif",
     "size": "1.25",
     "color": "204,0,0,255"
+  },
+  "weapon": {
+    "type": "text",
+    "text": "Press 'Z' to switch weapons",
+    "position": "800,650",
+    "font": "Microsoft Sans Serif",
+    "size": "0.5",
+    "color": "0,0,0,255"
   }
 }

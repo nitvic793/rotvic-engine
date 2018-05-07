@@ -23,11 +23,9 @@ FBXLoader::FBXLoader(FbxString name, FbxString lFilePath1, FbxString lFilePath2)
 	if (lFilePath1.IsEmpty())
 	{
 		lResult = false;
-		FBXSDK_printf("\n\nUsage: ImportScene <FBX file name>\n\n");
 	}
 	else
 	{
-		FBXSDK_printf("\n\nFile: %s\n\n", lFilePath1.Buffer());
 		lResult = LoadScene(lFilePath1.Buffer(),scene);
 		LoadScene(lFilePath2.Buffer(), scene2);
 	}
@@ -54,7 +52,7 @@ void FBXLoader::InitializeSdkObjects()
 		FBXSDK_printf("Error: Unable to create FBX Manager!\n");
 		exit(1);
 	}
-	else FBXSDK_printf("Autodesk FBX SDK version %s\n", fbxManager->GetVersion());
+	
 
 	// Create an IOSettings object. This object holds all import/export settings.
 	FbxIOSettings* ios = FbxIOSettings::Create(fbxManager, IOSROOT);
@@ -84,7 +82,7 @@ void FBXLoader::DestroySdkObjects(bool pExitStatus)
 {
 	//Delete the FBX Manager. All the objects that have been allocated using the FBX Manager and that haven't been explicitly destroyed are also automatically destroyed.
 	if (fbxManager) fbxManager->Destroy();
-	if (pExitStatus) FBXSDK_printf("Program Success!\n");
+	
 }
 
 bool FBXLoader::LoadScene(const char* pFilename, FbxScene* pScene)
@@ -125,39 +123,9 @@ bool FBXLoader::LoadScene(const char* pFilename, FbxScene* pScene)
 
 	if (lImporter->IsFBX())
 	{
-		FBXSDK_printf("FBX file format version for file '%s' is %d.%d.%d\n\n", pFilename, lFileMajor, lFileMinor, lFileRevision);
+		
+		// Set the import states. By default, the import states are always set to true
 
-		// From this point, it is possible to access animation stack information without
-		// the expense of loading the entire file.
-
-		FBXSDK_printf("Animation Stack Information\n");
-
-		lAnimStackCount = lImporter->GetAnimStackCount();
-
-		FBXSDK_printf("    Number of Animation Stacks: %d\n", lAnimStackCount);
-		FBXSDK_printf("    Current Animation Stack: \"%s\"\n", lImporter->GetActiveAnimStackName().Buffer());
-		FBXSDK_printf("\n");
-
-		for (i = 0; i < lAnimStackCount; i++)
-		{
-			FbxTakeInfo* lTakeInfo = lImporter->GetTakeInfo(i);
-
-			FBXSDK_printf("    Animation Stack %d\n", i);
-			FBXSDK_printf("         Name: \"%s\"\n", lTakeInfo->mName.Buffer());
-			FBXSDK_printf("         Description: \"%s\"\n", lTakeInfo->mDescription.Buffer());
-
-			// Change the value of the import name if the animation stack should be imported 
-			// under a different name.
-			FBXSDK_printf("         Import Name: \"%s\"\n", lTakeInfo->mImportName.Buffer());
-
-			// Set the value of the import state to false if the animation stack should be not
-			// be imported. 
-			FBXSDK_printf("         Import State: %s\n", lTakeInfo->mSelect ? "true" : "false");
-			FBXSDK_printf("\n");
-		}
-
-		// Set the import states. By default, the import states are always set to 
-		// true. The code below shows how to change these states.
 		IOS_REF.SetBoolProp(IMP_FBX_MATERIAL, true);
 		IOS_REF.SetBoolProp(IMP_FBX_TEXTURE, true);
 		IOS_REF.SetBoolProp(IMP_FBX_LINK, true);

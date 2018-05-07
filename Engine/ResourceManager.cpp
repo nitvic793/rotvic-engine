@@ -371,8 +371,8 @@ void ResourceManager::LoadResourcesAsync(ConfigMap config, SystemCore * core, st
 
 		// Animation data
 
-		FbxString lFilePath1("../../axe-idle.fbx");		// Player Character Idle animation file path
-		FbxString lFilePath2("../../axe-walk.fbx");		// Player Character Walk animation file path
+		FbxString lFilePath1("../../Assets/Models/axe-idle.fbx");		// Player Character Idle animation file path
+		FbxString lFilePath2("../../Assets/Models/axe-walk.fbx");		// Player Character Walk animation file path
 
 		fbxLoader = new FBXLoader("man", lFilePath1, lFilePath2);
 		fbxLoader->LoadNodes(fbxLoader->scene->GetRootNode(), fbxLoader->skeleton.mJoints);
@@ -397,8 +397,8 @@ void ResourceManager::LoadResourcesAsync(ConfigMap config, SystemCore * core, st
 		materials.insert(std::pair<std::string, Material*>("man", material));
 
 
-		lFilePath1 = FbxString("../../Bee-Idle3.fbx");		// Enemy Character Idle animation file path
-		lFilePath2 = FbxString("../../Bee-Idle3.fbx");
+		lFilePath1 = FbxString("../../Assets/Models/Bee-Idle3.fbx");		// Enemy Character Idle animation file path
+		lFilePath2 = FbxString("../../Assets/Models/Bee-Idle3.fbx");
 
 		enemyFBXLoader = new FBXLoader("bee", lFilePath1, lFilePath2);
 		enemyFBXLoader->LoadNodes(enemyFBXLoader->scene->GetRootNode()->GetChild(9), enemyFBXLoader->skeleton.mJoints);
@@ -555,8 +555,8 @@ void ResourceManager::LoadResources(ConfigMap config, SystemCore* core)
 
 	// Animation data
 
-	FbxString lFilePath1("../../axe-idle.fbx");
-	FbxString lFilePath2("../../axe-walk.fbx");
+	FbxString lFilePath1("../../Assets/Models/axe-idle.fbx");
+	FbxString lFilePath2("../../Assets/Models/axe-walk.fbx");
 
 	fbxLoader = new FBXLoader("man", lFilePath1, lFilePath2);
 	fbxLoader->LoadNodes(fbxLoader->scene->GetRootNode(), fbxLoader->skeleton.mJoints);
@@ -579,8 +579,8 @@ void ResourceManager::LoadResources(ConfigMap config, SystemCore* core)
 
 
 
-	lFilePath1 = FbxString("../../Bee-Idle3.fbx");
-	lFilePath2 = FbxString("../../Bee-Idle3.fbx");
+	lFilePath1 = FbxString("../../Assets/Models/Bee-Idle3.fbx");
+	lFilePath2 = FbxString("../../Assets/Models/Bee-Idle3.fbx");
 
 	enemyFBXLoader = new FBXLoader("bee", lFilePath1, lFilePath2);
 	enemyFBXLoader->LoadNodes(enemyFBXLoader->scene->GetRootNode()->GetChild(9), enemyFBXLoader->skeleton.mJoints);
