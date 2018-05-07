@@ -13,8 +13,8 @@ class UICanvas
 {
 	SystemCore *core;
 	std::unique_ptr<SpriteBatch> spriteBatch;
-	std::map<std::string, UIComponent*> mUIElements;
 public:
+	std::map<std::string, UIComponent*> mUIElements;
 	/// <summary>
 	/// Adds given component to the canvas. 
 	/// </summary>
