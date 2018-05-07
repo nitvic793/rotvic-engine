@@ -1,11 +1,11 @@
 {
   "roar": {
     "type": "text",
-    "text": "ROAR!",
-    "position": "576,1",
+    "text": "Pre-Alpha Demo",
+    "position": "525,1",
     "font": "Microsoft Sans Serif",
-    "size": "1.25",
-    "color": "204,0,0,255"
+    "size": "1",
+    "color": "0,60,200,255"
   },
   "weapon": {
     "type": "text",
