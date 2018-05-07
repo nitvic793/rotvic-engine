@@ -67,8 +67,20 @@ public:
 	FBXLoader * fbxLoader;   // Player FBX Loader
 	FBXLoader * enemyFBXLoader;    // Enemy FBX Loader
 
+	/// <summary>
+	/// Loads given mesh asynchronously. The mesh input should be an obj file with a corresponding mtl file. 
+	/// </summary>
+	/// <param name="meshName">The full name of the mesh file</param>
+	/// <param name="eventType">The event callback name</param>
+	/// <param name="instance">The instance reference of the event</param>
 	void LoadMeshAsync(std::string meshName, std::string eventType, void* instance);
 
+	/// <summary>
+	/// Unloads given mesh asynchronously. 
+	/// </summary>
+	/// <param name="meshName">The full name of the mesh file</param>
+	/// <param name="eventType">The event callback name</param>
+	/// <param name="instance">The instance reference of the event</param>
 	void UnloadMeshAsync(std::string meshName, std::string eventType, void* instance);
 
 	void SetAsyncLoader(AsyncLoader* loader);

@@ -294,7 +294,7 @@ void Console::RegisterCommand(std::string commandName, CommandCallback command, 
 Console::Console(SystemCore* sysCore)
 {
 	enabled = false;
-	maxLines = 10;
+	maxLines = 30;
 	height = 20;
 	currentLine = 0;
 	core = sysCore;
