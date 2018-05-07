@@ -3,10 +3,8 @@
 #include "ConfigLoader.h"
 #include <typeinfo>
 #include <stdexcept>
-#include <iostream>
 #include <fstream>
-#include <sstream>
-#include <iomanip>
+#include "json\json.h"
 
 /// <summary>
 /// Initializes bound game instance.
@@ -148,6 +146,23 @@ CoreGame::CoreGame(int height, int width, std::string title)
 
 void CoreGame::LoadHUDFile(std::string fileName) 
 {
+	Json::Value root;
+	try
+	{
+		std::ifstream config_doc(fileName, std::ifstream::binary);
+		config_doc >> root;
+		auto memberNames = root.getMemberNames();
+		for (auto member : memberNames)
+		{
+			//configMap.insert(ConfigMap::value_type(member, root.get(member, "").asString()));
+		}
+		config_doc.close();
+	}
+	catch (std::exception)
+	{
+		// Console message here
+		return;
+	}
 }
 
 /// <summary>

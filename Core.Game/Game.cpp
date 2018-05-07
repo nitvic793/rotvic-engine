@@ -97,7 +97,7 @@ void Game::Initialize()
 	lightsMap.insert(std::pair<std::string, Light*>("pointLight", new Light{ &pointLight, Point }));
 	skybox = new Skybox(resource->GetMesh("cube"), resource->vertexShaders["sky"], resource->pixelShaders["sky"], resource->GetTexture("skybox"), core->GetDevice());
 	LoadLevel();
-	LoadHUDFile("..\\..\\Assets\\GameHUD.json");
+	//LoadHUDFile("..\\..\\Assets\\GameHUD.json");
 	hasLoaded = true;
 	uiCanvas->RemoveComponent("LoadingText");
 }
@@ -111,7 +111,7 @@ void Game::LoadLevel()
 
 	/* Add Entitites */
 
-	auto asyncEntity = new AsyncEntity("palm_tree.obj", rp3d::Vector3(-20, -8.65, 1), dynamicsWorld);
+	auto asyncEntity = new AsyncEntity("palm_tree.obj", rp3d::Vector3(-20, -8.65f, 1), dynamicsWorld);
 	AddEntity(asyncEntity, "AsyncEntity");
 	// Player Entity
 	auto pEntity = new ThirdPersonPlayerEntity(resource->GetMesh("man"), resource->GetMaterial("man"), rp3d::Vector3(0, -2, 5), dynamicsWorld);

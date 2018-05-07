@@ -54,7 +54,6 @@ UICanvas::UICanvas(SystemCore *core)
 {
 	this->core = core;
 	spriteBatch = std::unique_ptr<SpriteBatch>(new SpriteBatch(core->GetDeviceContext()));
-	spriteFont = std::unique_ptr<SpriteFont>(new SpriteFont(core->GetDevice(), L"../../Assets/Fonts/segoeUI.spritefont")); //Load default font
 }
 
 
