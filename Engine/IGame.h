@@ -72,6 +72,7 @@ public:
 	bool IsResourcesInitialized() const;
 	Entity* GetEntity(std::string entity);
 	void AddEntity(Entity *entity, std::string entityName);
+	void RemoveEntity(std::string entityName);
 	Camera* GetCamera();
 	LightsMap GetLights();
 	Skybox* GetSkybox();

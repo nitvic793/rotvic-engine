@@ -23,6 +23,7 @@ class SystemRenderer {
 public:
 	virtual void Draw(Mesh *mesh, ID3D11DeviceContext *context);
 	virtual void SetShaders(Entity *entity, Camera* camera, LightsMap lights);
+	virtual void SetShaders(Material *material, XMFLOAT4X4 world, Camera* camera, LightsMap lights);
 	
 };
 
@@ -31,13 +32,14 @@ public:
 /// </summary>
 class Renderer
 {
-	SystemRenderer	*internalRenderer;
-	SystemCore		*core;
-	XMFLOAT4X4		viewMatrix;
-	XMFLOAT4X4		projectionMatrix;
-	Camera*			camera;
-	LightsMap		lights;
-	ResourceManager *resourceManager;
+	SystemRenderer*			internalRenderer;
+	SystemCore*				core;
+	XMFLOAT4X4				viewMatrix;
+	XMFLOAT4X4				projectionMatrix;
+	Camera*					camera;
+	LightsMap				lights;
+	ResourceManager*		resourceManager;
+	ID3D11RasterizerState*	nonBackFaceCullRasterizer;
 public:
 	virtual SystemRenderer* GetInternalRenderer();
 	virtual void			Draw(Mesh *mesh);

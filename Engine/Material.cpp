@@ -19,6 +19,10 @@ Material::Material(SystemCore* core, SimpleVertexShader *vertexShader, SimplePix
 	textureSRV = srv;
 	sampler = samplerState;
 	normalSRV = normal;
+	if (normalSRV == nullptr)
+	{
+		normalSRV = rm->GetTexture("defaultNormal");
+	}
 	roughnessSRV = rm->GetTexture("defaultSpecular");
 }
 

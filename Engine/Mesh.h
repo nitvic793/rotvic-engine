@@ -1,3 +1,10 @@
+/// <summary>
+/// Authors:
+/// Base Code - Nitish Victor
+/// Animation - Rahul SV
+/// Physics tweaks - Trevor Walden
+/// </summary>
+
 #pragma once
 #define NOMINMAX
 #include "SystemCore.h"
@@ -9,7 +16,7 @@
 using namespace DirectX;
 
 /// <summary>
-/// Mesh class represents the shape/dimensions of an object. Meshes should be bound to a Game Entity object for rendering.  
+/// Mesh class represents the shape/dimensions of an object. Meshes can be bound to a Game Entity object for rendering.  
 /// </summary>
 class Mesh
 {
@@ -21,7 +28,10 @@ protected:
 	ID3D11Buffer *vertexBuffer = nullptr;
 	ID3D11Buffer *indexBuffer = nullptr;
 	VertexAnimated *verticesAnim;
+	bool isBackfaceCulled = true;
 public:
+	void SetIsBackFaceCulled(bool active);
+	bool IsBackFaceCulled() const;
 	Mesh(SystemCore* core);
 	Mesh::Mesh(const char *objFile, SystemCore* core);
 	~Mesh();

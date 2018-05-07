@@ -6,11 +6,12 @@
 #include "ResourceManager.h"
 #include "MeshLoader.h"
 #include "DDSTextureLoader.h"
-#include "ObjLoader.h"
+
 #include <locale>
 #include <codecvt>
 #include <string>
 #include "EventSystem.h"
+#include "ObjLoader.h"
 
 std::wstring to_wstring(std::string narrow)
 {
@@ -27,22 +28,172 @@ Vertex MapObjlToVertex(objl::Vertex vertex)
 	return { pos, normal, uv };
 }
 
-ID3D11ShaderResourceView* LoadSRV(std::wstring filename, ID3D11Device* device)
+std::vector<Vertex> MapObjlToVertex(std::vector<objl::Vertex> vertices)
+{
+	std::vector<Vertex> verts;
+	for (auto v : vertices)
+	{
+		verts.push_back(MapObjlToVertex(v));
+	}
+	return verts;
+}
+
+ID3D11ShaderResourceView* LoadSRV(std::wstring filename, ID3D11Device* device, ID3D11DeviceContext* context)
 {
 	ID3D11ShaderResourceView* srv = nullptr;
 	if (filename.find(L".dds") != std::string::npos)
 	{
-		CreateDDSTextureFromFile(device, filename.c_str(), nullptr, &srv);
+		CreateDDSTextureFromFile(device, context, filename.c_str(), nullptr, &srv);
 	}
 	else
 	{
-		CreateWICTextureFromFile(device, filename.c_str(), nullptr, &srv);
+		CreateWICTextureFromFile(device, context, filename.c_str(), nullptr, &srv);
 	}
 
 	return srv;
 }
 
 ResourceManager* ResourceManager::instance = nullptr;
+
+std::vector<std::string> ResourceManager::AddToMeshMap(objl::Loader loader, std::string prefix, ID3D11DeviceContext* context, bool loadTex)
+{
+	auto device = core->GetDevice();
+	std::wstring baseTexAddress = L"../../Assets/Textures/";
+	std::vector<std::string> meshList;
+	for (auto mesh : loader.LoadedMeshes)
+	{
+		auto verts = MapObjlToVertex(mesh.Vertices);
+		auto indices = mesh.Indices;
+		Mesh* m = new Mesh(core);
+		m->Initialize(verts.data(), verts.size(), indices.data(), indices.size());
+		m->SetIsBackFaceCulled(false);
+		meshes.insert(std::pair<std::string, Mesh*>(prefix + mesh.MeshName, m));
+		meshList.push_back(prefix + mesh.MeshName);
+		if (loadTex)
+		{
+			auto texURIDiffuse = baseTexAddress + to_wstring(mesh.MeshMaterial.map_Kd);
+			auto texDiffuseName = prefix + mesh.MeshName;
+			textures.insert(std::pair<std::string, ID3D11ShaderResourceView*>(texDiffuseName, LoadSRV(texURIDiffuse, device, context)));
+			auto texURINormal = baseTexAddress + to_wstring(mesh.MeshMaterial.map_bump);
+			auto texNormalName = prefix + mesh.MeshName + "Normal";
+			auto normalMap = LoadSRV(texURINormal, device, context);
+			if (normalMap != nullptr)
+				textures.insert(std::pair<std::string, ID3D11ShaderResourceView*>(texNormalName, normalMap));
+
+			auto mat = new Material(
+				core,
+				vertexShaders["default"],
+				pixelShaders["default"],
+				textures[texDiffuseName],
+				normalMap,
+				sampler
+			);
+
+			materials.insert(std::pair<std::string, Material*>(prefix + mesh.MeshName, mat));
+			mtlMap.insert(std::pair<std::string, MTLData>(prefix + mesh.MeshName, { mesh.MeshName, texDiffuseName, texNormalName }));
+		}
+	}
+	return meshList;
+}
+
+void ResourceManager::LoadMeshAsync(std::string meshName, std::string eventType, void* instance)
+{
+	auto events = EventSystem::GetInstance();
+	auto fullMeshName = "../../Assets/Models/" + meshName;
+	auto entity = (Entity*)instance;
+
+	if (meshReferenceMap.find(meshName) != meshReferenceMap.end())
+	{
+		//No resource loading required. Set the mesh and materials directly.
+		auto meshRef = &meshReferenceMap[meshName];
+		std::vector<Mesh*> meshList;
+		std::vector<Material*> matList;
+		for (auto m : meshRef->meshNames)
+		{
+			meshList.push_back(meshes[m]);
+			matList.push_back(materials[m]);
+		}
+		entity->SetMaterialList(matList);
+		entity->SetMeshList(meshList);
+		meshReferenceMap[meshName].referenceCount++;
+		//Let the entity know that the resources are set. 
+		events->EmitEventQueued(eventType, GENERIC, nullptr, instance);
+		return;
+	}
+
+	//Load mesh and materials asynchronously. 
+	auto job = [=](void*)
+	{
+		auto device = core->GetDevice();
+		ID3D11CommandList *commandList;
+		CoInitializeEx(nullptr, COINITBASE_MULTITHREADED);
+		ID3D11DeviceContext *deferredContext;
+		device->CreateDeferredContext(0, &deferredContext);
+		auto context = deferredContext;
+		objl::Loader loader;
+		loader.LoadFile(fullMeshName);
+		auto meshNames = AddToMeshMap(loader, meshName, deferredContext);
+
+		std::vector<Mesh*> meshList;
+		std::vector<Material*> matList;
+		for (auto m : meshNames)
+		{
+			meshList.push_back(meshes[m]);
+			matList.push_back(materials[m]);
+		}
+		MeshReference m = { meshNames , 1U };
+		meshReferenceMap.insert(std::pair<std::string, MeshReference>(meshName, m));
+		entity->SetMaterialList(matList);
+		entity->SetMeshList(meshList);
+		deferredContext->FinishCommandList(false, &commandList);
+		events->EmitEventQueued("ResourceLoadComplete", GENERIC, commandList, this);
+		//Let the entity know that the resources are set. 
+		events->EmitEventQueued(eventType, GENERIC, nullptr, instance);
+		deferredContext->Release();
+	};
+
+	//Queue async job
+	asyncWorker->EnqueueJob({ job, nullptr });
+}
+
+void ResourceManager::UnloadMeshAsync(std::string meshName, std::string eventType, void* instance)
+{
+	auto events = EventSystem::GetInstance();
+	auto entity = (Entity*)instance;
+	auto job = [=](void*)
+	{
+		//Ensure entity is dereferenced from the materials and meshes.
+		entity->SetMaterialList(std::vector<Material*>());
+		entity->SetMeshList(std::vector<Mesh*>());
+
+		auto meshRef = meshReferenceMap[meshName];
+		meshRef.referenceCount--;
+		if (meshRef.referenceCount > 0)return; //Return if some other object is using this mesh reference.
+
+		//Unload materials and meshes
+		for (auto m : meshRef.meshNames)
+		{
+			auto mtl = mtlMap[m];
+			delete materials[m];
+			materials.erase(m);
+			textures[mtl.diffuseTexture]->Release();
+			textures.erase(mtl.diffuseTexture);
+			if (textures.find(mtl.normalTexture) != textures.end())
+			{
+				textures[mtl.normalTexture]->Release();
+				textures.erase(mtl.normalTexture);
+			}
+			delete meshes[meshName + mtl.meshName];
+			meshes.erase(meshName + mtl.meshName);
+		}
+
+		meshReferenceMap.erase(meshName);
+		//Let entity know resource has been unloaded.
+		events->EmitEventQueued(eventType, GENERIC, nullptr, instance);
+	};
+
+	asyncWorker->EnqueueJob({ job, nullptr });
+}
 
 void ResourceManager::SetAsyncLoader(AsyncLoader* loader)
 {

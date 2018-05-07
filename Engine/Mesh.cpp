@@ -4,6 +4,16 @@
 
 #include "Mesh.h"
 
+void Mesh::SetIsBackFaceCulled(bool active)
+{
+	isBackfaceCulled = active;
+}
+
+bool Mesh::IsBackFaceCulled() const
+{
+	return isBackfaceCulled;
+}
+
 Mesh::Mesh(SystemCore* core)
 {
 	if (core == nullptr) {

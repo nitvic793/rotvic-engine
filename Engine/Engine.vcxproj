@@ -148,6 +148,7 @@
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="AsyncEntity.h" />
     <ClInclude Include="AsyncLoader.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="Colors.h" />
@@ -203,6 +204,7 @@
     <ClInclude Include="WorkerThread.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="AsyncEntity.cpp" />
     <ClCompile Include="AsyncLoader.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="ConcurrentQueue.cpp" />

@@ -364,6 +364,26 @@ Material * Entity::GetMaterial()
 	return material;
 }
 
+void Entity::SetMeshList(const std::vector<Mesh*>& meshList)
+{
+	this->meshList = meshList;
+}
+
+void Entity::SetMaterialList(const std::vector<Material*>& matList)
+{
+	this->matList = matList;
+}
+
+std::vector<Mesh*> Entity::GetMeshList()
+{
+	return meshList;
+}
+
+std::vector<Material*> Entity::GetMaterialList()
+{
+	return matList;
+}
+
 void Entity::Update(float deltaTime)
 {
 	if (scripts.size() > 0) // Call the update for each script each cycle

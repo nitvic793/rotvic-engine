@@ -11,10 +11,28 @@
 #include "FBXLoader.h"
 #include "AsyncLoader.h"
 
+namespace objl {
+	class Loader;
+}
+
+
 typedef std::map<std::string, SimpleVertexShader*> VertexShaderMap;
 typedef std::map<std::string, SimplePixelShader*> PixelShaderMap;
 typedef std::pair<std::string, SimpleVertexShader*> VertexShaderMapType;
 typedef std::pair<std::string, SimplePixelShader*> PixelShaderMapType;
+
+struct MTLData
+{
+	std::string meshName;
+	std::string diffuseTexture;
+	std::string normalTexture;
+};
+
+struct MeshReference
+{
+	std::vector<std::string> meshNames;
+	unsigned int referenceCount;
+};
 
 /// <summary>
 /// Resource manager class. A central class to manage all resources required by the game. 
@@ -24,10 +42,15 @@ class ResourceManager
 	std::map<std::string, Mesh*> meshes;
 	std::map<std::string, Material*> materials;
 	std::map<std::string, ID3D11ShaderResourceView*> textures;
+	std::map<std::string, MTLData> mtlMap;
+	std::map<std::string, MeshReference> meshReferenceMap;
+
 	static ResourceManager* instance;
 	AsyncLoader* asyncLoader;
 	WorkerThread *asyncWorker;
 	SystemCore* core;
+
+	std::vector<std::string> AddToMeshMap(objl::Loader loader, std::string prefix, ID3D11DeviceContext* context, bool loadTex = true);
 public:
 	SimpleVertexShader *vertexShader;
 	SimplePixelShader *pixelShader;
@@ -43,6 +66,10 @@ public:
 	// Animation Data
 	FBXLoader * fbxLoader;   // Player FBX Loader
 	FBXLoader * enemyFBXLoader;    // Enemy FBX Loader
+
+	void LoadMeshAsync(std::string meshName, std::string eventType, void* instance);
+
+	void UnloadMeshAsync(std::string meshName, std::string eventType, void* instance);
 
 	void SetAsyncLoader(AsyncLoader* loader);
 

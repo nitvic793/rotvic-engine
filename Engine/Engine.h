@@ -27,3 +27,4 @@
 #include "UIText.h"
 #include "ThirdPersonPlayerEntity.h"
 #include "ThirdPersonCamera.h"
+#include "AsyncEntity.h"

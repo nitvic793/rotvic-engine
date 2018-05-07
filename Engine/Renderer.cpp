@@ -59,6 +59,37 @@ void SystemRenderer::SetShaders(Entity *entity, Camera *camera, LightsMap lights
 	pixelShader->SetShader();
 }
 
+void SystemRenderer::SetShaders(Material * material, XMFLOAT4X4 world, Camera * camera, LightsMap lights)
+{
+	auto pixelShader = material->GetPixelShader();
+	auto vertexShader = material->GetVertexShader();
+	vertexShader->SetMatrix4x4(WORLD_STR, world);
+	vertexShader->SetMatrix4x4(VIEW_STR, camera->GetViewMatrix());
+	vertexShader->SetMatrix4x4(PROJECTION_STR, camera->GetProjectionMatrix());
+	pixelShader->SetSamplerState("basicSampler", material->GetSampler());
+	pixelShader->SetShaderResourceView("diffuseTexture", material->GetSRV());
+	pixelShader->SetShaderResourceView("normalTexture", material->GetNormalSRV());
+	pixelShader->SetShaderResourceView("roughnessTexture", material->GetRoughnessSRV());
+	pixelShader->SetFloat3("cameraPosition", camera->GetPosition());
+	for (auto lightPair : lights)
+	{
+		auto light = lightPair.second;
+		switch (light->Type)
+		{
+		case Directional:
+			pixelShader->SetData(lightPair.first, light->GetLight<DirectionalLight>(), sizeof(DirectionalLight));
+			break;
+		case Point:
+			pixelShader->SetData(lightPair.first, light->GetLight<PointLight>(), sizeof(PointLight));
+			break;
+		}
+	}
+	vertexShader->CopyAllBufferData();
+	pixelShader->CopyAllBufferData();
+	vertexShader->SetShader();
+	pixelShader->SetShader();
+}
+
 void Renderer::SetShadersAndDrawAnimated(Entity * entity, Camera * camera, LightsMap lights, ID3D11DeviceContext * context)
 {
 	auto material = entity->GetMaterial();
@@ -291,10 +322,12 @@ Renderer::Renderer(SystemCore* core, int width, int height)
 		0.1f,
 		100.0f);
 	XMStoreFloat4x4(&projectionMatrix, XMMatrixTranspose(P));
+
 }
 
 Renderer::~Renderer()
 {
+	nonBackFaceCullRasterizer->Release();
 	delete internalRenderer;
 }
 
@@ -317,6 +350,10 @@ SystemRenderer* Renderer::GetInternalRenderer()
 /// </summary>
 void Renderer::Initialize()
 {
+	D3D11_RASTERIZER_DESC rDesc = {};
+	rDesc.CullMode = D3D11_CULL_NONE;
+	rDesc.FillMode = D3D11_FILL_SOLID;
+	core->GetDevice()->CreateRasterizerState(&rDesc, &nonBackFaceCullRasterizer);
 	core->GetDeviceContext()->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 }
 
@@ -390,9 +427,18 @@ void Renderer::Draw(Mesh *mesh)
 	if (mesh == nullptr) {
 		throw std::exception("Null Mesh");
 	}
-
+	//Disable backface culling if mesh does not require it. 
+	if (!mesh->IsBackFaceCulled())
+	{
+		core->GetDeviceContext()->RSSetState(nonBackFaceCullRasterizer);
+	}
 	internalRenderer->Draw(mesh, context);
 	core->Draw();
+	//Reset rasterizer if backface culling was disabled.
+	if (!mesh->IsBackFaceCulled())
+	{
+		core->GetDeviceContext()->RSSetState(nullptr);
+	}
 }
 
 /// <summary>
@@ -404,10 +450,31 @@ void Renderer::Draw(Entity *entity)
 	if (entity == nullptr) {
 		throw std::exception("Null Mesh");
 	}
+
 	if (!entity->isAnimated && !entity->isWeapon)
 	{
-		internalRenderer->SetShaders(entity, camera, lights);
-		Draw(entity->GetMesh());
+
+		if (entity->GetMeshList().size() == 0)
+		{
+			if (entity->GetMesh() == nullptr || entity->GetMaterial() == nullptr)
+			{
+				return; //Return if no mesh or material found. Cannot draw item
+			}
+			internalRenderer->SetShaders(entity, camera, lights);
+			Draw(entity->GetMesh());
+		}
+		else
+		{
+			auto meshList = entity->GetMeshList();
+			auto matList = entity->GetMaterialList();
+			int counter = 0;
+			for (auto mesh : meshList)
+			{
+				internalRenderer->SetShaders(matList[counter], entity->GetWorldMatrix(), camera, lights);
+				Draw(mesh);
+				counter++;
+			}
+		}
 	}
 	else if (entity->isAnimated)
 	{
@@ -423,10 +490,10 @@ void Renderer::Draw(Entity *entity)
 			if (entity->fbx->currentTime >= 3.3f)
 				entity->fbx->currentTime -= 3.3f;
 
-			entity->fbx->GetAnimatedMatrixExtra(0.025);
+			entity->fbx->GetAnimatedMatrixExtra(0.025f);
 		}
 		else
-			entity->fbx->GetAnimatedMatrixExtra(0.075);
+			entity->fbx->GetAnimatedMatrixExtra(0.075f);
 
 		SetShadersAndDrawAnimated(entity, camera, lights, core->GetDeviceContext());
 	}

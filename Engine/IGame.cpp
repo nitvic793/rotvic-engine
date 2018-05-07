@@ -179,7 +179,7 @@ void IGame::UpdateEntities(float deltaTime)
 	}
 
 	physicsTimer += deltaTime; // Track time
-	
+
 }
 
 void IGame::PreInitialize()
@@ -198,6 +198,17 @@ void IGame::AddEntity(Entity *entity, std::string entityName)
 	vEntities.push_back(entity);
 	auto shape = entity->GetProxyShape();
 	physicsEntityMap->Insert(shape, entity);
+}
+
+void IGame::RemoveEntity(std::string entityName)
+{
+	if (entities.find(entityName) != entities.end())
+	{
+		vEntities.erase(std::remove(vEntities.begin(), vEntities.end(), entities[entityName]), vEntities.end());
+		physicsEntityMap->Remove(entities[entityName]->GetProxyShape());
+		delete entities[entityName];
+		entities.erase(entityName);
+	}
 }
 
 Camera* IGame::GetCamera()

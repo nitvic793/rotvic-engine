@@ -69,10 +69,11 @@ public:
 	/// <summary>
 	/// Queue emit event to required update cycle. On update cycle, all registered event callback functions will be invoked. 
 	/// </summary>
-	/// <param name="eventType"></param>
-	/// <param name="update"></param>
-	/// <param name="args"></param>
-	/// <param name="instance"></param>
+	/// <param name="eventType">Name of Event Type</param>
+	/// <param name="update">Event update queue type</param>
+	/// <param name="args">Arguments to pass to callback</param>
+	/// <param name="instance">Instance to refer for callback function.</param>
+	/// <remarks>Instances are used to map event type with given callback function.</remarks>
 	void EmitEventQueued(std::string eventType, EventUpdateType update, void* args = nullptr, void* instance = nullptr);
 
 	/// <summary>

@@ -468,6 +468,21 @@ void CoreGame::RegisterConsoleCommands()
 		"Set 0 to disable, 1 to enable wireframe rendering"
 	});
 
+	console->RegisterCommand("Remove", [&](std::vector<std::string> params)
+	{
+		if (params.size() != 1)
+		{
+			console->WriteLine(L"Invalid params supplied", Error);
+			return;
+		}
+		auto eName = params[0];
+		gameInstance->RemoveEntity(eName);
+	},
+	{
+		"Syntax: Remove entityName",
+		"Removes given entity."
+	});
+
 }
 
 /// <summary>

@@ -1,3 +1,10 @@
+/// <summary>
+/// Authors: 
+/// Nitish - Base Entity code
+/// Trevor Walden - Physics Integration
+/// Rahul SV - Animation integration
+/// </summary>
+
 #pragma once
 #undef min
 #undef max
@@ -25,6 +32,8 @@ class Entity
 protected:
 	EntityContextWrapper context;
 	DirectX::XMFLOAT3 scale;
+	std::vector<Mesh*> meshList;
+	std::vector<Material*> matList;
 	Mesh *mesh;
 	Material *material;
 	rp3d::RigidBody *rigidBody;
@@ -122,6 +131,11 @@ public:
 	XMFLOAT3 GetScale();
 	Mesh* GetMesh();
 	Material *GetMaterial();
+
+	void SetMeshList(const std::vector<Mesh*>& meshList);
+	void SetMaterialList(const std::vector<Material*>& matList);
+	std::vector<Mesh*> GetMeshList();
+	std::vector<Material*> GetMaterialList();
 	Entity(rp3d::DynamicsWorld* physicsWorld, std::vector<Script*> pScripts = std::vector<Script*>());
 	Entity(Mesh *m, Material* mat, rp3d::Vector3 position, rp3d::Quaternion orientation, rp3d::DynamicsWorld* physicsWorld, std::vector<Script*> pScripts = std::vector<Script*>());
 	Entity(Mesh *m, Material* mat, rp3d::Vector3 position, rp3d::DynamicsWorld* physicsWorld, std::vector<Script*> pScripts = std::vector<Script*>());

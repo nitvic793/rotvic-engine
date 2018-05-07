@@ -109,8 +109,11 @@ void Game::LoadLevel()
 
 	/* Add Entitites */
 
+	auto asyncEntity = new AsyncEntity("palm_tree.obj", rp3d::Vector3(-20, -8.65, 1), dynamicsWorld);
+	AddEntity(asyncEntity, "AsyncEntity");
 	// Player Entity
 	auto pEntity = new ThirdPersonPlayerEntity(resource->GetMesh("man"), resource->GetMaterial("man"), rp3d::Vector3(0, -2, 5), dynamicsWorld);
+	asyncEntity->SetProximityLoadTarget(pEntity);
 	pEntity->isAnimated = true;
 	pEntity->fbx = resource->fbxLoader;
 	pEntity->SetScale(0.03f, 0.03f, 0.03f);
@@ -246,6 +249,16 @@ void Game::LoadLevel()
 		terrain->SetMaterial(resource->GetMaterial("grass"));
 		terrain->SetPosition(-70, -12, -10);
 		AddEntity(terrain, terrainName);
+	});
+
+	console->RegisterCommand("Unload", [=](std::vector<std::string> params)
+	{
+		asyncEntity->UnloadEntity();
+	});
+
+	console->RegisterCommand("Load", [=](std::vector<std::string> params)
+	{
+		asyncEntity->LoadEntity();
 	});
 
 	console->RegisterCommand("AddPhysicsTerrain", [=](std::vector<std::string> params)
