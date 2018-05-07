@@ -1,11 +1,4 @@
 {
-  "phone": {
-    "type": "image",
-    "source": "..\\..\\Assets\\Images\\image.png",
-    "position": "1198,638",
-    "scale": "1,1",
-    "color": "0,0,255,255"
-  },
   "roar": {
     "type": "text",
     "text": "ROAR!",
@@ -17,7 +10,7 @@
   "weapon": {
     "type": "text",
     "text": "Press 'Z' to switch weapons",
-    "position": "800,650",
+    "position": "550,650",
     "font": "Microsoft Sans Serif",
     "size": "0.5",
     "color": "0,0,0,255"
@@ -25,7 +18,7 @@
    "healthbar": {
     "type": "image",
     "source": "..\\..\\Assets\\Images\\PlayerHealthBar.png",
-    "position": "100,638",
+    "position": "950,600",
     "scale": "1,1",
     "color": "255,255,255,255"	
   }
