@@ -66,5 +66,9 @@ UICanvas::UICanvas(SystemCore *core)
 
 UICanvas::~UICanvas()
 {
+	for (std::map<std::string, UIComponent*>::iterator itr = mUIElements.begin(); itr != mUIElements.end(); itr++) // https://stackoverflow.com/questions/19970531/properly-destroying-pointers-in-an-stdmap
+	{
+		delete (itr->second);
+	}
 	mUIElements.clear();
 }
