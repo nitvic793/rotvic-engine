@@ -143,9 +143,12 @@ namespace HUDEditor
                         // Allow editing on click
                         newElement.Click += delegate
                         {
-                            newElement.SizeMode = PictureBoxSizeMode.StretchImage;
-                            newElement.Width = newElement.Image.Size.Width;
-                            newElement.Height = newElement.Image.Size.Height;
+                            if (newElement.SizeMode != PictureBoxSizeMode.StretchImage)
+                            {
+                                newElement.SizeMode = PictureBoxSizeMode.StretchImage;
+                                newElement.Width = newElement.Image.Size.Width;
+                                newElement.Height = newElement.Image.Size.Height;
+                            }
 
                             textEditPanel.Hide();
                             imageEditPanel.BringToFront();
@@ -306,19 +309,20 @@ namespace HUDEditor
                 }
                 else // Updating image
                 {
-                    c.ForeColor = changeTint.BackColor;
-                    c.Width = (int)(((PictureBox)c).Image.Size.Width * widthBox.Value);
-                    c.Height = (int)(((PictureBox)c).Image.Size.Height * heightBox.Value);
-
                     try
                     {
-                        if (changeImage.Text != "") ((PictureBox)c).ImageLocation = changeImage.Text;
+                        if (changeImage.Text != "" && changeImage.Text != ((PictureBox)c).ImageLocation) ((PictureBox)c).ImageLocation = changeImage.Text;
                     }
                     catch (Exception ex)
                     {
                         MessageBox.Show("Image source not changed, file not read correctly.\nFull error: " + ex.Message, "File Read Error", MessageBoxButtons.OK);
                         return;
                     }
+
+                    c.ForeColor = changeTint.BackColor;
+                    c.Width = (int)(((PictureBox)c).Image.Size.Width * widthBox.Value);
+                    c.Height = (int)(((PictureBox)c).Image.Size.Height * heightBox.Value);
+
                 }
 
                 if (nameChange.Text != "" && !HUD_View.Controls.ContainsKey(nameChange.Text)) c.Name = nameChange.Text;
