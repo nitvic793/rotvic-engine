@@ -1,0 +1,18 @@
+{
+  "health": {
+    "type": "text",
+    "text": "Health: 3",
+	"position": "50,150",
+	"font": "Ariel",
+	"size": "2",
+	"color": "1,0,0,1"
+  },
+  "ammo": {
+    "type": "text",
+    "text": "Ammo: 1",
+	"position": "500,500",
+	"font": "Ariel",
+	"size": "3",
+	"color": "0,0,0,1"
+  }
+}

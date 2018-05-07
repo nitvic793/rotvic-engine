@@ -29,12 +29,26 @@ namespace HUDEditor
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.HUD_View = new System.Windows.Forms.GroupBox();
             this.CreateElement = new System.Windows.Forms.Button();
             this.editLabel = new System.Windows.Forms.Label();
             this.exitButton = new System.Windows.Forms.Button();
-            this.comboBox1 = new System.Windows.Forms.ComboBox();
+            this.typeSelector = new System.Windows.Forms.ComboBox();
             this.exportButton = new System.Windows.Forms.Button();
+            this.nameBox = new System.Windows.Forms.TextBox();
+            this.label1 = new System.Windows.Forms.Label();
+            this.label2 = new System.Windows.Forms.Label();
+            this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
+            this.colorDialog = new System.Windows.Forms.ColorDialog();
+            this.textEditPanel = new System.Windows.Forms.Panel();
+            this.nameChange = new System.Windows.Forms.TextBox();
+            this.textChange = new System.Windows.Forms.TextBox();
+            this.colorPicker = new System.Windows.Forms.Panel();
+            this.updateButton = new System.Windows.Forms.Button();
+            this.sizeChange = new System.Windows.Forms.NumericUpDown();
+            this.textEditPanel.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.sizeChange)).BeginInit();
             this.SuspendLayout();
             // 
             // HUD_View
@@ -47,75 +61,187 @@ namespace HUDEditor
             this.HUD_View.TabIndex = 0;
             this.HUD_View.TabStop = false;
             this.HUD_View.Text = "HUD View";
+            this.toolTip1.SetToolTip(this.HUD_View, "This area represents the bounds of the screen in game");
             // 
             // CreateElement
             // 
-            this.CreateElement.Location = new System.Drawing.Point(165, 22);
+            this.CreateElement.Location = new System.Drawing.Point(323, 22);
             this.CreateElement.Margin = new System.Windows.Forms.Padding(2);
             this.CreateElement.Name = "CreateElement";
             this.CreateElement.Size = new System.Drawing.Size(91, 21);
             this.CreateElement.TabIndex = 1;
             this.CreateElement.Text = "Create Element";
+            this.toolTip1.SetToolTip(this.CreateElement, "Create the element with the given parameters");
             this.CreateElement.UseVisualStyleBackColor = true;
             this.CreateElement.Click += new System.EventHandler(this.CreateElement_Click);
             // 
             // editLabel
             // 
-            this.editLabel.AutoSize = true;
+            this.editLabel.AutoEllipsis = true;
             this.editLabel.Cursor = System.Windows.Forms.Cursors.Default;
-            this.editLabel.Location = new System.Drawing.Point(373, 26);
+            this.editLabel.Location = new System.Drawing.Point(417, 26);
             this.editLabel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.editLabel.Name = "editLabel";
-            this.editLabel.Size = new System.Drawing.Size(78, 13);
+            this.editLabel.Size = new System.Drawing.Size(120, 13);
             this.editLabel.TabIndex = 2;
-            this.editLabel.Text = "Edit Element ():";
+            this.editLabel.Text = "Edit []:";
             // 
             // exitButton
             // 
-            this.exitButton.Location = new System.Drawing.Point(1206, 23);
+            this.exitButton.Location = new System.Drawing.Point(1206, 22);
             this.exitButton.Name = "exitButton";
-            this.exitButton.Size = new System.Drawing.Size(74, 20);
+            this.exitButton.Size = new System.Drawing.Size(74, 21);
             this.exitButton.TabIndex = 3;
             this.exitButton.Text = "Exit";
+            this.toolTip1.SetToolTip(this.exitButton, "Exit the editor");
             this.exitButton.UseVisualStyleBackColor = true;
             this.exitButton.Click += new System.EventHandler(this.ExitButton_Click);
             // 
-            // comboBox1
+            // typeSelector
             // 
-            this.comboBox1.FormattingEnabled = true;
-            this.comboBox1.Items.AddRange(new object[] {
+            this.typeSelector.FormattingEnabled = true;
+            this.typeSelector.Items.AddRange(new object[] {
             "Text",
             "Image"});
-            this.comboBox1.Location = new System.Drawing.Point(5, 22);
-            this.comboBox1.Name = "comboBox1";
-            this.comboBox1.Size = new System.Drawing.Size(145, 21);
-            this.comboBox1.TabIndex = 4;
+            this.typeSelector.Location = new System.Drawing.Point(5, 22);
+            this.typeSelector.Name = "typeSelector";
+            this.typeSelector.Size = new System.Drawing.Size(72, 21);
+            this.typeSelector.TabIndex = 4;
+            this.toolTip1.SetToolTip(this.typeSelector, "Whether this UI element is text, or an image");
             // 
             // exportButton
             // 
-            this.exportButton.Location = new System.Drawing.Point(1084, 23);
+            this.exportButton.Location = new System.Drawing.Point(1076, 22);
             this.exportButton.Name = "exportButton";
-            this.exportButton.Size = new System.Drawing.Size(89, 20);
+            this.exportButton.Size = new System.Drawing.Size(124, 21);
             this.exportButton.TabIndex = 5;
-            this.exportButton.Text = "Export as UI File...";
+            this.exportButton.Text = "Export HUD to engine";
+            this.toolTip1.SetToolTip(this.exportButton, "Export the layout you\'ve set up to be used in the engine");
             this.exportButton.UseVisualStyleBackColor = true;
             this.exportButton.Click += new System.EventHandler(this.ExportButton_Click);
+            // 
+            // nameBox
+            // 
+            this.nameBox.Location = new System.Drawing.Point(83, 23);
+            this.nameBox.Name = "nameBox";
+            this.nameBox.Size = new System.Drawing.Size(111, 20);
+            this.nameBox.TabIndex = 6;
+            this.toolTip1.SetToolTip(this.nameBox, "This string will be used as the UI element\'s identifier in the engine\'s UI map");
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(2, 7);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(75, 13);
+            this.label1.TabIndex = 7;
+            this.label1.Text = "Element Type:";
+            this.toolTip1.SetToolTip(this.label1, "Whether this UI element is text, or an image");
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(80, 7);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(79, 13);
+            this.label2.TabIndex = 8;
+            this.label2.Text = "Element Name:";
+            this.toolTip1.SetToolTip(this.label2, "This string will be used as the UI element\'s identifier in the engine\'s UI map");
+            // 
+            // colorDialog
+            // 
+            this.colorDialog.ShowHelp = true;
+            // 
+            // textEditPanel
+            // 
+            this.textEditPanel.Controls.Add(this.sizeChange);
+            this.textEditPanel.Controls.Add(this.colorPicker);
+            this.textEditPanel.Controls.Add(this.textChange);
+            this.textEditPanel.Controls.Add(this.nameChange);
+            this.textEditPanel.Location = new System.Drawing.Point(487, 6);
+            this.textEditPanel.Name = "textEditPanel";
+            this.textEditPanel.Size = new System.Drawing.Size(459, 41);
+            this.textEditPanel.TabIndex = 10;
+            // 
+            // nameChange
+            // 
+            this.nameChange.Location = new System.Drawing.Point(55, 17);
+            this.nameChange.Name = "nameChange";
+            this.nameChange.Size = new System.Drawing.Size(97, 20);
+            this.nameChange.TabIndex = 10;
+            this.toolTip1.SetToolTip(this.nameChange, "Edit the name of the selected element (this is the string used as its key in the " +
+        "engine\'s UI map)");
+            // 
+            // textChange
+            // 
+            this.textChange.Location = new System.Drawing.Point(158, 17);
+            this.textChange.Name = "textChange";
+            this.textChange.Size = new System.Drawing.Size(124, 20);
+            this.textChange.TabIndex = 11;
+            this.toolTip1.SetToolTip(this.textChange, "Edit the text of the selected element (this is the string used as its key in the " +
+        "engine\'s UI map)");
+            // 
+            // colorPicker
+            // 
+            this.colorPicker.BackColor = System.Drawing.Color.Black;
+            this.colorPicker.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.colorPicker.Location = new System.Drawing.Point(288, 17);
+            this.colorPicker.Name = "colorPicker";
+            this.colorPicker.Size = new System.Drawing.Size(47, 20);
+            this.colorPicker.TabIndex = 12;
+            this.toolTip1.SetToolTip(this.colorPicker, "Edit the font color of the selected element");
+            // 
+            // updateButton
+            // 
+            this.updateButton.Location = new System.Drawing.Point(956, 22);
+            this.updateButton.Name = "updateButton";
+            this.updateButton.Size = new System.Drawing.Size(114, 21);
+            this.updateButton.TabIndex = 14;
+            this.updateButton.Text = "Update Element";
+            this.toolTip1.SetToolTip(this.updateButton, "Update the selected element with the provided parameters");
+            this.updateButton.UseVisualStyleBackColor = true;
+            // 
+            // sizeChange
+            // 
+            this.sizeChange.DecimalPlaces = 2;
+            this.sizeChange.Location = new System.Drawing.Point(342, 17);
+            this.sizeChange.Minimum = new decimal(new int[] {
+            5,
+            0,
+            0,
+            0});
+            this.sizeChange.Name = "sizeChange";
+            this.sizeChange.Size = new System.Drawing.Size(55, 20);
+            this.sizeChange.TabIndex = 13;
+            this.sizeChange.Value = new decimal(new int[] {
+            5,
+            0,
+            0,
+            0});
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1292, 773);
+            this.Controls.Add(this.updateButton);
+            this.Controls.Add(this.label2);
+            this.Controls.Add(this.label1);
+            this.Controls.Add(this.nameBox);
             this.Controls.Add(this.exportButton);
-            this.Controls.Add(this.comboBox1);
+            this.Controls.Add(this.typeSelector);
             this.Controls.Add(this.exitButton);
             this.Controls.Add(this.editLabel);
             this.Controls.Add(this.CreateElement);
             this.Controls.Add(this.HUD_View);
+            this.Controls.Add(this.textEditPanel);
             this.Margin = new System.Windows.Forms.Padding(2);
             this.Name = "Form1";
             this.Text = "Form1";
             this.Load += new System.EventHandler(this.Form1_Load);
+            this.textEditPanel.ResumeLayout(false);
+            this.textEditPanel.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.sizeChange)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -127,8 +253,19 @@ namespace HUDEditor
         private System.Windows.Forms.Button CreateElement;
         private System.Windows.Forms.Label editLabel;
         private System.Windows.Forms.Button exitButton;
-        private System.Windows.Forms.ComboBox comboBox1;
+        private System.Windows.Forms.ComboBox typeSelector;
         private System.Windows.Forms.Button exportButton;
+        private System.Windows.Forms.TextBox nameBox;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.ToolTip toolTip1;
+        private System.Windows.Forms.ColorDialog colorDialog;
+        private System.Windows.Forms.Panel textEditPanel;
+        private System.Windows.Forms.TextBox textChange;
+        private System.Windows.Forms.TextBox nameChange;
+        private System.Windows.Forms.Panel colorPicker;
+        private System.Windows.Forms.Button updateButton;
+        private System.Windows.Forms.NumericUpDown sizeChange;
     }
 }
 

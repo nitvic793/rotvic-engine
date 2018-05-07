@@ -2,17 +2,17 @@
   "health": {
     "type": "text",
     "text": "Health: 3",
-	"position": "50,150",
-	"font": "Ariel",
-	"size": "2",
-	"color": "1,0,0,1"
+    "position": "1,9",
+    "font": "Microsoft Sans Serif",
+    "size": ".5",
+    "color": "198,0,0,255"
   },
   "ammo": {
     "type": "text",
-    "text": "Ammo: 1",
-	"position": "500,500",
-	"font": "Ariel",
-	"size": "3",
-	"color": "0,0,0,1"
+    "text": "Ammo: 2",
+    "position": "1202,694",
+    "font": "Microsoft Sans Serif",
+    "size": ".4",
+    "color": "0,0,255,255"
   }
 }
