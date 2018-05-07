@@ -80,10 +80,7 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\phone.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\trevoroverexertion.png" />
+    <None Include="Resources\GameScreen.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

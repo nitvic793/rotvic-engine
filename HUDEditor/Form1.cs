@@ -21,6 +21,14 @@ namespace HUDEditor
                     colorPicker.BackColor = colorDialog.Color;
                 }
             };
+
+            changeTint.Click += delegate
+            {
+                if (colorDialog.ShowDialog() == DialogResult.OK)
+                {
+                    changeTint.BackColor = colorDialog.Color;
+                }
+            };
             //string combinedPath = Path.GetFullPath(Path.Combine(Directory.GetCurrentDirectory(), "..\\..\\..\\Assets\\Images")); // From https://stackoverflow.com/questions/21769921/does-openfiledialog-initialdirectory-not-accept-relative-path
             //openFileDialog.InitialDirectory = combinedPath;
 
@@ -38,10 +46,11 @@ namespace HUDEditor
                     {
                         AutoSize = true,
                         Name = nameBox.Text,
-                        Text = creationBox.Text=="" ? "Text" : creationBox.Text,
+                        Text = creationBox.Text == "" ? "Text" : creationBox.Text,
                         Cursor = Cursors.SizeAll,
                         Enabled = true,
                         Tag = "Text",
+                        BackColor = Color.Transparent,
                         AllowDrop = false // Use this to do drag dropping
                     };
                     newElement.Font = new Font(newElement.Font.Name, 40, GraphicsUnit.Pixel);
@@ -116,6 +125,7 @@ namespace HUDEditor
                             ImageLocation = creationBox.Text,
                             Cursor = Cursors.SizeAll,
                             Enabled = true,
+                            BackColor = Color.Transparent,
                             AllowDrop = false // Use this to do drag dropping
                         };
                     }
@@ -132,6 +142,8 @@ namespace HUDEditor
                     newElement.Click += delegate
                     {
                         newElement.SizeMode = PictureBoxSizeMode.StretchImage;
+                        newElement.Width = newElement.Image.Size.Width;
+                        newElement.Height = newElement.Image.Size.Height;
 
                         textEditPanel.Hide();
                         imageEditPanel.BringToFront();
@@ -140,10 +152,9 @@ namespace HUDEditor
                         nameChange.Text = newElement.Name;
                         updateButton.Tag = newElement.Name;
                         changeImage.Text = newElement.ImageLocation;
-                        changeTint.BackColor = (Color)newElement.Tag;
-                        lockAspectBox.Tag = (decimal)(newElement.Width / newElement.Height);
-                        widthBox.Value = (decimal)(newElement.Width) / (decimal)(newElement.Image.Size.Width);
-                        heightBox.Value = (decimal)(newElement.Height) / (decimal)(newElement.Image.Size.Height);
+                        changeTint.BackColor = newElement.ForeColor;
+                        widthBox.Value = (decimal)(newElement.Width) / (newElement.Image.Size.Width);
+                        heightBox.Value = (decimal)(newElement.Height) / (newElement.Image.Size.Height);
                     };
 
                     newElement.MouseDown += delegate
@@ -177,7 +188,6 @@ namespace HUDEditor
                                 p.Y = t;
                             }
                             newElement.Location = p;
-
                         }
                     };
 
@@ -230,7 +240,21 @@ namespace HUDEditor
                 if ((string)c.Tag != "Text")
                 {
                     fwriter.WriteLine("    \"type\": \"image\",");
-
+                    fwriter.WriteLine("    \"scale\": \"" + (decimal)(c.Width) / (((PictureBox)c).Image.Size.Width) + "," + (decimal)(c.Height) / (((PictureBox)c).Image.Size.Height) + "\",");
+                    string filename = ((PictureBox)c).ImageLocation.Split('\\')[((PictureBox)c).ImageLocation.Split('\\').Length-1];
+                    string engineFile = "..\\..\\..\\Assets\\Images\\" + filename;
+                    string file = ((PictureBox)c).ImageLocation;
+                    ((PictureBox)c).ImageLocation = "";
+                    System.Threading.Thread.Sleep(1000);
+                    File.Copy(file, engineFile, true);
+                    System.Threading.Thread.Sleep(1000);
+                    ((PictureBox)c).ImageLocation = file;
+                    System.Threading.Thread.Sleep(1000);
+                    fwriter.WriteLine("    \"source\": \"..\\..\\Assets\\Images\\" + filename +"\",");
+                    fwriter.WriteLine("    \"position\": \"" + c.Location.X + "," + c.Location.Y + "\",");
+                    fwriter.WriteLine("    \"color\": \"" + c.ForeColor.R + "," + c.ForeColor.G + "," + c.ForeColor.B + "," + c.ForeColor.A + "\"");
+                    if (i < HUD_View.Controls.Count - 1) fwriter.WriteLine("  },");
+                    else fwriter.WriteLine("  }");
                 }
                 else
                 {
@@ -275,7 +299,7 @@ namespace HUDEditor
                 }
                 else // Updating image
                 {
-                    c.Tag = changeTint.BackColor;
+                    c.ForeColor = changeTint.BackColor;
                     c.Width = (int)(((PictureBox)c).Image.Size.Width * widthBox.Value);
                     c.Height = (int)(((PictureBox)c).Image.Size.Height * heightBox.Value);
 
@@ -338,14 +362,14 @@ namespace HUDEditor
         {
             if (lockAspectBox.Checked)
             {
-                widthBox.Value = (heightBox.Value * (decimal)lockAspectBox.Tag);
+                widthBox.Value = heightBox.Value;
             }
         }
         private void WidthBox_ValueChanged(object sender, EventArgs e)
         {
             if (lockAspectBox.Checked)
             {
-                heightBox.Value = (widthBox.Value * ((decimal)1.0/(decimal)lockAspectBox.Tag));
+                heightBox.Value = widthBox.Value;
             }
         }
     }

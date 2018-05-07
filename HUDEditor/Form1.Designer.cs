@@ -74,6 +74,8 @@ namespace HUDEditor
             // 
             // HUD_View
             // 
+            this.HUD_View.BackgroundImage = global::HUDEditor.Properties.Resources.GameScreen;
+            this.HUD_View.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.HUD_View.Location = new System.Drawing.Point(5, 48);
             this.HUD_View.Margin = new System.Windows.Forms.Padding(2);
             this.HUD_View.Name = "HUD_View";
@@ -86,6 +88,7 @@ namespace HUDEditor
             // 
             // imageEditPanel
             // 
+            this.imageEditPanel.BackColor = System.Drawing.Color.Transparent;
             this.imageEditPanel.Controls.Add(this.lockAspectBox);
             this.imageEditPanel.Controls.Add(this.heightBox);
             this.imageEditPanel.Controls.Add(this.label7);
@@ -97,7 +100,7 @@ namespace HUDEditor
             this.imageEditPanel.Controls.Add(this.label10);
             this.imageEditPanel.Location = new System.Drawing.Point(594, 0);
             this.imageEditPanel.Name = "imageEditPanel";
-            this.imageEditPanel.Size = new System.Drawing.Size(417, 51);
+            this.imageEditPanel.Size = new System.Drawing.Size(417, 48);
             this.imageEditPanel.TabIndex = 18;
             this.imageEditPanel.Visible = false;
             // 
@@ -431,6 +434,7 @@ namespace HUDEditor
             // 
             // textEditPanel
             // 
+            this.textEditPanel.BackColor = System.Drawing.Color.Transparent;
             this.textEditPanel.Controls.Add(this.label6);
             this.textEditPanel.Controls.Add(this.label5);
             this.textEditPanel.Controls.Add(this.label4);
@@ -439,7 +443,7 @@ namespace HUDEditor
             this.textEditPanel.Controls.Add(this.textChange);
             this.textEditPanel.Location = new System.Drawing.Point(595, 0);
             this.textEditPanel.Name = "textEditPanel";
-            this.textEditPanel.Size = new System.Drawing.Size(377, 51);
+            this.textEditPanel.Size = new System.Drawing.Size(377, 48);
             this.textEditPanel.TabIndex = 20;
             this.textEditPanel.Visible = false;
             // 
@@ -466,7 +470,6 @@ namespace HUDEditor
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1292, 773);
-            this.Controls.Add(this.textEditPanel);
             this.Controls.Add(this.creationLabel);
             this.Controls.Add(this.creationBox);
             this.Controls.Add(this.deleteButton);
@@ -479,10 +482,11 @@ namespace HUDEditor
             this.Controls.Add(this.exitButton);
             this.Controls.Add(this.editLabel);
             this.Controls.Add(this.CreateElement);
-            this.Controls.Add(this.HUD_View);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.nameChange);
             this.Controls.Add(this.imageEditPanel);
+            this.Controls.Add(this.textEditPanel);
+            this.Controls.Add(this.HUD_View);
             this.Margin = new System.Windows.Forms.Padding(2);
             this.Name = "Form1";
             this.Text = "Form1";
