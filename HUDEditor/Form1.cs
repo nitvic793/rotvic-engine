@@ -21,28 +21,11 @@ namespace HUDEditor
                     colorPicker.BackColor = colorDialog.Color;
                 }
             };
+            //string combinedPath = Path.GetFullPath(Path.Combine(Directory.GetCurrentDirectory(), "..\\..\\..\\Assets\\Images")); // From https://stackoverflow.com/questions/21769921/does-openfiledialog-initialdirectory-not-accept-relative-path
+            //openFileDialog.InitialDirectory = combinedPath;
 
-            updateButton.Click += delegate {
-                if (MessageBox.Show("Are you sure you wish to update this element? You cannot undo this.", "Update Element", MessageBoxButtons.YesNo) == DialogResult.Yes)
-                {
-                    Control c = HUD_View.Controls[HUD_View.Controls.IndexOfKey((string)updateButton.Tag)];
-                    if (textEditPanel.Visible)
-                    {
-                        if (textChange.Text != "") c.Text = textChange.Text;
-                        else MessageBox.Show("Text element cannot be empty", "Update Element", MessageBoxButtons.OK);
-                        c.ForeColor = colorPicker.BackColor;
-                        c.Font = new Font(c.Font.Name, (float)sizeChange.Value, GraphicsUnit.Pixel);
-                    }
-                    else // Updating image
-                    {
-
-                    }
-
-                    if (nameChange.Text != "" && !HUD_View.Controls.ContainsKey(nameChange.Text)) c.Name = nameChange.Text;
-                    else if (nameChange.Text != c.Name) MessageBox.Show("Please enter a name for the element that does not match the name of a different element.", "Update Element", MessageBoxButtons.OK);
-                    editLabel.Text = "Edit [" + c.Name + "]:";
-                }
-            };
+            string combinedPath = Path.GetFullPath(Path.Combine(Directory.GetCurrentDirectory(), "..\\..\\..\\Assets\\Images")); // From https://stackoverflow.com/questions/21769921/does-openfiledialog-initialdirectory-not-accept-relative-path
+            openFileDialog.InitialDirectory = combinedPath;
         }
 
         private void CreateElement_Click(object sender, EventArgs e)
@@ -55,18 +38,22 @@ namespace HUDEditor
                     {
                         AutoSize = true,
                         Name = nameBox.Text,
-                        Text = "Text",
+                        Text = creationBox.Text=="" ? "Text" : creationBox.Text,
                         Cursor = Cursors.SizeAll,
                         Enabled = true,
+                        Tag = "Text",
                         AllowDrop = false // Use this to do drag dropping
                     };
-                    newElement.Font = new Font(newElement.Font.Name, 10, GraphicsUnit.Pixel);
+                    newElement.Font = new Font(newElement.Font.Name, 40, GraphicsUnit.Pixel);
                     HUD_View.Controls.Add(newElement);
                     newElement.Location = new Point(640, 360);
 
                     // Allow editing on click
                     newElement.Click += delegate
                     {
+                        imageEditPanel.Hide();
+                        textEditPanel.BringToFront();
+                        textEditPanel.Show();
                         editLabel.Text = "Edit [" + newElement.Name + "]:";
                         nameChange.Text = newElement.Name;
                         textChange.Text = newElement.Text;
@@ -113,9 +100,93 @@ namespace HUDEditor
 
                     newElement.MouseUp += delegate
                     {
-                    //newElement.DoDragDrop(newElement, DragDropEffects.Move);
-                    newElement.AllowDrop = false;
+                        //newElement.DoDragDrop(newElement, DragDropEffects.Move);
+                        newElement.AllowDrop = false;
                     };
+                }
+                else if ((string)typeSelector.SelectedItem == "Image")
+                {
+                    PictureBox newElement;
+                    try
+                    {
+                        newElement = new PictureBox
+                        {
+                            Name = nameBox.Text,
+                            SizeMode = PictureBoxSizeMode.AutoSize,
+                            ImageLocation = creationBox.Text,
+                            Cursor = Cursors.SizeAll,
+                            Enabled = true,
+                            AllowDrop = false // Use this to do drag dropping
+                        };
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show("Image element creation aborted, file not read correctly.\nFull error: " + ex.Message, "File Read Error", MessageBoxButtons.OK);
+                        return;
+                    }
+
+                    HUD_View.Controls.Add(newElement);
+                    newElement.Location = new Point(640, 360);
+
+                    // Allow editing on click
+                    newElement.Click += delegate
+                    {
+                        newElement.SizeMode = PictureBoxSizeMode.StretchImage;
+
+                        textEditPanel.Hide();
+                        imageEditPanel.BringToFront();
+                        imageEditPanel.Show();
+                        editLabel.Text = "Edit [" + newElement.Name + "]:";
+                        nameChange.Text = newElement.Name;
+                        updateButton.Tag = newElement.Name;
+                        changeImage.Text = newElement.ImageLocation;
+                        //changeTint = newElement.
+                        lockAspectBox.Tag = (decimal)(newElement.Width / newElement.Height);
+                        widthBox.Value = (decimal)(newElement.Width) / (decimal)(newElement.Image.Size.Width);
+                        heightBox.Value = (decimal)(newElement.Height) / (decimal)(newElement.Image.Size.Height);
+                    };
+
+                    newElement.MouseDown += delegate
+                    {
+                        newElement.AllowDrop = true;
+                    };
+
+                    newElement.MouseMove += delegate
+                    {
+                        if (newElement.AllowDrop)
+                        {
+                            Point p = PointToClient(new Point(Cursor.Position.X - 5, Cursor.Position.Y - 48));
+                            int l = 0;
+                            int r = HUD_View.Size.Width;
+                            int t = 0;
+                            int b = HUD_View.Size.Height;
+                            if (p.X + newElement.Width > r)
+                            {
+                                p.X = r - newElement.Width;
+                            }
+                            if (p.X < l)
+                            {
+                                p.X = l;
+                            }
+                            if (p.Y + newElement.Height > b)
+                            {
+                                p.Y = b - newElement.Height;
+                            }
+                            if (p.Y < t)
+                            {
+                                p.Y = t;
+                            }
+                            newElement.Location = p;
+
+                        }
+                    };
+
+                    newElement.MouseUp += delegate
+                    {
+                        //newElement.DoDragDrop(newElement, DragDropEffects.Move);
+                        newElement.AllowDrop = false;
+                    };
+
                 }
                 else
                 {
@@ -156,7 +227,7 @@ namespace HUDEditor
             {
                 Control c = HUD_View.Controls[i];
                 fwriter.WriteLine("  \""+c.Name+"\": {");
-                if ((string)c.Tag == "Image") // YGWIOL>UEGFHUIWQGVBFHVOQLWHUYVGFYUHVOWEIUHJFGUIWQGYUIHEF YOU MUST TAG IMAGES AS IMAGE
+                if ((string)c.Tag != "Text")
                 {
                     fwriter.WriteLine("    \"type\": \"image\",");
 
@@ -178,6 +249,104 @@ namespace HUDEditor
             fwriter.Close();
             fstream.Close();
             MessageBox.Show("HUD File successfully saved.", "Save File", MessageBoxButtons.OK);
+        }
+
+        private void DeleteButton_Click(object sender, EventArgs e)
+        {
+            if (MessageBox.Show("Are you sure you wish to DELETE this element? You cannot undo this.", "DELETE ELEMENT", MessageBoxButtons.YesNo) == DialogResult.Yes)
+            {
+                Control c = HUD_View.Controls[HUD_View.Controls.IndexOfKey((string)updateButton.Tag)];
+                HUD_View.Controls.Remove(c);
+                c.Dispose();
+            }
+        }
+
+        private void UpdateButton_Click(object sender, EventArgs e)
+        {
+            if (MessageBox.Show("Are you sure you wish to update this element? You cannot undo this.", "Update Element", MessageBoxButtons.YesNo) == DialogResult.Yes)
+            {
+                Control c = HUD_View.Controls[HUD_View.Controls.IndexOfKey((string)updateButton.Tag)];
+                if (textEditPanel.Visible)
+                {
+                    if (textChange.Text != "") c.Text = textChange.Text;
+                    else MessageBox.Show("Text element cannot be empty", "Update Element", MessageBoxButtons.OK);
+                    c.ForeColor = colorPicker.BackColor;
+                    c.Font = new Font(c.Font.Name, (float)sizeChange.Value, GraphicsUnit.Pixel);
+                }
+                else // Updating image
+                {
+                    c.Tag = changeTint.BackColor;
+                    c.Width = (int)(((PictureBox)c).Image.Size.Width * widthBox.Value);
+                    c.Height = (int)(((PictureBox)c).Image.Size.Height * heightBox.Value);
+
+                    try
+                    {
+                        if (changeImage.Text != "") ((PictureBox)c).ImageLocation = changeImage.Text;
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show("Image source not changed, file not read correctly.\nFull error: " + ex.Message, "File Read Error", MessageBoxButtons.OK);
+                        return;
+                    }
+                }
+
+                if (nameChange.Text != "" && !HUD_View.Controls.ContainsKey(nameChange.Text)) c.Name = nameChange.Text;
+                else if (nameChange.Text != c.Name) MessageBox.Show("Please enter a name for the element that does not match the name of a different element.", "Update Element", MessageBoxButtons.OK);
+                editLabel.Text = "Edit [" + c.Name + "]:";
+            }
+        }
+
+        private void TypeSelected(object sender, EventArgs e)
+        {
+            if ((string)typeSelector.SelectedItem == "Text")
+            {
+                creationLabel.Text = "Element Text:";
+                toolTip1.SetToolTip(creationLabel, "The text the element will display");
+                toolTip1.SetToolTip(creationBox, "The text the element will display");
+
+            }
+            else
+            {
+                creationLabel.Text = "Image Filepath:";
+                toolTip1.SetToolTip(creationLabel, "The filepath to the image the element will display");
+                toolTip1.SetToolTip(creationBox, "The filepath to the image the element will display");
+            }
+            nameBox.Text = "";
+            creationBox.Text = "";
+        }
+
+        private void CreationBox_Click(object sender, EventArgs e)
+        {
+            if ((string)typeSelector.SelectedItem == "Image")
+            {
+                if (openFileDialog.ShowDialog() == DialogResult.OK)
+                {
+                    creationBox.Text = openFileDialog.FileName;
+                }
+            }
+        }
+
+        private void ChangeImage_Click(object sender, EventArgs e)
+        {
+            if (openFileDialog.ShowDialog() == DialogResult.OK)
+            {
+                changeImage.Text = openFileDialog.FileName;
+            }
+        }
+
+        private void HeightBox_ValueChanged(object sender, EventArgs e)
+        {
+            if (lockAspectBox.Checked)
+            {
+                widthBox.Value = (heightBox.Value * (decimal)lockAspectBox.Tag);
+            }
+        }
+        private void WidthBox_ValueChanged(object sender, EventArgs e)
+        {
+            if (lockAspectBox.Checked)
+            {
+                heightBox.Value = (widthBox.Value * ((decimal)1.0/(decimal)lockAspectBox.Tag));
+            }
         }
     }
 }

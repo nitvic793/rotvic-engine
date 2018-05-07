@@ -39,6 +39,10 @@ void UICanvas::Render()
 				text->spriteFont->DrawString(spriteBatch.get(), text->GetText().c_str(), XMLoadFloat3(&text->GetPosition()), XMLoadFloat4(&text->color), 0, g_XMZero, text->size);
 				break;
 			}
+			case ComponentType::UI_IMAGE:
+			{
+				break;
+			}
 			default:
 				break;
 		}

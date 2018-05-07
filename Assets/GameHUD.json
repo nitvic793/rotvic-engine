@@ -1,18 +1,10 @@
 {
-  "health": {
+  "sen": {
     "type": "text",
-    "text": "Health: 3",
-    "position": "1,9",
+    "text": "lot",
+    "position": "640,360",
     "font": "Microsoft Sans Serif",
-    "size": ".5",
-    "color": "198,0,0,255"
-  },
-  "ammo": {
-    "type": "text",
-    "text": "Ammo: 2",
-    "position": "1202,694",
-    "font": "Microsoft Sans Serif",
-    "size": ".4",
-    "color": "0,0,255,255"
+    "size": "0.875",
+    "color": "128,255,0,255"
   }
 }
