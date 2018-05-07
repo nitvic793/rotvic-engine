@@ -252,14 +252,14 @@ namespace HUDEditor
                     fwriter.WriteLine("    \"type\": \"image\",");
                     fwriter.WriteLine("    \"scale\": \"" + (decimal)(c.Width) / (((PictureBox)c).Image.Size.Width) + "," + (decimal)(c.Height) / (((PictureBox)c).Image.Size.Height) + "\",");
                     string filename = ((PictureBox)c).ImageLocation.Split('\\')[((PictureBox)c).ImageLocation.Split('\\').Length-1];
-                    string engineFile = "..\\..\\..\\Assets\\Images\\" + filename;
-                    string file = ((PictureBox)c).ImageLocation;
-                    ((PictureBox)c).ImageLocation = "";
-                    System.Threading.Thread.Sleep(1000);
-                    File.Copy(file, engineFile, true);
-                    System.Threading.Thread.Sleep(1000);
-                    ((PictureBox)c).ImageLocation = file;
-                    System.Threading.Thread.Sleep(1000);
+                    //string engineFile = "..\\..\\..\\Assets\\Images\\" + filename;
+                    //string file = ((PictureBox)c).ImageLocation;
+                    //((PictureBox)c).ImageLocation = "";
+                    //System.Threading.Thread.Sleep(1000);
+                    //File.Copy(file, engineFile, true);
+                    //System.Threading.Thread.Sleep(1000);
+                    //((PictureBox)c).ImageLocation = file;
+                    //System.Threading.Thread.Sleep(1000);
                     fwriter.WriteLine("    \"source\": \"..\\..\\Assets\\Images\\" + filename +"\",");
                     fwriter.WriteLine("    \"position\": \"" + c.Location.X + "," + c.Location.Y + "\",");
                     fwriter.WriteLine("    \"color\": \"" + c.ForeColor.R + "," + c.ForeColor.G + "," + c.ForeColor.B + "," + c.ForeColor.A + "\"");
@@ -282,7 +282,7 @@ namespace HUDEditor
 
             fwriter.Close();
             fstream.Close();
-            MessageBox.Show("HUD File successfully saved.", "Save File", MessageBoxButtons.OK);
+            MessageBox.Show("HUD File successfully saved, make sure to transfer any images not in Assets/Images to be there before trying to load this HUD configuration in game.", "Save File", MessageBoxButtons.OK);
         }
 
         private void DeleteButton_Click(object sender, EventArgs e)
