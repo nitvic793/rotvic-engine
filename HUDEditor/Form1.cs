@@ -115,87 +115,94 @@ namespace HUDEditor
                 }
                 else if ((string)typeSelector.SelectedItem == "Image")
                 {
-                    PictureBox newElement;
-                    try
+                    if (creationBox.Text != "")
                     {
-                        newElement = new PictureBox
+                        PictureBox newElement;
+                        try
                         {
-                            Name = nameBox.Text,
-                            SizeMode = PictureBoxSizeMode.AutoSize,
-                            ImageLocation = creationBox.Text,
-                            Cursor = Cursors.SizeAll,
-                            Enabled = true,
-                            BackColor = Color.Transparent,
-                            AllowDrop = false // Use this to do drag dropping
-                        };
-                    }
-                    catch (Exception ex)
-                    {
-                        MessageBox.Show("Image element creation aborted, file not read correctly.\nFull error: " + ex.Message, "File Read Error", MessageBoxButtons.OK);
-                        return;
-                    }
-
-                    HUD_View.Controls.Add(newElement);
-                    newElement.Location = new Point(640, 360);
-
-                    // Allow editing on click
-                    newElement.Click += delegate
-                    {
-                        newElement.SizeMode = PictureBoxSizeMode.StretchImage;
-                        newElement.Width = newElement.Image.Size.Width;
-                        newElement.Height = newElement.Image.Size.Height;
-
-                        textEditPanel.Hide();
-                        imageEditPanel.BringToFront();
-                        imageEditPanel.Show();
-                        editLabel.Text = "Edit [" + newElement.Name + "]:";
-                        nameChange.Text = newElement.Name;
-                        updateButton.Tag = newElement.Name;
-                        changeImage.Text = newElement.ImageLocation;
-                        changeTint.BackColor = newElement.ForeColor;
-                        widthBox.Value = (decimal)(newElement.Width) / (newElement.Image.Size.Width);
-                        heightBox.Value = (decimal)(newElement.Height) / (newElement.Image.Size.Height);
-                    };
-
-                    newElement.MouseDown += delegate
-                    {
-                        newElement.AllowDrop = true;
-                    };
-
-                    newElement.MouseMove += delegate
-                    {
-                        if (newElement.AllowDrop)
-                        {
-                            Point p = PointToClient(new Point(Cursor.Position.X - 5, Cursor.Position.Y - 48));
-                            int l = 0;
-                            int r = HUD_View.Size.Width;
-                            int t = 0;
-                            int b = HUD_View.Size.Height;
-                            if (p.X + newElement.Width > r)
+                            newElement = new PictureBox
                             {
-                                p.X = r - newElement.Width;
-                            }
-                            if (p.X < l)
-                            {
-                                p.X = l;
-                            }
-                            if (p.Y + newElement.Height > b)
-                            {
-                                p.Y = b - newElement.Height;
-                            }
-                            if (p.Y < t)
-                            {
-                                p.Y = t;
-                            }
-                            newElement.Location = p;
+                                Name = nameBox.Text,
+                                SizeMode = PictureBoxSizeMode.AutoSize,
+                                ImageLocation = creationBox.Text,
+                                Cursor = Cursors.SizeAll,
+                                Enabled = true,
+                                BackColor = Color.Transparent,
+                                AllowDrop = false // Use this to do drag dropping
+                            };
                         }
-                    };
+                        catch (Exception ex)
+                        {
+                            MessageBox.Show("Image element creation aborted, file not read correctly.\nFull error: " + ex.Message, "File Read Error", MessageBoxButtons.OK);
+                            return;
+                        }
 
-                    newElement.MouseUp += delegate
-                    {
+                        HUD_View.Controls.Add(newElement);
+                        newElement.Location = new Point(640, 360);
+
+                        // Allow editing on click
+                        newElement.Click += delegate
+                        {
+                            newElement.SizeMode = PictureBoxSizeMode.StretchImage;
+                            newElement.Width = newElement.Image.Size.Width;
+                            newElement.Height = newElement.Image.Size.Height;
+
+                            textEditPanel.Hide();
+                            imageEditPanel.BringToFront();
+                            imageEditPanel.Show();
+                            editLabel.Text = "Edit [" + newElement.Name + "]:";
+                            nameChange.Text = newElement.Name;
+                            updateButton.Tag = newElement.Name;
+                            changeImage.Text = newElement.ImageLocation;
+                            changeTint.BackColor = newElement.ForeColor;
+                            widthBox.Value = (decimal)(newElement.Width) / (newElement.Image.Size.Width);
+                            heightBox.Value = (decimal)(newElement.Height) / (newElement.Image.Size.Height);
+                        };
+
+                        newElement.MouseDown += delegate
+                        {
+                            newElement.AllowDrop = true;
+                        };
+
+                        newElement.MouseMove += delegate
+                        {
+                            if (newElement.AllowDrop)
+                            {
+                                Point p = PointToClient(new Point(Cursor.Position.X - 5, Cursor.Position.Y - 48));
+                                int l = 0;
+                                int r = HUD_View.Size.Width;
+                                int t = 0;
+                                int b = HUD_View.Size.Height;
+                                if (p.X + newElement.Width > r)
+                                {
+                                    p.X = r - newElement.Width;
+                                }
+                                if (p.X < l)
+                                {
+                                    p.X = l;
+                                }
+                                if (p.Y + newElement.Height > b)
+                                {
+                                    p.Y = b - newElement.Height;
+                                }
+                                if (p.Y < t)
+                                {
+                                    p.Y = t;
+                                }
+                                newElement.Location = p;
+                            }
+                        };
+
+                        newElement.MouseUp += delegate
+                        {
                         //newElement.DoDragDrop(newElement, DragDropEffects.Move);
                         newElement.AllowDrop = false;
-                    };
+                        };
+                    }
+                    else
+                    {
+                        MessageBox.Show("Please enter a file path to a valid image type", "Create Element", MessageBoxButtons.OK);
+                    }
 
                 }
                 else
