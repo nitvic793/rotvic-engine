@@ -6,7 +6,7 @@ UIImage::UIImage(XMFLOAT3 pos, XMFLOAT4 tColor, std::string image, SystemCore* c
 {
 	this->scale = scale;
 	mPosition = pos;
-	tint = tColor;
+	tint = XMFLOAT4(tColor.x/255, tColor.y/255, tColor.z/255, tColor.w/255);
 	CreateWICTextureFromFile(core->GetDevice(), core->GetDeviceContext(), core->s2ws(image).c_str(), nullptr, &img);
 }
 

@@ -20,7 +20,7 @@ UIText::UIText(XMFLOAT3 pos, std::wstring text, float pSize, SpriteFont* font, X
 	mText = text;
 	size = pSize;
 	spriteFont = font;
-	color = pColor;
+	color = XMFLOAT4(pColor.x / 255, pColor.y / 255, pColor.z / 255, pColor.w / 255);
 }
 
 ComponentType UIText::GetType() const
