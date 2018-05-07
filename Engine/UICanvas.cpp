@@ -4,6 +4,7 @@
 
 #include "UICanvas.h"
 #include "UIText.h"
+#include "UIImage.h"
 
 void UICanvas::AddComponent(UIComponent* component, std::string name)
 {
@@ -41,6 +42,8 @@ void UICanvas::Render()
 			}
 			case ComponentType::UI_IMAGE:
 			{
+				auto sprite = (UIImage*)element;
+				spriteBatch->Draw(sprite->img, XMLoadFloat3(&sprite->GetPosition()), nullptr, XMLoadFloat4(&sprite->tint), 0, g_XMZero, XMLoadFloat2(&sprite->scale));
 				break;
 			}
 			default:

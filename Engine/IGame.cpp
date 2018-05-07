@@ -4,17 +4,8 @@
 #include "EventSystem.h"
 #include <sstream>
 #include "UIText.h"
-
-namespace DirectX
-{
-	std::wstring s2ws(const std::string& str) // Code from top answer on https://stackoverflow.com/questions/10737644/convert-const-char-to-wstring
-	{
-		int size_needed = MultiByteToWideChar(CP_UTF8, 0, &str[0], (int)str.size(), NULL, 0);
-		std::wstring wstrTo(size_needed, 0);
-		MultiByteToWideChar(CP_UTF8, 0, &str[0], (int)str.size(), &wstrTo[0], size_needed);
-		return wstrTo;
-	}
-}
+#include "UIImage.h"
+using namespace DirectX;
 
 IGame::IGame()
 {
@@ -116,7 +107,7 @@ void IGame::LoadHUDFile(std::string fileName) // Reference used from Trevor's St
 					sscanf_s(element.get("position", "0,0").asCString(), "%f,%f", &pos.x, &pos.y);
 					pos.z = 0;
 
-					std::wstring text = s2ws(element.get("text", "").asCString());
+					std::wstring text = core->s2ws(element.get("text", "").asCString());
 					SpriteFont* spriteFont = new SpriteFont(core->GetDevice(), L"../../Assets/Fonts/segoeUI.spritefont"); // TODO: Register a dictionary of spritefonts on load and access pointers from it
 					XMFLOAT4 color;
 					sscanf_s(element.get("color", "0,0,0,1").asCString(), "%f,%f,%f,%f", &color.x, &color.y, &color.z, &color.w);
@@ -128,7 +119,18 @@ void IGame::LoadHUDFile(std::string fileName) // Reference used from Trevor's St
 				}
 				else if (element.get("type", "") == "image")
 				{
+					XMFLOAT3 pos;
+					sscanf_s(element.get("position", "0,0").asCString(), "%f,%f", &pos.x, &pos.y);
+					pos.z = 0;
+					XMFLOAT4 color;
+					sscanf_s(element.get("color", "1,1,1,1").asCString(), "%f,%f,%f,%f", &color.x, &color.y, &color.z, &color.w);
 
+					XMFLOAT2 scale;
+					sscanf_s(element.get("scale", "1,1").asCString(), "%f,%f", &scale.x, &scale.y);
+
+					std::string filepath = element.get("source", "..\\..\\Assets\\Images\\image.png").asCString();
+
+					uiCanvas->AddComponent(new UIImage(pos, color, filepath, core, scale), member);
 				}
 			}
 			catch (std::exception e)

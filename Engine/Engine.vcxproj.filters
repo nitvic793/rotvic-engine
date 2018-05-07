@@ -246,6 +246,9 @@
     <ClInclude Include="AsyncEntity.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="UIImage.h">
+      <Filter>Header Files\UI</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CoreGame.cpp">
@@ -376,6 +379,9 @@
     </ClCompile>
     <ClCompile Include="AsyncEntity.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="UIImage.cpp">
+      <Filter>Source Files\UI</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

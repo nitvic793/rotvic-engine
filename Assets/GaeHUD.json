@@ -14,5 +14,13 @@
     "font": "Microsoft Sans Serif",
     "size": ".4",
     "color": "0,0,255,255"
+  },
+  "phone": {
+	"type": "image",
+	"source": "..\\..\\Assets\\Images\\phone.png",
+	"position": "500,500",
+	"scale": "1,1,1",
+	"tint": "1,1,1,1",
+	
   }
 }

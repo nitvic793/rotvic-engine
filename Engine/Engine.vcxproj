@@ -195,6 +195,7 @@
     <ClInclude Include="Transform.h" />
     <ClInclude Include="UICanvas.h" />
     <ClInclude Include="UIComponent.h" />
+    <ClInclude Include="UIImage.h" />
     <ClInclude Include="UIText.h" />
     <ClInclude Include="Utility.h" />
     <ClInclude Include="Vector2f.h" />
@@ -241,6 +242,7 @@
     <ClCompile Include="Transform.cpp" />
     <ClCompile Include="UICanvas.cpp" />
     <ClCompile Include="UIComponent.cpp" />
+    <ClCompile Include="UIImage.cpp" />
     <ClCompile Include="UIText.cpp" />
     <ClCompile Include="Utility.cpp" />
     <ClCompile Include="Vector2f.cpp" />

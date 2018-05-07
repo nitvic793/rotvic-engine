@@ -140,7 +140,7 @@ namespace HUDEditor
                         nameChange.Text = newElement.Name;
                         updateButton.Tag = newElement.Name;
                         changeImage.Text = newElement.ImageLocation;
-                        //changeTint = newElement.
+                        changeTint.BackColor = (Color)newElement.Tag;
                         lockAspectBox.Tag = (decimal)(newElement.Width / newElement.Height);
                         widthBox.Value = (decimal)(newElement.Width) / (decimal)(newElement.Image.Size.Width);
                         heightBox.Value = (decimal)(newElement.Height) / (decimal)(newElement.Image.Size.Height);

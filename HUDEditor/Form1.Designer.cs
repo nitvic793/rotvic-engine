@@ -53,18 +53,18 @@ namespace HUDEditor
             this.updateButton = new System.Windows.Forms.Button();
             this.label3 = new System.Windows.Forms.Label();
             this.nameChange = new System.Windows.Forms.TextBox();
+            this.label6 = new System.Windows.Forms.Label();
+            this.label5 = new System.Windows.Forms.Label();
+            this.label4 = new System.Windows.Forms.Label();
+            this.colorPicker = new System.Windows.Forms.Panel();
+            this.textChange = new System.Windows.Forms.TextBox();
             this.colorDialog = new System.Windows.Forms.ColorDialog();
             this.deleteButton = new System.Windows.Forms.Button();
             this.creationBox = new System.Windows.Forms.TextBox();
             this.creationLabel = new System.Windows.Forms.Label();
             this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
             this.textEditPanel = new System.Windows.Forms.Panel();
-            this.label6 = new System.Windows.Forms.Label();
-            this.label5 = new System.Windows.Forms.Label();
-            this.label4 = new System.Windows.Forms.Label();
             this.sizeChange = new System.Windows.Forms.NumericUpDown();
-            this.colorPicker = new System.Windows.Forms.Panel();
-            this.textChange = new System.Windows.Forms.TextBox();
             this.imageEditPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.heightBox)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.widthBox)).BeginInit();
@@ -342,6 +342,55 @@ namespace HUDEditor
             this.toolTip1.SetToolTip(this.nameChange, "Edit the name of the selected element (this is the string used as its key in the " +
         "engine\'s UI map)");
             // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(194, 7);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(51, 13);
+            this.label6.TabIndex = 17;
+            this.label6.Text = "Edit Size:";
+            this.toolTip1.SetToolTip(this.label6, "Edit the font size of the selected element");
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(136, 7);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(55, 13);
+            this.label5.TabIndex = 16;
+            this.label5.Text = "Edit Color:";
+            this.toolTip1.SetToolTip(this.label5, "Edit the font color of the selected element");
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(3, 7);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(52, 13);
+            this.label4.TabIndex = 15;
+            this.label4.Text = "Edit Text:";
+            this.toolTip1.SetToolTip(this.label4, "Edit the text of the selected element");
+            // 
+            // colorPicker
+            // 
+            this.colorPicker.BackColor = System.Drawing.Color.Black;
+            this.colorPicker.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.colorPicker.Location = new System.Drawing.Point(139, 23);
+            this.colorPicker.Name = "colorPicker";
+            this.colorPicker.Size = new System.Drawing.Size(52, 20);
+            this.colorPicker.TabIndex = 12;
+            this.toolTip1.SetToolTip(this.colorPicker, "Edit the font color of the selected element");
+            // 
+            // textChange
+            // 
+            this.textChange.Location = new System.Drawing.Point(6, 23);
+            this.textChange.Name = "textChange";
+            this.textChange.Size = new System.Drawing.Size(124, 20);
+            this.textChange.TabIndex = 11;
+            this.toolTip1.SetToolTip(this.textChange, "Edit the text of the selected element (this is the string used as its key in the " +
+        "engine\'s UI map)");
+            // 
             // colorDialog
             // 
             this.colorDialog.ShowHelp = true;
@@ -394,36 +443,6 @@ namespace HUDEditor
             this.textEditPanel.TabIndex = 20;
             this.textEditPanel.Visible = false;
             // 
-            // label6
-            // 
-            this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(194, 7);
-            this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(51, 13);
-            this.label6.TabIndex = 17;
-            this.label6.Text = "Edit Size:";
-            this.toolTip1.SetToolTip(this.label6, "Edit the font size of the selected element");
-            // 
-            // label5
-            // 
-            this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(136, 7);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(55, 13);
-            this.label5.TabIndex = 16;
-            this.label5.Text = "Edit Color:";
-            this.toolTip1.SetToolTip(this.label5, "Edit the font color of the selected element");
-            // 
-            // label4
-            // 
-            this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(3, 7);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(52, 13);
-            this.label4.TabIndex = 15;
-            this.label4.Text = "Edit Text:";
-            this.toolTip1.SetToolTip(this.label4, "Edit the text of the selected element");
-            // 
             // sizeChange
             // 
             this.sizeChange.DecimalPlaces = 2;
@@ -441,25 +460,6 @@ namespace HUDEditor
             0,
             0,
             0});
-            // 
-            // colorPicker
-            // 
-            this.colorPicker.BackColor = System.Drawing.Color.Black;
-            this.colorPicker.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.colorPicker.Location = new System.Drawing.Point(139, 23);
-            this.colorPicker.Name = "colorPicker";
-            this.colorPicker.Size = new System.Drawing.Size(52, 20);
-            this.colorPicker.TabIndex = 12;
-            this.toolTip1.SetToolTip(this.colorPicker, "Edit the font color of the selected element");
-            // 
-            // textChange
-            // 
-            this.textChange.Location = new System.Drawing.Point(6, 23);
-            this.textChange.Name = "textChange";
-            this.textChange.Size = new System.Drawing.Size(124, 20);
-            this.textChange.TabIndex = 11;
-            this.toolTip1.SetToolTip(this.textChange, "Edit the text of the selected element (this is the string used as its key in the " +
-        "engine\'s UI map)");
             // 
             // Form1
             // 
