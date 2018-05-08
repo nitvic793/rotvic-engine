@@ -260,7 +260,7 @@ namespace HUDEditor
                     //System.Threading.Thread.Sleep(1000);
                     //((PictureBox)c).ImageLocation = file;
                     //System.Threading.Thread.Sleep(1000);
-                    fwriter.WriteLine("    \"source\": \"..\\..\\Assets\\Images\\" + filename +"\",");
+                    fwriter.WriteLine("    \"source\": \"..\\\\..\\\\Assets\\\\Images\\\\" + filename +"\",");
                     fwriter.WriteLine("    \"position\": \"" + c.Location.X + "," + c.Location.Y + "\",");
                     fwriter.WriteLine("    \"color\": \"" + c.ForeColor.R + "," + c.ForeColor.G + "," + c.ForeColor.B + "," + c.ForeColor.A + "\"");
                     if (i < HUD_View.Controls.Count - 1) fwriter.WriteLine("  },");
